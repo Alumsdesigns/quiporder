@@ -1,1 +1,26 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+venv/
+env/
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Environment
 /venv
+.env
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

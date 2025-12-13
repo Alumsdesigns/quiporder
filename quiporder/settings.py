@@ -1,3 +1,11 @@
+# The control panel python
+# Contains:
+# - Which database to use (SQLite, PostgreSQL)
+# - Security settings (SECRET_KEY)
+# - Which apps are installed
+# - Time zones, languages
+# Think of it as your project's config file
+
 """
 Django settings for quiporder project.
 
