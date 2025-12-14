@@ -39,7 +39,7 @@ erDiagram
         int equipment_id FK
         int quantity
         datetime ordered_at
-        string status
+        enum status "PENDING, APPROVED  IN_TRANSIT  DELIVERED, CANCELLED"
     }
 
     EQUIPMENT {
