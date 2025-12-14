@@ -42,7 +42,7 @@ flowchart TD
     %% PATIENT LAYER
     subgraph PATIENT_VIEW
         D --> H[View My Orders Only Read-Only]
-        H --> H1[See Order Status: Pending → Approved → In Transit → Delivered]]
+        H --> H1[See Order Status: Pending → Approved → In Transit → Delivered]
     end
 
     %% COLOR STYLING
@@ -53,3 +53,4 @@ flowchart TD
     style G fill:#2A9D8F,stroke:#333
     style H fill:#56CFE1,stroke:#333
 ```
+
