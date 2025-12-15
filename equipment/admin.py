@@ -1,6 +1,16 @@
 from django.contrib import admin
+from .models import Equipment, EquipmentOrder
 
-# Register your models here. Manage equipment in admin panel
+"""
+Admin configuration for the equipment app.
+
+Registers:
+- Equipment
+- EquipmentOrder
+
+Register models here. Manage equipment in admin panel
+Allows staff to manage equipment inventory and orders via Django admin.
+"""
 
 @admin.register(Equipment)
 class EquipmentAdmin(admin.ModelAdmin):
