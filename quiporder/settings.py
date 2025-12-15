@@ -75,6 +75,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware', 
 ]
 
+
 # Custom user model
 AUTH_USER_MODEL = 'users.CustomUser'
 
@@ -103,6 +104,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ROOT_URLCONF = 'quiporder.urls'
 
 TEMPLATES = [
     {
