@@ -385,7 +385,7 @@ JOIN equipment_equipment e ON eo.equipment_id = e.id
 JOIN users_customuser u ON eo.patient_id = u.id;
 ```
 
-***Learnings**
+**Learnings**
 
 When i tried to verify by ID, I assumed if I knew the user_id (from the UI), I could also filter:
 
@@ -677,6 +677,6 @@ flowchart TD
 ```
 *Improvements Implemented / Identified*
 
-In particular, unused framework-level features such as Django Sites and social authentication models should be hidden or de-scoped, and custom role-based dashboards should replace Django Admin for core CRUD operations. These changes would improve usability, enforce clearer role separation, and ensure the interface accurately reflects the system’s real capabilities.
+In particular, unused framework-level features such as Django Sites and social authentication models should be hidden or de-scoped, and custom role-based dashboards should be introduced to complement or replace Django Admin for core CRUD operations in future iterations. These changes would improve usability, enforce clearer role separation, and ensure the interface accurately reflects the system’s real capabilities.
 
 
