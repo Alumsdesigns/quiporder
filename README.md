@@ -217,3 +217,466 @@ All screenshots confirm that:
 
 This validates **manual CRUD testing via Django Admin** for the current implementation.
 
+
+## Manual Database Verification — Django Admin → PostgreSQL
+**Purpose**
+
+This section documents how to verify that data created via the Django Admin UI is persisted correctly in PostgreSQL, and that foreign key relationships are functioning as designed.
+To verify that the data created via Django Admin UI exists in PostgreSQL
+
+This validation confirms that:
+
+- Admin UI inputs are saved to the database
+
+- Migrations are correctly applied
+
+- Relationships between users, profiles, and equipment are intact
+
+- The system behaves correctly beyond the UI abstraction
+
+1. Prerequisites:
+
+- PostgreSQL running
+
+- Django migrations applied
+
+- Test data created via Django Admin UI
+
+- Open terminal in VS Code 
+
+2. Connect to PostgreSQL run below command in the terminal:
+
+```psql -d quiporder```
+
+3. List the tables to inspect existing tables:
+
+```\dt```
+
+Expected tables include:
+
+- users_customuser
+
+- users_patientprofile
+
+- users_therapistprofile
+
+- equipment_equipment
+
+- equipment_equipmentorder
+
+
+4. Verify the table contents:
+
+```
+SELECT * FROM users_patientprofile;
+SELECT * FROM users_therapistprofile;
+SELECT * FROM equipment_equipment;
+SELECT * FROM equipment_equipmentorder;
+```
+
+5. Filtering Records Safely
+ *Incorrect Assumption, Common Pitfal:*
+SELECT * FROM users_patientprofile WHERE user_id = 1;
+
+
+This may return 0 rows, even though the patient exists.
+
+*Why?*
+
+Django Admin does not display database primary keys
+
+id = 1 is typically the first created user, often a superuser or admin
+
+The patient user likely has a different id
+
+
+5. Filter for specific records (example for patient1):
+
+Tip: The id column is usually the primary key; use it to reference specific records for further queries.
+
+
+6. Filter by ID or name
+
+By ID:
+
+SELECT * 
+FROM users_patientprofile
+WHERE id = 1;
+
+
+**To filter by username see 7 & 8 below**
+
+
+7. Check the table columnsand inspect the table structure
+
+Always inspect the schema before querying:
+
+Run:
+```\d users_patientprofile```
+
+Key insight:
+
+user_id is a foreign key referencing users_customuser(id)
+
+Human-readable fields (username, email) are not stored here
+
+The important thing: there’s a user_id column, which references the CustomUser table
+
+8. Authoritative Verification Using JOINs to view the username
+
+You can join users_patientprofile with users_customuser to see patient1:
+
+Correct Way to Verify a Patient Profile:
+
+```
+SELECT p.id AS patient_id,
+       u.username,
+       p.medical_record_number,
+       p.status,
+       p.admission_date
+FROM users_patientprofile p
+JOIN users_customuser u ON p.user_id = u.id
+WHERE u.username = 'patient1';
+```
+
+8Why this works:*
+
+Filters using a human identifier
+
+PostgreSQL resolves the correct user_id internally
+
+Confirms both persistence and FK integrity
+
+9. Verify Therapist Profiles
+
+```
+SELECT t.id AS therapist_profile_id,
+       u.username,
+       t.license_number
+FROM users_therapistprofile t
+JOIN users_customuser u ON t.user_id = u.id;
+
+```
+
+10. Verify Equipment Records
+
+```
+SELECT id, name, total_quantity, available_quantity
+FROM equipment_equipment;
+```
+
+next look at updating with size so will be
+
+```
+SELECT id, name, category, size, total_quantity, available_quantity
+FROM equipment_equipment;
+```
+
+11. Verify Equipment Orders
+
+```
+SELECT eo.id,
+       e.name AS equipment,
+       u.username AS patient,
+       eo.quantity,
+       eo.status
+FROM equipment_equipmentorder eo
+JOIN equipment_equipment e ON eo.equipment_id = e.id
+JOIN users_customuser u ON eo.patient_id = u.id;
+```
+
+***Learnings**
+
+When i tried to verify by ID, I assumed if I knew the user_id (from the UI), I could also filter:
+
+```SELECT * FROM users_patientprofile WHERE user_id = 1;```
+
+I initially assumed should return the patient profile for patient1. Howedver it retirned 
+0 rows. This is because user_id = 1 is not the user ID for patient1.
+In Django the admin UI does NOT show the database primary key
+
+The first user created is often:
+
+a superuser
+
+or a staff/admin account
+
+So id = 1 is very commonly the admin user, not the patient1 user I created for example.
+
+That means:
+
+users_customuser.id = 1  → admin
+users_customuser.id = X  → patient1 (X is some other number)
+
+
+My users_patientprofile row correctly exists, but it is linked to:
+
+users_patientprofile.user_id = X
+
+
+not 1.
+
+**Why the JOIN query worked to find my users_patientprofile.user_id**
+
+However when I ran the below json query to filter by username:
+```
+SELECT p.id AS patient_id,
+       u.username,
+       p.medical_record_number,
+       p.status,
+       p.admission_date
+FROM users_patientprofile p
+JOIN users_customuser u ON p.user_id = u.id
+WHERE u.username = 'patient1';
+```
+
+This query is correct and authoritative. 
+It worked because:
+
+I filtered by a real human identifier (username).
+
+PostgreSQL then resolved the correct user_id internally.
+
+This confirms:
+
+The admin UI entry is persisted.
+
+The foreign key relationship is correct.
+
+The table data is real and queryable.
+
+So the system is working as designed.
+
+**How to reliably find the correct user_id**
+
+Always do this first
+
+```
+SELECT id, username, email, user_type
+FROM users_customuser
+ORDER BY id;
+```
+You will see something like:
+
+ id |  username  |         email          | user_type 
+----+------------+------------------------+-----------
+  1 | Damaris    |                        | THERAPIST
+  4 | therapist1 | therapist1@example.com | THERAPIST
+  5 | patient1   | patient1@example.com   | PATIENT
+(3 rows)
+
+Now you know:
+
+```patient1.user_id = 5```
+
+Then this will work:
+```SELECT * FROM users_patientprofile WHERE user_id = 5;```
+
+The 
+
+```
+SELECT p.id AS patient_profile_id,
+       u.username,
+       p.medical_record_number,
+       p.status,
+       p.admission_date
+FROM users_patientprofile p
+JOIN users_customuser u ON p.user_id = u.id;
+```
+
+**Key Takeaways**
+
+Django Admin often stores user info in CustomUser. Related models (like PatientProfile) reference it via foreign key.
+
+Don’t assume the username is a column in the profile table.
+
+Use ```\d table_name``` example ```\d users_patientprofile``` to inspect columns anytime.
+
+Joins are necessary to see human-readable fields like username or email.
+
+
+Django Admin UI does not display database primary keys
+
+Profile tables reference users_customuser via foreign keys
+
+Always join profile tables to users_customuser to verify human-readable fields
+
+If a direct WHERE user_id = X query returns no rows, verify the correct user ID first
+
+**See screenshots of commands exected:**
+The screenshots below demonstrate direct PostgreSQL verification of data created via the Django Admin interface. They show successful execution of psql commands to inspect schemas, query tables, and validate foreign key relationships between CustomUser, profile, and equipment-related models. This confirms that Admin UI actions are correctly persisted to PostgreSQL, migrations are applied as intended, and relational integrity is enforced at the database level.
+![PostgreSQL table inspection and schema verification](docs/screenshots_verify_tests/psql_test_1.png)
+![Joined queries validating user, profile, and foreign key relationships](docs/screenshots_verify_tests/psql_test_2.png)
+![Equipment and equipment order queries confirming persisted admin data](docs/screenshots_verify_tests/psql_test_3.png)
+
+
+**Summary**
+
+What screenshots proves:
+
+Admin UI input is being written to PostgreSQL
+
+Migrations are applied correctly
+
+Foreign key relationships are intact
+
+Your CRUD setup is working end-to-end
+
+## Iteration Improvements from Round 1 Observational User Testing
+
+**Testing Context**
+
+Three anonymous users (two occupational therapists and one patient) were asked to complete the manual UI testing flow using a pre-configured system.
+Users were observed interacting with:
+
+1. Patient profiles
+
+2. Therapist profiles
+
+3. Equipment ordering workflows
+
+Post-session feedback was collected through guided questions, focusing on usability, clarity, and workflow efficiency.
+
+#### Key Observations & Improvements
+
+**1. Enhanced Human-Readable Data in ERD:**
+
+Previous issue: Some tables (e.g., EquipmentOrder) lacked direct references to patient or therapist information, which required multiple lookups and could introduce inconsistencies if names or MRNs changed.
+
+*Improvement:*
+
+- All CustomUser data (first_name, last_name, DOB, email) is stored once in the CustomUser table.
+
+- PatientProfile and TherapistProfile reference CustomUser via foreign keys.
+
+- Names, DOB, and email are derived via FK rather than stored redundantly.
+
+*Reasoning:*
+
+This follows DRY principles (Don’t Repeat Yourself), avoids duplicated facts, and ensures consistency.
+
+Any updates to a user’s name or email automatically propagate across all related profiles and orders.
+
+**2. Equipment & Order Normalization:**
+Previous issue: Equipment attributes like size and category were unclear or conflated.
+
+*Improvement:*
+
+- Added size field to Equipment (Small / Medium / Large / Custom) separate from category (Mobility / ADL / Sensory).
+
+- EquipmentOrder references PatientProfile via FK instead of storing patient names or MRNs.
+
+*Reasoning:*
+
+Keeps single source of truth for patient details.
+
+Supports reporting and analytics without risk of inconsistent or outdated data.
+
+**3. Status Fields Clarified:**
+
+PatientProfile.status: ACTIVE / DISCHARGED, reflects clinical workflow.
+
+EquipmentOrder.status: PENDING / APPROVED / IN_TRANSIT / DELIVERED / CANCELLED, reflects logistics workflow.
+
+*Reasoning:*
+
+- Clear separation of concerns avoids confusion between clinical status and equipment workflow.
+
+- Supports KISS principle (Keep It Simple, Stupid) by keeping workflows explicit and easy to track.
+
+**4. Assigned Therapist via FK:**
+
+Previous issue: Some systems store therapist name directly on PatientProfile.
+
+*Improvements:*
+
+- Store assigned_therapist_id FK to TherapistProfile instead of the therapist name.
+
+- Display names derived dynamically through FK in UI/API.
+
+*Reasoning:*
+
+- Avoids duplication and errors if therapist name changes.
+
+- Ensures SOLID principle (Single Responsibility) — PatientProfile tracks assignment, not therapist identity.
+
+**5. General Observational Feedback Incorporated:**
+
+*Users appreciated:*
+
+- Easier reading of patient and therapist details through consistent naming and DOB display.
+
+- Equipment details being separated into category and size for clarity.
+
+*Users requested:*
+
+Improved admin interface to display derived names and email directly for search and filtering implemented in admin refinements.
+
+**6. UI Scope Refinement and Removal of Non-Essential Admin Features and other changes needed on UI** 
+
+*Observation*
+
+During testing, users interacted only with patient management, therapist profiles, equipment, and orders. However, the default Django Admin interface exposed additional system-level components (e.g. Sites framework, social account configuration, email confirmation tables) that were not relevant to the Quip-Order workflow and caused confusion for non-technical users.
+
+ While the underlying data model and database relationships fully support Quip-Order’s functional requirements at this stage, further UI refinements are required to align the user interface with the intended therapist and patient workflows outlined in the flow diagram below:
+
+```mermaid
+flowchart TD
+    %% QuipOrder MVP - CRUD Flow (Layered for VS Code readability)
+
+    %% LOGIN LAYER
+    subgraph LOGIN
+        A[User Login]
+        A --> B{User Type?}
+    end
+
+    %% DASHBOARD LAYER
+    subgraph DASHBOARD
+        B -->|Therapist| C[Therapist Dashboard]
+        B -->|Patient| D[Patient Dashboard]
+    end
+
+    %% THERAPIST CRUD LAYER
+    subgraph PATIENT_MANAGEMENT
+        C --> E[Manage Patients CRUD]
+        E --> E1[Create Patient]
+        E --> E2[Read/View Patients List & Details]
+        E --> E3[Update Patient Details]
+        E --> E4[Delete Patient]
+    end
+
+    subgraph EQUIPMENT_MANAGEMENT
+        C --> F[Manage Equipment CRUD]
+        F --> F1[Create Equipment]
+        F --> F2[Read/View Equipment List]
+        F --> F3[Update Equipment Stock/Info]
+        F --> F4[Delete Equipment]
+    end
+
+    subgraph ORDER_MANAGEMENT
+        C --> G[Manage Orders CRUD]
+        G --> G1[Create Order for Patient]
+        G --> G2[Read/View Orders]
+        G --> G3[Update Order Status/Quantity]
+        G --> G4[Delete/Cancel Order]
+    end
+
+    %% PATIENT LAYER
+    subgraph PATIENT_VIEW
+        D --> H[View My Orders Only Read-Only]
+        H --> H1[See Order Status: Pending → Approved → In Transit → Delivered]
+    end
+
+    %% COLOR STYLING
+    style C fill:#78C7A6,stroke:#333,stroke-width:2px
+    style D fill:#56CFE1,stroke:#333,stroke-width:2px
+    style E fill:#2A9D8F,stroke:#333
+    style F fill:#2A9D8F,stroke:#333
+    style G fill:#2A9D8F,stroke:#333
+    style H fill:#56CFE1,stroke:#333
+```
+*Improvements Implemented / Identified*
+
+In particular, unused framework-level features such as Django Sites and social authentication models should be hidden or de-scoped, and custom role-based dashboards should replace Django Admin for core CRUD operations. These changes would improve usability, enforce clearer role separation, and ensure the interface accurately reflects the system’s real capabilities.
+
+
