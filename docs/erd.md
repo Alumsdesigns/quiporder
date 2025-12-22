@@ -52,7 +52,8 @@ erDiagram
         string name UK
         string category "MOBILITY/ADL/SENSORY"
         string size "S/M/L/Custom"
-        int stock_quantity
+        total_quantity
+        available_quantity
         text description
     }
 ```

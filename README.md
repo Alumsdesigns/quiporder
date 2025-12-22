@@ -679,4 +679,3 @@ flowchart TD
 
 In particular, unused framework-level features such as Django Sites and social authentication models should be hidden or de-scoped, and custom role-based dashboards should be introduced to complement or replace Django Admin for core CRUD operations in future iterations. These changes would improve usability, enforce clearer role separation, and ensure the interface accurately reflects the system’s real capabilities.
 
-
