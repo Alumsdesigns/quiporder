@@ -10,6 +10,7 @@ Models for equipment app.
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 from users.models import PatientProfile
 
 
@@ -30,8 +31,12 @@ class Equipment(models.Model):
     name = models.CharField(max_length=100)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='MOBILITY')
     size = models.CharField(max_length=10, choices=SIZE_CHOICES, default='MEDIUM')
-    total_quantity = models.PositiveIntegerField()
-    available_quantity = models.PositiveIntegerField()
+    total_quantity = models.PositiveIntegerField(
+        help_text="Total units owned by facility"
+    )
+    available_quantity = models.PositiveIntegerField(
+                help_text="Units currently available (not assigned to patients)"
+    )
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -51,14 +56,25 @@ class Equipment(models.Model):
             return 0
         return ((self.total_quantity - self.available_quantity) / self.total_quantity) * 100
 
-    # Validation method to ensure available_quantity doesn't exceed total_quantity
+    # Validation method to ensure available_quantity doesn't exceed total_quantity +  Added None checks and proper error messages
     def clean(self):
         """Validate that available_quantity doesn't exceed total_quantity."""
-        from django.core.exceptions import ValidationError
+        # COMMIT 1: Check if fields have values before comparing (prevents TypeError)
+        if self.total_quantity is None:
+            raise ValidationError({
+                'total_quantity': 'Total quantity is required.'
+            })
+        
+        if self.available_quantity is None:
+            raise ValidationError({
+                'available_quantity': 'Available quantity is required.'
+            })
+        
+        # COMMIT 1: Now safe to compare (both are not None)
         if self.available_quantity > self.total_quantity:
-            raise ValidationError(
-                f"Available quantity ({self.available_quantity}) cannot exceed total quantity ({self.total_quantity})"
-            )
+            raise ValidationError({
+                'available_quantity': f"Available quantity ({self.available_quantity}) cannot exceed total quantity ({self.total_quantity})"
+            })
     
 class EquipmentOrder(models.Model):
     """Orders for equipment assigned to patients."""
