@@ -70,7 +70,7 @@ class Equipment(models.Model):
                 'available_quantity': 'Available quantity is required.'
             })
         
-        # Now safe to compare (both are not None)
+        # Now safe to compare both are not None
         if self.available_quantity > self.total_quantity:
             raise ValidationError({
                 'available_quantity': f"Available quantity ({self.available_quantity}) cannot exceed total quantity ({self.total_quantity})"
