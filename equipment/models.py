@@ -35,7 +35,7 @@ class Equipment(models.Model):
         help_text="Total units owned by facility"
     )
     available_quantity = models.PositiveIntegerField(
-                help_text="Units currently available (not assigned to patients)"
+        help_text="Units currently available (not assigned to patients)"
     )
     description = models.TextField(blank=True)
 
@@ -56,10 +56,10 @@ class Equipment(models.Model):
             return 0
         return ((self.total_quantity - self.available_quantity) / self.total_quantity) * 100
 
-    # Validation method to ensure available_quantity doesn't exceed total_quantity +  Added None checks and proper error messages
+    # Validation method to ensure available_quantity doesn't exceed total_quantity + added None checks and proper error messages
     def clean(self):
         """Validate that available_quantity doesn't exceed total_quantity."""
-        # COMMIT 1: Check if fields have values before comparing (prevents TypeError)
+        # Check if fields have values before comparing (prevents TypeError)
         if self.total_quantity is None:
             raise ValidationError({
                 'total_quantity': 'Total quantity is required.'
@@ -70,7 +70,7 @@ class Equipment(models.Model):
                 'available_quantity': 'Available quantity is required.'
             })
         
-        # COMMIT 1: Now safe to compare (both are not None)
+        # Now safe to compare (both are not None)
         if self.available_quantity > self.total_quantity:
             raise ValidationError({
                 'available_quantity': f"Available quantity ({self.available_quantity}) cannot exceed total quantity ({self.total_quantity})"
@@ -100,16 +100,14 @@ class EquipmentOrder(models.Model):
         related_name='orders'
     )
 
-    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='PENDING'
+    quantity = models.PositiveIntegerField(
+        default=1, 
+        validators=[MinValueValidator(1)],
+        help_text="Number of units to assign to patient"
     )
-
+    
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
     ordered_at = models.DateTimeField(auto_now_add=True)
-
-    # Track who created the order
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -126,29 +124,96 @@ class EquipmentOrder(models.Model):
     def __str__(self):
         return f"{self.equipment.name} → {self.patient.user.get_full_name()} ({self.get_status_display()})"
 
-    # Enhanced save method with inventory management
+    def clean(self):
+        """Validate order before saving - enforce three rules."""
+        super().clean()
+        
+        # Comprehensive validation of order quantity
+        if self.equipment and self.quantity:
+            # Calculate total of ALL active orders for this equipment
+            active_statuses = ['PENDING', 'APPROVED', 'IN_TRANSIT', 'DELIVERED']
+            
+            # Get sum of all active orders, excluding current order if editing
+            from django.db.models import Sum
+            total_active_orders = EquipmentOrder.objects.filter(
+                equipment=self.equipment,
+                status__in=active_statuses
+            ).exclude(pk=self.pk).aggregate(
+                total=Sum('quantity')
+            )['total'] or 0
+            
+            # Add this order's quantity to the total
+            total_with_this_order = total_active_orders + self.quantity
+            
+            # Total active orders cannot exceed total_quantity
+            if total_with_this_order > self.equipment.total_quantity:
+                currently_allocated = total_active_orders
+                max_can_order = self.equipment.total_quantity - currently_allocated
+                
+                raise ValidationError({
+                    'quantity': (
+                        f"Cannot order {self.quantity} units. "
+                        f"Total inventory is {self.equipment.total_quantity} units. "
+                        f"Currently allocated to other active orders: {currently_allocated} units. "
+                        f"Maximum you can order: {max_can_order} units."
+                    )
+                })
+            
+            # Check available_quantity (both new AND edited orders)
+            # Calculate how much is truly available for this order
+            current_available = self.equipment.available_quantity
+            
+            # If editing existing active order, add back its old quantity
+            if self.pk:
+                try:
+                    old_order = EquipmentOrder.objects.get(pk=self.pk)
+                    if old_order.status not in ['CANCELLED', 'RETURNED']:
+                        current_available += old_order.quantity
+                except EquipmentOrder.DoesNotExist:
+                    pass
+            
+            # New quantity cannot exceed available + old quantity
+            if self.quantity > current_available:
+                raise ValidationError({
+                    'quantity': (
+                        f"Cannot order {self.quantity} units. "
+                        f"Only {current_available} units available "
+                        f"(current stock: {self.equipment.available_quantity}"
+                        + (f" + {current_available - self.equipment.available_quantity} from this order" 
+                           if self.pk and current_available > self.equipment.available_quantity else "") +
+                        f"). Total inventory: {self.equipment.total_quantity}, "
+                        f"allocated to other orders: {total_active_orders}."
+                    )
+                })
+    
     def save(self, *args, **kwargs):
         """Override save to update inventory and create status history."""
         is_new = self.pk is None
         old_status = None
         old_quantity = 0
         
+        # For existing orders, get old values
         if not is_new:
-            # Get old status and quantity before saving
             old_order = EquipmentOrder.objects.get(pk=self.pk)
             old_status = old_order.status
             old_quantity = old_order.quantity
             
-            # If status changed to CANCELLED, restore inventory
-            if old_status != 'CANCELLED' and self.status == 'CANCELLED':
+            # Handle status changes
+            if old_status not in ['CANCELLED', 'RETURNED'] and self.status in ['CANCELLED', 'RETURNED']:
+                # Order cancelled/returned - restore inventory
                 self.equipment.available_quantity += old_quantity
                 self.equipment.save()
-            # If status changed to DELIVERED, optionally adjust total_quantity
-            elif old_status != 'DELIVERED' and self.status == 'DELIVERED':
-                # adjust total_quantity if equipment won't return
-                pass
+            elif old_status in ['CANCELLED', 'RETURNED'] and self.status not in ['CANCELLED', 'RETURNED']:
+                # Order reactivated - reduce inventory
+                self.equipment.available_quantity -= self.quantity
+                self.equipment.save()
+            elif old_status not in ['CANCELLED', 'RETURNED'] and self.status not in ['CANCELLED', 'RETURNED']:
+                # Order quantity changed while active - adjust inventory
+                quantity_difference = self.quantity - old_quantity
+                self.equipment.available_quantity -= quantity_difference
+                self.equipment.save()
         else:
-            # New order, reduce available quantity
+            # New order reduce available quantity
             if self.equipment.available_quantity >= self.quantity:
                 self.equipment.available_quantity -= self.quantity
                 self.equipment.save()
@@ -165,7 +230,6 @@ class EquipmentOrder(models.Model):
                 new_status=self.status,
                 changed_by=kwargs.get('changed_by')
             )
-
 
 class EquipmentOrderStatusHistory(models.Model):
     """
