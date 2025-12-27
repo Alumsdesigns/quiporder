@@ -8,6 +8,7 @@ Models for equipment app.
 """
 
 from django.db import models
+
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
@@ -35,7 +36,7 @@ class Equipment(models.Model):
         help_text="Total units owned by facility"
     )
     available_quantity = models.PositiveIntegerField(
-        help_text="Units currently available (not assigned to patients)"
+        help_text="Units currently available not assigned to patients"
     )
     description = models.TextField(blank=True)
 
@@ -58,8 +59,8 @@ class Equipment(models.Model):
 
     # Validation method to ensure available_quantity doesn't exceed total_quantity + added None checks and proper error messages
     def clean(self):
-        """Validate that available_quantity doesn't exceed total_quantity."""
-        # Check if fields have values before comparing (prevents TypeError)
+        """Validate Equipment fields comprehensively."""
+        # Check if fields have values before comparing prevents TypeError
         if self.total_quantity is None:
             raise ValidationError({
                 'total_quantity': 'Total quantity is required.'
@@ -73,8 +74,72 @@ class Equipment(models.Model):
         # Now safe to compare both are not None
         if self.available_quantity > self.total_quantity:
             raise ValidationError({
-                'available_quantity': f"Available quantity ({self.available_quantity}) cannot exceed total quantity ({self.total_quantity})"
+                'available_quantity': (
+                    f"Available quantity ({self.available_quantity}) cannot be more than "
+                    f"total quantity ({self.total_quantity}). "
+                    f"Please reduce available quantity to {self.total_quantity} or less."
+                )
             })
+
+        # Check against active orders only for existing equipment
+        if self.pk: 
+            from django.db.models import Sum
+            active_statuses = ['PENDING', 'APPROVED', 'IN_TRANSIT', 'DELIVERED']
+            
+            # Calculate total of all active orders for this equipment
+            total_allocated = EquipmentOrder.objects.filter(
+                equipment=self,
+                status__in=active_statuses
+            ).aggregate(total=Sum('quantity'))['total'] or 0
+            
+            # Prevent reducing total_quantity below currently allocated amount
+            if self.total_quantity < total_allocated:
+                raise ValidationError({
+                    'total_quantity': (
+                        f"Cannot reduce total quantity to {self.total_quantity}. "
+                        f"Currently {total_allocated} units are allocated to active orders. "
+                        f"You must first cancel or return orders before reducing total quantity. "
+                        f"Minimum allowed: {total_allocated} units."
+                    )
+                })
+
+            # Available_quantity must be consistent with allocations
+            # Formula: available = total - allocated
+            correct_available = self.total_quantity - total_allocated
+            
+            if self.available_quantity > correct_available:
+                raise ValidationError({
+                    'available_quantity': (
+                        f"Available quantity cannot be set to {self.available_quantity}. "
+                        f"With {self.total_quantity} total units and {total_allocated} units allocated to active orders, "
+                        f"maximum available is {correct_available} units. "
+                        f"(Formula: Available = Total - Allocated = {self.total_quantity} - {total_allocated} = {correct_available})"
+                    )
+                })
+            
+            # Warn if available_quantity is set lower than mathematically correct
+            # But we store it for potential admin warning
+            if self.available_quantity < correct_available:
+                # This is ALLOWED, admin might be marking some as unavailable for maintenance
+                # Just log it or add a note field in future
+                pass
+
+    # NEW: Auto-adjust available_quantity when total_quantity increases
+    def save(self, *args, **kwargs):
+        """Override save to auto-adjust available_quantity when total increases."""
+        if self.pk:  # Existing equipment
+            old_equipment = Equipment.objects.get(pk=self.pk)
+            old_total = old_equipment.total_quantity
+            old_available = old_equipment.available_quantity
+            
+            # If total_quantity increased, auto-increase available_quantity
+            if self.total_quantity > old_total:
+                difference = self.total_quantity - old_total
+                # Only auto-adjust if available wasn't manually changed
+                if self.available_quantity == old_available:
+                    self.available_quantity += difference
+        
+        super().save(*args, **kwargs)
     
 class EquipmentOrder(models.Model):
     """Orders for equipment assigned to patients."""
@@ -154,12 +219,13 @@ class EquipmentOrder(models.Model):
                     'quantity': (
                         f"Cannot order {self.quantity} units. "
                         f"Total inventory is {self.equipment.total_quantity} units. "
-                        f"Currently allocated to other active orders: {currently_allocated} units. "
-                        f"Maximum you can order: {max_can_order} units."
+                        f"Currently {currently_allocated} units are already allocated to other active orders. "
+                        f"Maximum you can order: {max_can_order} units. "
+                        f"(Calculation: {self.equipment.total_quantity} total - {currently_allocated} allocated = {max_can_order} available)"
                     )
                 })
             
-            # Check available_quantity (both new AND edited orders)
+            # Check available_quantity both new AND edited orders
             # Calculate how much is truly available for this order
             current_available = self.equipment.available_quantity
             
@@ -177,12 +243,12 @@ class EquipmentOrder(models.Model):
                 raise ValidationError({
                     'quantity': (
                         f"Cannot order {self.quantity} units. "
-                        f"Only {current_available} units available "
-                        f"(current stock: {self.equipment.available_quantity}"
-                        + (f" + {current_available - self.equipment.available_quantity} from this order" 
+                        f"Only {current_available} units are available "
+                        f"(Current available stock: {self.equipment.available_quantity}"
+                        + (f" + {current_available - self.equipment.available_quantity} from this order  being edited" 
                            if self.pk and current_available > self.equipment.available_quantity else "") +
-                        f"). Total inventory: {self.equipment.total_quantity}, "
-                        f"allocated to other orders: {total_active_orders}."
+                        f"). Total inventory: {self.equipment.total_quantity} units, "
+                        f"already allocated to other orders: {total_active_orders} units."
                     )
                 })
     
@@ -205,20 +271,35 @@ class EquipmentOrder(models.Model):
                 self.equipment.save()
             elif old_status in ['CANCELLED', 'RETURNED'] and self.status not in ['CANCELLED', 'RETURNED']:
                 # Order reactivated - reduce inventory
-                self.equipment.available_quantity -= self.quantity
-                self.equipment.save()
+                if self.equipment.available_quantity >= self.quantity:
+                    self.equipment.available_quantity -= self.quantity
+                    self.equipment.save()
+                else:
+                    raise ValueError(f"Insufficient stock to reactivate order. Available: {self.equipment.available_quantity}, Required: {self.quantity}")
             elif old_status not in ['CANCELLED', 'RETURNED'] and self.status not in ['CANCELLED', 'RETURNED']:
-                # Order quantity changed while active - adjust inventory
+                # FIXED: Order quantity changed while active - adjust inventory properly
                 quantity_difference = self.quantity - old_quantity
-                self.equipment.available_quantity -= quantity_difference
-                self.equipment.save()
+                if quantity_difference != 0:  # Only update if quantity actually changed
+                    new_available = self.equipment.available_quantity - quantity_difference
+                    if new_available < 0:
+                        raise ValueError(
+                            f"Cannot increase order quantity. Insufficient stock. "
+                            f"Available: {self.equipment.available_quantity}, "
+                            f"Additional needed: {abs(quantity_difference)}"
+                        )
+                    self.equipment.available_quantity = new_available
+                    self.equipment.save()
         else:
-            # New order reduce available quantity
+            # New order - reduce available quantity
             if self.equipment.available_quantity >= self.quantity:
                 self.equipment.available_quantity -= self.quantity
                 self.equipment.save()
             else:
-                raise ValueError(f"Insufficient stock. Available: {self.equipment.available_quantity}, Requested: {self.quantity}")
+                raise ValueError(
+                    f"Cannot create order. Insufficient stock. "
+                    f"Available: {self.equipment.available_quantity}, "
+                    f"Requested: {self.quantity}"
+                )
         
         super().save(*args, **kwargs)
         
