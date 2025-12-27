@@ -145,6 +145,7 @@ class EquipmentOrder(models.Model):
     """Orders for equipment assigned to patients."""
     
     STATUS_CHOICES = [
+         ('DRAFT', 'Draft'), 
         ('PENDING', 'Pending'),
         ('APPROVED', 'Approved'),
         ('IN_TRANSIT', 'In Transit'),
@@ -171,7 +172,7 @@ class EquipmentOrder(models.Model):
         help_text="Number of units to assign to patient"
     )
     
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='DRAFT')
     ordered_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
