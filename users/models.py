@@ -4,7 +4,7 @@
 Models for Quipster app:
 - CustomUser extends AbstractUser with a user_type field (Therapist/Patient)
 - TherapistProfile and PatientProfile store related information
-- Default login uses username and password (change USERNAME_FIELD for email login)
+- Default login uses username and password change USERNAME_FIELD for email login
 """
 
 from django.contrib.auth.models import AbstractUser
@@ -31,7 +31,7 @@ class CustomUser(AbstractUser):
     )
     
     # Email optional for now
-    email = models.EmailField(unique=True, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     
     # Keep default login with username
@@ -46,8 +46,6 @@ class CustomUser(AbstractUser):
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}".strip()
-
-    
 
 
 class TherapistProfile(models.Model):
@@ -70,8 +68,11 @@ class TherapistProfile(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.username} - {self.license_number}"
-
+        # use self.user, not self.user.user
+        full_name = self.user.get_full_name()
+        if full_name:
+            return f"{full_name} (License: {self.license_number})"
+        return f"{self.user.username} (License: {self.license_number})"
 
 class PatientProfile(models.Model):
     """
@@ -97,5 +98,8 @@ class PatientProfile(models.Model):
     notes = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.user.full_name} – MRN {self.medical_record_number}"
+        full_name = self.user.get_full_name()
+        if full_name:
+            return f"{full_name} (MRN: {self.medical_record_number})"
+        return f"{self.user.username} (MRN: {self.medical_record_number})"
 
