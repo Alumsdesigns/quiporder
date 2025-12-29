@@ -1,7 +1,7 @@
 # The traffic director python
 # Maps URLs to views:
-# example.com/patients/ → shows patient list
-# example.com/equipment/ → shows equipment list
+# example.com/patients/ -> shows patient list
+# example.com/equipment/ -> shows equipment list
 # Like a phone directory for your website
 
 """

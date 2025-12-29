@@ -97,7 +97,19 @@ class EquipmentOrderAdmin(admin.ModelAdmin):
         """Auto-set created_by to current user if not set."""
         if not obj.created_by:
             obj.created_by = request.user
-        super().save_model(request, obj, form, change)
+        
+        # Pass current user so history shows actual therapist
+        obj.save(current_user=request.user)
+
+    # Override delete to pass current_user
+    def delete_model(self, request, obj):
+        """Soft delete with user tracking."""
+        obj.delete(current_user=request.user)
+    
+    def delete_queryset(self, request, queryset):
+        """Soft delete multiple objects."""
+        for obj in queryset:
+            obj.delete(current_user=request.user)
 
 
 @admin.register(EquipmentOrderStatusHistory)
@@ -122,15 +134,15 @@ class EquipmentOrderStatusHistoryAdmin(admin.ModelAdmin):
     search_fields = [
         'order__equipment__name', 
         'order__patient__user__username',
-        'changed_by__username',  # Can search by therapist username
-        'changed_by__first_name',  # Can search by therapist name
+        'changed_by__username',  
+        'changed_by__first_name',
         'changed_by__last_name'
         ]
     readonly_fields = [
         'order',
         'old_status',
         'new_status',
-        'get_changed_by_details',  # NEW: Show in detail view too
+        'get_changed_by_details',
         'changed_at',
         'notes',
     ]

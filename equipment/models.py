@@ -340,7 +340,7 @@ class EquipmentOrder(models.Model):
                         f"Action: Increase inventory or reduce order quantity"
                     )
             
-            # SCENARIO 3: DRAFT → Active (ACTIVATION) - MISSING IN DOCUMENT 6
+            # DRAFT → Active (ACTIVATION) - MISSING IN DOCUMENT 6
             elif old_status == 'DRAFT' and self.status not in ['DRAFT', 'CANCELLED', 'RETURNED']:
                 # Moving from DRAFT to active status - reduce inventory
                 if self.equipment.available_quantity >= self.quantity:
@@ -401,7 +401,7 @@ class EquipmentOrder(models.Model):
                         f"Shortage: {self.quantity - self.equipment.available_quantity} units\n"
                         f"Action: Reduce quantity or wait for returns"
                     )
-            # If status IS DRAFT/CANCELLED/RETURNED, don't touch inventory (correct)
+            # If status IS DRAFT/CANCELLED/RETURNED, don't touch inventory
         
         super().save(*args, **kwargs)
         
@@ -413,7 +413,8 @@ class EquipmentOrder(models.Model):
                 new_status=self.status,
                 changed_by=current_user
             )
-        # Soft delete method
+    
+    # Soft delete method
     def delete(self, using=None, keep_parents=False, current_user=None):
         """
         Soft delete - mark as deleted instead of removing from database.
@@ -427,9 +428,7 @@ class EquipmentOrder(models.Model):
             self.equipment.available_quantity += self.quantity
             self.equipment.save()
 
-        # self.save() replaced below
-
-        # IMPORTANT: Call save() without args to avoid recursion
+        # Call save() without args to avoid recursion
         super(EquipmentOrder, self).save()
 
         # Create history entry for deletion
@@ -441,7 +440,7 @@ class EquipmentOrder(models.Model):
             notes=f"Order soft-deleted at {self.deleted_at}",
         )
 
-        # Hard delete method (for admin only)
+        # Hard delete method for admin only
         def hard_delete(self):
             """Actually delete from database admin use only."""
             super().delete()

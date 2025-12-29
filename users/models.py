@@ -33,9 +33,6 @@ class CustomUser(AbstractUser):
     # Email optional for now
     email = models.EmailField(blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
-    
-    # Keep default login with username
-    # USERNAME_FIELD = 'username'
 
     # Required fields for creating superuser
     REQUIRED_FIELDS = ['user_type']
@@ -68,7 +65,6 @@ class TherapistProfile(models.Model):
     )
 
     def __str__(self):
-        # use self.user, not self.user.user
         full_name = self.user.get_full_name()
         if full_name:
             return f"{full_name} (License: {self.license_number})"
