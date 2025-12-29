@@ -185,5 +185,8 @@ class EquipmentOrderStatusHistoryAdmin(admin.ModelAdmin):
         return False
 
     def has_delete_permission(self, request, obj=None):
-        """Disallow deletion of audit history."""
-        return False
+        """
+        Allow superusers to delete (needed for cascade when deleting orders).
+        Regular users cannot delete to preserve audit integrity.
+        """
+        return request.user.is_superuser
