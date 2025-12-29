@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="text-align: center; padding: 4rem 0;">
+    <h1 style="color: #2A9D8F;">Welcome to Quiporder</h1>
+    <p style="margin: 1rem 0;">Equipment Management for Occupational Therapists</p>
+    
+    {% if user.is_authenticated %}
+        <p>Logged in as: <strong>{{ user.get_full_name|default:user.username }}</strong></p>
+        {% if user.user_type == 'THERAPIST' %}
+            <a href="{% url 'therapist_dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+        {% else %}
+            <a href="{% url 'patient_dashboard' %}" class="btn btn-primary">View My Orders</a>
+        {% endif %}
+    {% else %}
+        <a href="{% url 'account_login' %}" class="btn btn-primary">Login</a>
+    {% endif %}
+</div>
+{% endblock %}
