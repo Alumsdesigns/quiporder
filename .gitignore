@@ -1,32 +1,55 @@
 # Python
 *.py[cod]
-__pycache__/
+*$py.class
+__pycache__/*
 *.so
 *.egg
 *.egg-info/
+*.pyc
+*.pyo
+*.pyd
 dist/
 build/
-venv/
-env/
+*.sqlite3
+
+/dashboard/__pycache__
+/dashboard/migrations/__pycache__
+/equipment/__pycache__
+/equipment/migrations/__pycache__
 
 # Django
 *.log
+local_settings.py
 db.sqlite3
-media/
-staticfiles/
+db.sqlite3-journal
+/media
+/staticfiles
 
 # Environment
-/venv
 .env
+.venv
+env/
+/venv/
+ENV/
+env.bak/
+venv.bak/
 .vscode/
 .idea/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
 
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
 
-*.pyc
-__pycache__/*
-*.sqlite3
-/__pycache__/settings.cpython-313.pyc
+

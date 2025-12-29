@@ -68,46 +68,79 @@ pip install -r requirements.txt
 
 ### Project Structure
 ```
-quip-order/
-│
-├── manage.py                # Django management script
-├── requirements.txt         # Python dependencies
-├── .env.example             # Environment variables template
-├── .gitignore               # Git ignore rules
-├── README.md                # This file      
+quiporder/
+│  
+└── dashboard/               # Dashboard app
+│   ├── __pycache__  
+│   ├── migrations/          
+│   |    ├── __init__.py
+│   |    └── __pycache__
+│   |         └── __init__.cpython-313.pyc
+|   |
+|   ├── __init__.py          # Makes this a Python package
+|   ├── admin.py             # Register models to appear in admin panel 
+|   ├── apps.py              # App configuration
+|   ├── models.py            # Database tables (User, Therapist, Patient)
+|   ├── tests.py             # Test code goes here
+|   └── views.py             # Authentication views
+|   
+└── docs/                    # Documents folder holding assest and software architecture erd and flow diagrams
+│   └── screenshots_verify_tests/       
+│   └── erd.md  
+│   └── flow-horizontal-view.md
+|
+└── equipment/  
+│   ├── __pycache__
+│   ├──  migrations/  
+│   |   ├── 0001_initial.py
+│   |   ├── 0002_alter_equipmentorder_options_equipment_category_and_more.py
+│   |   ├── 0003_alter_equipment_available_quantity_and_more.py
+│   |   ├── 0004_alter_equipmentorder_quantity.py
+│   |   ├── 0005_alter_equipment_available_quantity.py
+│   |   ├── 0006_alter_equipmentorder_status.py
+│   |   └── 0007_equipmentorder_deleted_at_equipmentorder_deleted_by.py
+│   ├── __init__.py         # Tells Python this is a package
+|   ├── admin.py
+|   |── apps.py
+│   ├── models.py            # Equipment, Order models
+│   ├── tests.py             # CRUD test operations
+│   └── views.py             # Equipment tests
 │
 └── quiporder/             # Main project configuration
-│   │
-│   └── __pycache__/       # Tracks database changes
-│        └── __init__.cpython-313.pyc
+│   ├──  __pycache__/       # Tracks database changes
 │   ├── __init__.py        # Tells Python this is a package
 │   ├── asgi.py            # For async servers 
 │   ├── settings.py        # Project settings
 │   ├── urls.py            # URL routing
 │   └── wsgi.py            # For deploying to web servers
+└──static/                 
+|   └── css
+|   └── js
+|   └── images
 │
 └──users/                  # User management app
+|  ├──  __pycache__/ 
 │  │
-   └── migrations/          # Tracks database changes
-        └── __init__.py
-    │
-    ├── __init__.py          # Makes this a Python package
-    ├── admin.py             # Register models to appear in admin panel 
-    ├── apps.py              # App configuration
-    ├── models.py            # Database tables (User, Therapist, Patient)
-    ├── tests.py             # Test code goes here
-    ├── views.py             # Authentication views
-
-└── equipment/               # Equipment management app
-│   ├── models.py            # Equipment, Order models
-│   ├── views.py             # CRUD operations
-│   ├── forms.py             # Django forms
-│   └── tests.py             # Equipment tests
+|  ├──  migrations/          # Tracks database changes
+│  |     ├── init__.py
+│  |     ├── __pycache__
+│  |     ├── 0001_initial.py
+│  |     ├── 0002_alter_customuser_email_therapistprofile_and_more.py
+│  |     ├── 0003_alter_customuser_options_customuser_date_of_birth_and_more.py
+│  |     └── 0004_alter_customuser_email.py
+|  │
+|  ├── __init__.py          # Makes this a Python package
+|  ├── admin.py             # Register models to appear in admin panel 
+|  ├── apps.py              # App configuration
+|  ├── models.py            # Database tables (User, Therapist, Patient)
+|  ├── tests.py             # Test code goes here
+|  └── views.py             # Authentication views
 │
-└── dashboard/               # Dashboard app
-    ├── views.py             # Role-based dashboards
-    └── tests.py             # Dashboard tests
-   
+├── .gitignore               # Git ignore rules
+├── manage.py                # Django management script
+├── README.md                # This file  
+├── requirements.txt         # Python dependencies
+└── .env.example             # Environment variables template
 
 ```
 
