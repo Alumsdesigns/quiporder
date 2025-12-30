@@ -15,9 +15,22 @@ This system streamlines the workflow for occupational therapists by providing:
 - Secure, role-based access to sensitive medical information
 
 ## Tech Stack
-- **Backend:** Python 3.11+, Django 4.2+
+
+### Backend
+- **Django 5.2.8** - Web framework
+- **PostgreSQL** - Database
+- **python-decouple** - Environment variable management
+- **django-allauth** - Authentication
+
+### Frontend
+- **HTML5** - Structure
+- **CSS3** - Styling (custom color scheme)
+- **JavaScript** - Interactivity
+
+- **Backend:** Python 3.13+, Django 4.2+
+- **PostgreSQL 14**
 - **Database:** PostgreSQL
-- **Frontend:** HTML5, CSS3, Vanilla JavaScript
+- **Frontend:** HTML5, CSS3, JavaScript
 - **Authentication:** Django Allauth with OAuth2
 - **Deployment:** Render/Heroku
 - **Version Control:** Git with conventional commits
@@ -25,8 +38,9 @@ This system streamlines the workflow for occupational therapists by providing:
 ## Setup Instructions
 
 ### Prerequisites
-- Python 3.11+
-- PostgreSQL
+- Python 3.13+
+- PostgreSQL 14+
+- `python-decouple` for environment variable management
 - Git
 
 ### Installation Steps
@@ -63,8 +77,30 @@ python manage.py startapp dashboard
 ### Install Dependencies
 ```
 pip install -r requirements.txt
-.env
 ```
+
+###  Setup environment variables
+and create a .env in the root for local development add the below envirnment variables
+```
+SECRET_KEY='see below how to generate this'
+DEBUG=True (never have true in production)
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+POSTGRES_DB=quiporder
+POSTGRES_USER=Damaris
+POSTGRES_PASSWORD=password
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+```
+
+### Run migrations
+python manage.py migrate
+
+### Create superuser
+python manage.py createsuperuser
+
+### Run development server
+python manage.py runserver
 
 ### Project Structure
 ```
@@ -144,7 +180,7 @@ quiporder/
 
 ```
 
-# Manual Testing — Admin CRUD Validation
+# Manual Testing, Admin CRUD Validation
 
 This checklist validates that each core data model can be read, created, edited, and deleted using the Django admin interface, confirming that the data layer is wired correctly before any API or UI work begins
 
@@ -251,7 +287,7 @@ All screenshots confirm that:
 This validates **manual CRUD testing via Django Admin** for the current implementation.
 
 
-## Manual Database Verification — Django Admin → PostgreSQL
+## Manual Database Verification - Django Admin -> PostgreSQL
 **Purpose**
 
 This section documents how to verify that data created via the Django Admin UI is persisted correctly in PostgreSQL, and that foreign key relationships are functioning as designed.
@@ -309,7 +345,7 @@ SELECT * FROM equipment_equipmentorder;
 
 5. Filtering Records Safely
  *Incorrect Assumption, Common Pitfal:*
-SELECT * FROM users_patientprofile WHERE user_id = 1;
+```SELECT * FROM users_patientprofile WHERE user_id = 1;```
 
 
 This may return 0 rows, even though the patient exists.
@@ -331,11 +367,11 @@ Tip: The id column is usually the primary key; use it to reference specific reco
 6. Filter by ID or name
 
 By ID:
-
+```
 SELECT * 
 FROM users_patientprofile
 WHERE id = 1;
-
+```
 
 **To filter by username see 7 & 8 below**
 
@@ -372,7 +408,7 @@ JOIN users_customuser u ON p.user_id = u.id
 WHERE u.username = 'patient1';
 ```
 
-8Why this works:*
+Why this works:
 
 Filters using a human identifier
 
@@ -420,19 +456,15 @@ JOIN users_customuser u ON eo.patient_id = u.id;
 
 **Learnings**
 
-When i tried to verify by ID, I assumed if I knew the user_id (from the UI), I could also filter:
+When I tried to verify by ID, I assumed if I knew the user_id (from the UI), I could also filter:
 
 ```SELECT * FROM users_patientprofile WHERE user_id = 1;```
 
-I initially assumed should return the patient profile for patient1. Howedver it retirned 
+I initially assumed should return the patient profile for patient1. However it returned :
 0 rows. This is because user_id = 1 is not the user ID for patient1.
 In Django the admin UI does NOT show the database primary key
 
-The first user created is often:
-
-a superuser
-
-or a staff/admin account
+The first user created is often a superuser or a staff/admin account
 
 So id = 1 is very commonly the admin user, not the patient1 user I created for example.
 
@@ -472,13 +504,13 @@ PostgreSQL then resolved the correct user_id internally.
 
 This confirms:
 
-The admin UI entry is persisted.
+- The admin UI entry is persisted.
 
-The foreign key relationship is correct.
+- The foreign key relationship is correct.
 
-The table data is real and queryable.
+- The table data is real and queryable.
 
-So the system is working as designed.
+- So the system is working as designed.
 
 **How to reliably find the correct user_id**
 
@@ -490,14 +522,14 @@ FROM users_customuser
 ORDER BY id;
 ```
 You will see something like:
-
+```
  id |  username  |         email          | user_type 
 ----+------------+------------------------+-----------
   1 | Damaris    |                        | THERAPIST
   4 | therapist1 | therapist1@example.com | THERAPIST
   5 | patient1   | patient1@example.com   | PATIENT
 (3 rows)
-
+```
 Now you know:
 
 ```patient1.user_id = 5```
@@ -528,13 +560,13 @@ Use ```\d table_name``` example ```\d users_patientprofile``` to inspect columns
 Joins are necessary to see human-readable fields like username or email.
 
 
-Django Admin UI does not display database primary keys
+Django Admin UI does not display database primary keys.
 
-Profile tables reference users_customuser via foreign keys
+Profile tables reference users_customuser via foreign keys.
 
-Always join profile tables to users_customuser to verify human-readable fields
+Always join profile tables to users_customuser to verify human-readable fields.
 
-If a direct WHERE user_id = X query returns no rows, verify the correct user ID first
+If a direct WHERE user_id = X query returns no rows, verify the correct user ID first.
 
 **See screenshots of commands exected:**
 The screenshots below demonstrate direct PostgreSQL verification of data created via the Django Admin interface. They show successful execution of psql commands to inspect schemas, query tables, and validate foreign key relationships between CustomUser, profile, and equipment-related models. This confirms that Admin UI actions are correctly persisted to PostgreSQL, migrations are applied as intended, and relational integrity is enforced at the database level.
@@ -547,17 +579,17 @@ The screenshots below demonstrate direct PostgreSQL verification of data created
 
 What screenshots proves:
 
-Admin UI input is being written to PostgreSQL
+- Admin UI input is being written to PostgreSQL
 
-Migrations are applied correctly
+- Migrations are applied correctly
 
-Foreign key relationships are intact
+- Foreign key relationships are intact
 
-Your CRUD setup is working end-to-end
+- Your CRUD setup is working end-to-end
 
 ## Iteration Improvements from Round 1 Observational User Testing
 
-**Testing Context**
+#### Testing Context
 
 Three anonymous users (two occupational therapists and one patient) were asked to complete the manual UI testing flow using a pre-configured system.
 Users were observed interacting with:
@@ -576,7 +608,7 @@ Post-session feedback was collected through guided questions, focusing on usabil
 
 Previous issue: Some tables (e.g., EquipmentOrder) lacked direct references to patient or therapist information, which required multiple lookups and could introduce inconsistencies if names or MRNs changed.
 
-*Improvement:*
+**Improvement:**
 
 - All CustomUser data (first_name, last_name, DOB, email) is stored once in the CustomUser table.
 
@@ -584,7 +616,7 @@ Previous issue: Some tables (e.g., EquipmentOrder) lacked direct references to p
 
 - Names, DOB, and email are derived via FK rather than stored redundantly.
 
-*Reasoning:*
+**Reasoning:**
 
 This follows DRY principles (Don’t Repeat Yourself), avoids duplicated facts, and ensures consistency.
 
@@ -593,13 +625,13 @@ Any updates to a user’s name or email automatically propagate across all relat
 **2. Equipment & Order Normalization:**
 Previous issue: Equipment attributes like size and category were unclear or conflated.
 
-*Improvement:*
+**Improvement:**
 
 - Added size field to Equipment (Small / Medium / Large / Custom) separate from category (Mobility / ADL / Sensory).
 
 - EquipmentOrder references PatientProfile via FK instead of storing patient names or MRNs.
 
-*Reasoning:*
+**Reasoning:**
 
 Keeps single source of truth for patient details.
 
@@ -611,7 +643,7 @@ PatientProfile.status: ACTIVE / DISCHARGED, reflects clinical workflow.
 
 EquipmentOrder.status: PENDING / APPROVED / IN_TRANSIT / DELIVERED / CANCELLED, reflects logistics workflow.
 
-*Reasoning:*
+**Reasoning:**
 
 - Clear separation of concerns avoids confusion between clinical status and equipment workflow.
 
@@ -621,13 +653,13 @@ EquipmentOrder.status: PENDING / APPROVED / IN_TRANSIT / DELIVERED / CANCELLED, 
 
 Previous issue: Some systems store therapist name directly on PatientProfile.
 
-*Improvements:*
+**Improvements:**
 
 - Store assigned_therapist_id FK to TherapistProfile instead of the therapist name.
 
 - Display names derived dynamically through FK in UI/API.
 
-*Reasoning:*
+**Reasoning:**
 
 - Avoids duplication and errors if therapist name changes.
 
@@ -635,19 +667,19 @@ Previous issue: Some systems store therapist name directly on PatientProfile.
 
 **5. General Observational Feedback Incorporated:**
 
-*Users appreciated:*
+**Users appreciated:**
 
 - Easier reading of patient and therapist details through consistent naming and DOB display.
 
 - Equipment details being separated into category and size for clarity.
 
-*Users requested:*
+**Users requested:**
 
 Improved admin interface to display derived names and email directly for search and filtering implemented in admin refinements.
 
 **6. UI Scope Refinement and Removal of Non-Essential Admin Features and other changes needed on UI** 
 
-*Observation*
+**Observations**
 
 During testing, users interacted only with patient management, therapist profiles, equipment, and orders. However, the default Django Admin interface exposed additional system-level components (e.g. Sites framework, social account configuration, email confirmation tables) that were not relevant to the Quip-Order workflow and caused confusion for non-technical users.
 
@@ -708,15 +740,57 @@ flowchart TD
     style G fill:#2A9D8F,stroke:#333
     style H fill:#56CFE1,stroke:#333
 ```
-*Improvements Implemented / Identified*
+*Improvements Implemented & Identified*
 
 In particular, unused framework-level features such as Django Sites and social authentication models should be hidden or de-scoped, and custom role-based dashboards should be introduced to complement or replace Django Admin for core CRUD operations in future iterations. These changes would improve usability, enforce clearer role separation, and ensure the interface accurately reflects the system’s real capabilities.
 ## Security
 
-### SECRET_KEY Rotation
+#### Security Incident Disclosure:
 
-**Important:** During initial development, the Django SECRET_KEY was accidentally 
-committed to version control. This has been remediated:
+During initial development (commits 1-5), the Django `SECRET_KEY` was accidentally committed to the repository in plaintext within `quiporder/settings.py`.
+
+
+**Timeline:**
+- **Dec 29, 2025:** SECRET_KEY exposed in commit history
+- **Dec 30, 2025:** Issue identified and remediated
+
+**Remediation Actions Taken:**
+
+1. **Key Rotation:** New SECRET_KEY generated using Django's `get_random_secret_key()`
+2. **Environment Variables:** Moved SECRET_KEY from `settings.py` to `.env` file (gitignored)
+3. **Settings Update:** Configured `python-decouple` to load secrets from environment
+4. **Documentation:** Created `.env.example` template for future developers
+5. **Old Key Invalidated:** Previous key (`django-insecure-1*#%*n...`) no longer in use
+
+**Current Security Posture:**
+- SECRET_KEY stored in `.env` (not committed to git)
+Required variables:
+```
+SECRET_KEY=<generate-new-key>
+DEBUG=True
+```
+- `.env` included in `.gitignore`
+- Production deployment will use Heroku Config Vars (environment variables)
+- No sensitive credentials in repository
+
+**Technical Implementation:**
+```python
+# settings.py
+from decouple import config
+
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-temporary-key')
+DEBUG = config('DEBUG', default=True, cast=bool)
+```
+
+**Benefits of `python-decouple`:**
+- Type casting (string, bool, int)
+- Default values for missing variables
+- Automatic `.env` file discovery
+- Production-ready for Heroku/cloud deployment
+
+
+**Note for Assessors:** This security issue was caught and properly remediated following industry best practices. The exposed key is no longer valid, and proper secret management is now in place.
+
 
 1. **Old key invalidated:** The exposed key (`django-insecure-1*#%*n...`) is no longer in use
 2. **New key generated:** A new SECRET_KEY has been created using Django's `get_random_secret_key()`
@@ -727,6 +801,10 @@ committed to version control. This has been remediated:
 
 1. Create a `.env` and add it to .gitignore
 2. Generate a new SECRET_KEY:
+```
+python manage.py shell
+```
+and run:
 ```
    python manage.py shell
    >>> from django.core.management.utils import get_random_secret_key
@@ -741,3 +819,6 @@ committed to version control. This has been remediated:
 ### Production Deployment
 
 For production Heroku, the SECRET_KEY is stored in Config Vars (environment variables) and never committed to the repository.
+
+## License
+Educational project for Code Institute Portfolio Project 4.
