@@ -50,3 +50,14 @@ def patient_dashboard(request):
         messages.warning(request, 'No patient profile found. Please contact your therapist.')
     
     return render(request, 'equipment/patient_dashboard.html', {'orders': orders})
+
+
+@login_required
+def equipment_list(request):
+    """List all equipment inventory (therapists only)."""
+    if request.user.user_type != 'THERAPIST':
+        messages.error(request, 'Access denied. Therapists only.')
+        return redirect('home')
+    
+    equipment = Equipment.objects.all().order_by('category', 'name')
+    return render(request, 'equipment/equipment_list.html', {'equipment': equipment})

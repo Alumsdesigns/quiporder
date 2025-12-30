@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Equipment Inventory - Quiporder{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1 class="dashboard-title">Equipment Inventory</h1>
+
+    {% if equipment %}
+        <div class="orders-table-container">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Equipment Name</th>
+                        <th>Category</th>
+                        <th>Size</th>
+                        <th>Total Quantity</th>
+                        <th>Available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in equipment %}
+                    <tr>
+                        <td><strong>{{ item.name }}</strong></td>
+                        <td>{{ item.get_category_display }}</td>
+                        <td>{{ item.get_size_display }}</td>
+                        <td>{{ item.total_quantity }}</td>
+                        <td>
+                            <span class="{% if item.available_quantity > 0 %}text-success{% else %}text-danger{% endif %}">
+                                {{ item.available_quantity }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="action-card" style="margin-top: 2rem;">
+            <p>To add, edit, or delete equipment, use the admin panel.</p>
+            <a href="/admin/equipment/equipment/" class="btn btn-primary">Manage Equipment in Admin</a>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p class="empty-message">No equipment in inventory yet.</p>
+            <p class="empty-submessage">Add equipment via the admin panel.</p>
+            <a href="/admin/equipment/equipment/add/" class="btn btn-primary" style="margin-top: 1rem;">Add Equipment</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

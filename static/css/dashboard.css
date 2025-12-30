@@ -186,6 +186,22 @@
     font-size: 1rem;
 }
 
+/* Add at bottom of dashboard.css */
+
+/* Text Utilities */
+.text-success {
+    color: #78C7A6;
+    font-weight: 600;
+}
+
+.text-danger {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+/* ==============================================
+   RESPONSIVE STYLES
+   ============================================== */
 
 /* Responsive Design Therapist Dashboard */
 @media (max-width: 768px) {
