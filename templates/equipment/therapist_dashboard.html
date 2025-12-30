@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Therapist Dashboard - Quiporder{% endblock %}
+
+{# Link dashboard-specific CSS here #}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1 class="dashboard-title">Therapist Dashboard</h1>
+
+    <div class="stats-grid">
+        <div class="stat-card stat-card--primary">
+            <h2 class="stat-number">{{ total_equipment }}</h2>
+            <p class="stat-label">Equipment Items</p>
+        </div>
+        
+        <div class="stat-card stat-card--secondary">
+            <h2 class="stat-number">{{ total_orders }}</h2>
+            <p class="stat-label">Total Orders</p>
+        </div>
+        
+        <div class="stat-card stat-card--accent">
+            <h2 class="stat-number">{{ pending_orders }}</h2>
+            <p class="stat-label">Pending Orders</p>
+        </div>
+        
+        <div class="stat-card stat-card--primary">
+            <h2 class="stat-number">{{ active_patients }}</h2>
+            <p class="stat-label">Active Patients</p>
+        </div>
+    </div>
+
+    <div class="action-card">
+        <h2 class="action-title">Quick Actions</h2>
+        <p class="action-description">Use the admin panel to manage equipment, patients, and orders.</p>
+        <a href="/admin/" class="btn btn-primary">Go to Admin Panel</a>
+    </div>
+</div>
+{% endblock %}

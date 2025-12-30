@@ -3,7 +3,7 @@
 # example.com/patients/ -> shows patient list
 # example.com/equipment/ -> shows equipment list
 # Like a phone directory for your website
-
+# quiporder/urls.py 
 """
 URL configuration for quiporder project.
 
@@ -27,5 +27,6 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
+    path('equipment/', include('equipment.urls')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]

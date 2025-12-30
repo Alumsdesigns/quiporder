@@ -1,0 +1,113 @@
+/* ==============================================
+   DASHBOARD STYLES - Therapist Dashboard
+   ============================================== */
+
+/* Dashboard Container */
+.dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+/* Dashboard Title */
+.dashboard-title {
+    color: #2A9D8F;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+/* Statistics Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+/* Stat Card */
+.stat-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Stat Card Color Variants */
+.stat-card--primary .stat-number {
+    color: #2A9D8F; /* Teal Blue */
+}
+
+.stat-card--secondary .stat-number {
+    color: #78C7A6; /* Mint Green */
+}
+
+.stat-card--accent .stat-number {
+    color: #56CFE1; /* Sky Blue */
+}
+
+/* Stat Number */
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1;
+}
+
+/* Stat Label */
+.stat-label {
+    color: #4A5A6A;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* Action Card */
+.action-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-title {
+    color: #2A9D8F;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.action-description {
+    color: #4A5A6A;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-card {
+        padding: 1.5rem;
+    }
+}
