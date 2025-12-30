@@ -25,6 +25,7 @@
                 {% if user.user_type == 'THERAPIST' %}
                     <li><a href="{% url 'therapist_dashboard' %}">Dashboard</a></li>
                     <li><a href="{% url 'equipment_list' %}">Equipment</a></li>
+                                <li><a href="{% url 'order_create' %}">Create Order</a></li>
                 {% elif user.user_type == 'PATIENT' %}
                     <li><a href="{% url 'patient_dashboard' %}">My Orders</a></li>
                 {% endif %}
