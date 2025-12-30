@@ -76,9 +76,9 @@ main {
     cursor: pointer;
 }
 
-.btn-primary { background: #78C7A6; color: white; }
+.btn-primary { background: #32b57e; color: white; }
 .btn-secondary { background: #2A9D8F; color: white; }
-.btn:hover { opacity: 0.9; }
+.btn:hover { color: #e4fff2f5; opacity: 0.09;}
 
 /* Tables */
 table {
