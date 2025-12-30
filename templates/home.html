@@ -1,16 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Quiporder{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block content %}
-<div style="text-align: center; padding: 4rem 0;">
-    <h1 style="color: #2A9D8F;">Welcome to Quiporder</h1>
-    <p style="margin: 1rem 0;">Equipment Management for Occupational Therapists</p>
+<div class="home-container">
+    <h1 class="home-title">Welcome to Quiporder</h1>
+    <p class="home-subtitle"></p>Equipment Management for Occupational Therapists</p>
     
     {% if user.is_authenticated %}
-        <p>Logged in as: <strong>{{ user.get_full_name|default:user.username }}</strong></p>
-        <p style="color: #4A5A6A; margin-top: 1rem;">User Type: {{ user.get_user_type_display }}</p>
-        <p style="color: #78C7A6; margin-top: 2rem; font-style: italic;">Dashboard coming soon!</p>
+        <div class="user-info">
+            <p class="user-greeting">
+                Logged in as: <strong>{{ user.get_full_name|default:user.username }}</strong>
+            </p>
+            <p class="user-type">User Type: {{ user.get_user_type_display }}</p>
+            <p class="coming-soon">Dashboard coming soon!</p>
+        </div>
     {% else %}
-        <a href="{% url 'account_login' %}" class="btn btn-primary" style="margin-top: 2rem;">Login to Get Started</a>
+        <div class="home-cta">
+            <a href="{% url 'account_login' %}" class="btn btn-primary">Login to Get Started</a>
+        </div>
     {% endif %}
+
 </div>
 {% endblock %}
