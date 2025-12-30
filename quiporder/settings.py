@@ -187,4 +187,12 @@ LOGOUT_REDIRECT_URL = '/'
 # Redirect if user tries to access login-required page
 LOGIN_URL = '/accounts/login/'
 
+# Email configuration for local development
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Django-allauth settings
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # Disable email verification for dev
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+
 
