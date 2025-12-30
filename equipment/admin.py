@@ -58,7 +58,8 @@ class EquipmentOrderAdmin(admin.ModelAdmin):
         'patient__user__username', 
         'patient__user__first_name', 
         'patient__user__last_name', 
-        'equipment__name'
+        'equipment__name',
+        'notes'
         ]
     readonly_fields = ['ordered_at']
     ordering = ['-ordered_at']
@@ -68,6 +69,10 @@ class EquipmentOrderAdmin(admin.ModelAdmin):
         ('Order Details', {
             'fields': ('patient', 'equipment', 'quantity')
         }),
+        ('Additional Information', {
+            'fields': ('notes',),  
+            'description': 'Optional notes or special instructions for this order.'
+         }),
         ('Status & Tracking', {
             'fields': ('status', 'created_by', 'ordered_at'),
             'description': 'DRAFT orders do not reduce inventory. Change to PENDING to allocate stock.'

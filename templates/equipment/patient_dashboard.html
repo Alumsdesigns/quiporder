@@ -19,6 +19,7 @@
                         <th>Equipment</th>
                         <th>Quantity</th>
                         <th>Status</th>
+                        <th>Notes</th>
                         <th>Ordered Date</th>
                     </tr>
                 </thead>
@@ -31,6 +32,13 @@
                             <span class="status-badge status-{{ order.status|lower }}">
                                 {{ order.get_status_display }}
                             </span>
+                        </td>
+                         <td>
+                            {% if order.notes %}
+                                {{ order.notes|truncatewords:10 }}
+                            {% else %}
+                                <span style="color: #ccc;">-</span>
+                            {% endif %}
                         </td>
                         <td>{{ order.ordered_at|date:"M d, Y" }}</td>
                     </tr>

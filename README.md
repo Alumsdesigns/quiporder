@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**Quip-Order** is a comprehensive Full-Stack Django web application designed for occupational therapists in NHS/Private Practice s to efficiently manage:
+**Quip-Order** is a comprehensive Full-Stack Django web application designed for occupational therapists in NHS/Private Practices to efficiently manage:
 
 - Equipment ordering and inventory tracking
 - Role-based access control (Therapists vs Patients)

@@ -72,7 +72,7 @@ def order_create(request):
         patient_id = request.POST.get('patient')
         equipment_id = request.POST.get('equipment')
         quantity = request.POST.get('quantity')
-        notes = request.POST.get('notes', '')
+        notes = request.POST.get('notes', '') 
         
         # Validate inputs
         if not patient_id or not equipment_id or not quantity:
@@ -113,7 +113,7 @@ def order_create(request):
             patient=patient,
             equipment=equipment,
             quantity=quantity,
-            notes=notes,
+            notes=notes, 
             status='PENDING',
             created_by=request.user
         )

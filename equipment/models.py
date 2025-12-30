@@ -189,6 +189,13 @@ class EquipmentOrder(models.Model):
     )
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="DRAFT")
+
+    notes = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Special instructions or additional information"
+    )
+
     ordered_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
