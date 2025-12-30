@@ -7,13 +7,10 @@
     
     {% if user.is_authenticated %}
         <p>Logged in as: <strong>{{ user.get_full_name|default:user.username }}</strong></p>
-        {% if user.user_type == 'THERAPIST' %}
-            <a href="{% url 'therapist_dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
-        {% else %}
-            <a href="{% url 'patient_dashboard' %}" class="btn btn-primary">View My Orders</a>
-        {% endif %}
+        <p style="color: #4A5A6A; margin-top: 1rem;">User Type: {{ user.get_user_type_display }}</p>
+        <p style="color: #78C7A6; margin-top: 2rem; font-style: italic;">Dashboard coming soon!</p>
     {% else %}
-        <a href="{% url 'account_login' %}" class="btn btn-primary">Login</a>
+        <a href="{% url 'account_login' %}" class="btn btn-primary" style="margin-top: 2rem;">Login to Get Started</a>
     {% endif %}
 </div>
 {% endblock %}

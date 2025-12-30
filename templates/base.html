@@ -4,14 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Quipster - Equipment Management for Occupational Therapists">
+    <meta name="description" content="Quiporder - Equipment Management for Occupational Therapists">
     
     <title>{% block title %}Quiporder - Equipment Management{% endblock %}</title>
     
-    <!-- Favicon optional for now -->
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
-    
-    <!-- Custom CSS - Your color scheme -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
     <!-- Block for page-specific CSS -->
@@ -20,107 +17,43 @@
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar">
-        <div class="nav-container">
-            <!-- Logo/Brand -->
-            <a href="{% url 'home' %}" class="nav-brand">
-                <span class="logo-text">Quiporder</span>
-            </a>
+        <div class="container">
+            <a href="/" class="brand">Quiporder</a>
             
-            <!-- Navigation Links -->
-            <ul class="nav-menu">
+            <ul class="nav-links">
                 {% if user.is_authenticated %}
-                    <!-- Links for logged-in users -->
-                    
-                    {% if user.user_type == 'THERAPIST' %}
-                        <!-- Therapist-only links -->
-                        <li class="nav-item">
-                            <a href="{% url 'therapist_dashboard' %}" class="nav-link">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'equipment_list' %}" class="nav-link">Equipment</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'order_list' %}" class="nav-link">Orders</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'patient_list' %}" class="nav-link">Patients</a>
-                        </li>
-                    {% elif user.user_type == 'PATIENT' %}
-                        <!-- Patient-only links -->
-                        <li class="nav-item">
-                            <a href="{% url 'patient_dashboard' %}" class="nav-link">My Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'patient_orders' %}" class="nav-link">My Orders</a>
-                        </li>
-                    {% endif %}
-                    
-                    <!-- User info and logout -->
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link" id="userDropdown">
-                            <span class="user-greeting">
-                                Hello, {{ user.get_full_name|default:user.username }}
-                            </span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'account_logout' %}" class="dropdown-link">Logout</a></li>
-                        </ul>
-                    </li>
+                    <!-- Logged-in user -->
+                    <li><a href="{% url 'account_logout' %}">Logout ({{ user.username }})</a></li>
                     
                 {% else %}
-                    <!-- Links for anonymous users -->
-                    <li class="nav-item">
-                        <a href="{% url 'account_login' %}" class="nav-link">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'account_signup' %}" class="nav-link btn-primary">Sign Up</a>
-                    </li>
+                    <!-- Anonymous user -->
+                    <li><a href="{% url 'account_login' %}">Login</a></li>
+                    <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
                 {% endif %}
             </ul>
-            
-            <!-- Mobile menu toggle for later -->
-            <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                <span class="hamburger"></span>
-            </button>
         </div>
     </nav>
     
     <!-- Main Content Area -->
-    <main class="main-content">
-        <!-- Messages/Alerts for feedback -->
+    <main class="container">
+        <!-- Messages/Alerts -->
         {% if messages %}
-            <div class="messages-container">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
-                        {{ message }}
-                        <button class="alert-close" aria-label="Close">&times;</button>
-                    </div>
-                {% endfor %}
-            </div>
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
         {% endif %}
         
         <!-- Page Content -->
-        {% block content %}
-        <!-- Child templates will inject content here -->
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
     
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <p>&copy; 2025 Quiporder. Equipment Management for Healthcare.</p>
-            <p class="footer-links">
-                <a href="#">Privacy Policy</a> | 
-                <a href="#">Terms of Service</a> | 
-                <a href="#">Contact</a>
-            </p>
-        </div>
+    <footer>
+        <p>&copy; 2025 Quiporder - Equipment Management for Healthcare</p>
     </footer>
     
-    <!-- JavaScript -->
-    <script src="{% static 'js/main.js' %}"></script>
-    
-    <!-- Block for page-specific JS -->
+    <!-- JavaScript (optional) -->
+    {# <script src="{% static 'js/main.js' %}"></script> #}
     {% block extra_js %}{% endblock %}
 </body>
 </html>
