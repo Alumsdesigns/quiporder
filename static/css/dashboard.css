@@ -73,6 +73,8 @@
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center; 
+    margin-top: 2rem;
 }
 
 .action-title {
@@ -85,6 +87,19 @@
     color: #4A5A6A;
     margin-bottom: 1.5rem;
     line-height: 1.6;
+    font-size: 1rem;
+}
+
+.action-card p {
+    color: #4A5A6A;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.action-card .btn {
+    margin-top: 0.5rem; 
+    color: white;
 }
 
 

@@ -40,16 +40,20 @@
                 </tbody>
             </table>
         </div>
-        
-        <div class="action-card" style="margin-top: 2rem;">
-            <p>To add, edit, or delete equipment, use the admin panel.</p>
-            <a href="/admin/equipment/equipment/" class="btn btn-primary">Manage Equipment in Admin</a>
+
+        <div class="action-card">
+            <h3 class="action-title">Manage Equipment</h3>
+            <p class="action-description">
+                To add, edit, or delete equipment items, use the Django admin panel.
+            </p>
+            <a href="/admin/equipment/equipment/" class="btn btn-primary">Go to Admin Panel</a>
         </div>
+        
     {% else %}
         <div class="empty-state">
             <p class="empty-message">No equipment in inventory yet.</p>
             <p class="empty-submessage">Add equipment via the admin panel.</p>
-            <a href="/admin/equipment/equipment/add/" class="btn btn-primary" style="margin-top: 1rem;">Add Equipment</a>
+            <a href="/admin/equipment/equipment/add/" class="btn btn-primary">Add Equipment</a>
         </div>
     {% endif %}
 </div>
