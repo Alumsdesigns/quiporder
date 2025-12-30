@@ -711,4 +711,33 @@ flowchart TD
 *Improvements Implemented / Identified*
 
 In particular, unused framework-level features such as Django Sites and social authentication models should be hidden or de-scoped, and custom role-based dashboards should be introduced to complement or replace Django Admin for core CRUD operations in future iterations. These changes would improve usability, enforce clearer role separation, and ensure the interface accurately reflects the system’s real capabilities.
+## Security
 
+### SECRET_KEY Rotation
+
+**Important:** During initial development, the Django SECRET_KEY was accidentally 
+committed to version control. This has been remediated:
+
+1. **Old key invalidated:** The exposed key (`django-insecure-1*#%*n...`) is no longer in use
+2. **New key generated:** A new SECRET_KEY has been created using Django's `get_random_secret_key()`
+3. **Environment variables:** The new key is stored in `.env` (gitignored) file for local development 
+4. **Settings updated:** `settings.py` now reads from environment variables using `python-dotenv`
+
+### Running Locally
+
+1. Create a `.env` and add it to .gitignore
+2. Generate a new SECRET_KEY:
+```
+   python manage.py shell
+   >>> from django.core.management.utils import get_random_secret_key
+   >>> print(get_random_secret_key())
+```
+3. Paste the key into `.env`:
+```
+   SECRET_KEY=your-generated-key-here
+   DEBUG=True
+```
+
+### Production Deployment
+
+For production Heroku, the SECRET_KEY is stored in Config Vars (environment variables) and never committed to the repository.

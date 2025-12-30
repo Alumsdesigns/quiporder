@@ -4,7 +4,7 @@
 # - Security settings (SECRET_KEY)
 # - Which apps are installed
 # - Time zones, languages
-# Think of it as your project's config file
+# Think of it as our project's config file
 
 """
 Django settings for quiporder project.
@@ -20,6 +20,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
+# import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,8 +31,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-1*#%*n-)716j)a4g7pf-bi)08ter9m+clah#l)r+=!$z59@jfj'
-
 
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-temporary-key')
 
@@ -63,7 +63,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -137,6 +137,16 @@ DATABASES = {
 }
 
 
+# Alternative: Use DATABASE_URL for Heroku compatibility
+# Uncomment below and comment out DATABASES above if using DATABASE_URL
+# import dj_database_url
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=f"postgresql://{config('POSTGRES_USER')}:{config('POSTGRES_PASSWORD')}@{config('POSTGRES_HOST')}:{config('POSTGRES_PORT')}/{config('POSTGRES_DB')}"
+#     )
+# }
+
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -166,5 +176,15 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+# Authentication redirects
+# Redirect after successful login
+LOGIN_REDIRECT_URL = '/'
+
+# Redirect after logout
+LOGOUT_REDIRECT_URL = '/'
+
+# Redirect if user tries to access login-required page
+LOGIN_URL = '/accounts/login/'
 
 
