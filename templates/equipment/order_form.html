@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Order - Quiporder{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="form-title">Create Equipment Order</h1>
+    <p class="form-subtitle">Order equipment for a patient</p>
+
+    <form method="post" class="order-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="patient" class="form-label">
+                Patient <span class="required">*</span>
+            </label>
+            <select name="patient" id="patient" class="form-control" required>
+                <option value="">-- Select Patient --</option>
+                {% for patient in patients %}
+                <option value="{{ patient.id }}">
+                    {{ patient.user.get_full_name }} (MRN: {{ patient.medical_record_number }})
+                </option>
+                {% endfor %}
+            </select>
+            <small class="form-help">Select the patient who needs this equipment</small>
+        </div>
+
+        <div class="form-group">
+            <label for="equipment" class="form-label">
+                Equipment <span class="required">*</span>
+            </label>
+            <select name="equipment" id="equipment" class="form-control" required>
+                <option value="">-- Select Equipment --</option>
+                {% for item in equipment %}
+                <option value="{{ item.id }}">
+                    {{ item.name }} - {{ item.get_category_display }} 
+                    (Available: {{ item.available_quantity }})
+                </option>
+                {% endfor %}
+            </select>
+            <small class="form-help">Choose from available equipment</small>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity" class="form-label">
+                Quantity <span class="required">*</span>
+            </label>
+            <input 
+                type="number" 
+                name="quantity" 
+                id="quantity" 
+                class="form-control" 
+                min="1" 
+                value="1"
+                required
+            >
+            <small class="form-help">Number of items needed</small>
+        </div>
+
+        <div class="form-group">
+            <label for="notes" class="form-label">
+                Notes <span class="optional">(optional)</span>
+            </label>
+            <textarea 
+                name="notes" 
+                id="notes" 
+                class="form-control" 
+                rows="4"
+                placeholder="Add any special instructions or notes..."
+            ></textarea>
+            <small class="form-help">Any additional information about this order</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Order</button>
+            <a href="{% url 'therapist_dashboard' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
