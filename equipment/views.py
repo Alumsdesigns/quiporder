@@ -27,3 +27,26 @@ def therapist_dashboard(request):
     }
     
     return render(request, 'equipment/therapist_dashboard.html', context)
+
+    # Add to existing views.py
+
+@login_required
+def patient_dashboard(request):
+    """Patient dashboard showing their orders only."""
+    # Check if user is patient
+    if request.user.user_type != 'PATIENT':
+        messages.error(request, 'Access denied. Patients only.')
+        return redirect('home')
+    
+    # Get patient's orders only
+    try:
+        orders = EquipmentOrder.objects.filter(
+            patient=request.user.patientprofile,
+            deleted_at__isnull=True
+        ).select_related('equipment').order_by('-ordered_at')
+    except:
+        # If patient has no profile yet
+        orders = []
+        messages.warning(request, 'No patient profile found. Please contact your therapist.')
+    
+    return render(request, 'equipment/patient_dashboard.html', {'orders': orders})

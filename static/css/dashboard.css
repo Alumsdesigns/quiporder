@@ -87,7 +87,107 @@
     line-height: 1.6;
 }
 
-/* Responsive Design */
+
+/* ==============================================
+   PATIENT DASHBOARD - ORDERS TABLE
+   ============================================== */
+
+/* Orders Table Container */
+.orders-table-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+/* Orders Table */
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table thead {
+    background: #2A9D8F;
+}
+
+.orders-table th {
+    color: white;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.orders-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.orders-table tbody tr:hover {
+    background: #f5f9f8;
+}
+
+.orders-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #FFF3CD;
+    color: #856404;
+}
+
+.status-approved {
+    background: #D1ECF1;
+    color: #0C5460;
+}
+
+.status-in_transit {
+    background: #D4EDDA;
+    color: #155724;
+}
+
+.status-delivered {
+    background: #78C7A6;
+    color: white;
+}
+
+.status-cancelled {
+    background: #F8D7DA;
+    color: #721C24;
+}
+
+/* Empty State */
+.empty-state {
+    background: white;
+    padding: 3rem 2rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.empty-message {
+    color: #4A5A6A;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-submessage {
+    color: #78909C;
+    font-size: 1rem;
+}
+
+
+/* Responsive Design Therapist Dashboard */
 @media (max-width: 768px) {
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -99,6 +199,17 @@
     
     .dashboard-title {
         font-size: 1.5rem;
+    }
+
+    /* Responsive patient dashboard*/
+
+    .orders-table {
+        font-size: 0.875rem;
+    }
+    
+    .orders-table th,
+    .orders-table td {
+        padding: 0.75rem 0.5rem;
     }
 }
 
