@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Account Registration - Quiporder{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="form-title">Account Registration</h1>
+    
+    <div class="info-box">
+        <h2>Administrator Access Required</h2>
+        
+        <p>
+            For security reasons, all Quiporder accounts are created by authorized 
+            administrators only. This ensures proper verification of healthcare 
+            professionals and maintains patient data security.
+        </p>
+        
+        <h3>For New Employees:</h3>
+        <ul>
+            <li>Contact your department administrator or HR</li>
+            <li>Provide your employee ID and department details</li>
+            <li>Your account will be created within 24 hours</li>
+            <li>You'll receive login credentials via secure email</li>
+        </ul>
+        
+        <h3>For Administrators:</h3>
+        <p>
+            To create a new user account ask HR for admin credentials and once recieved:
+        </p>
+        <ol>
+            <li>Login to the <a href="{% url 'admin:index' %}">admin panel</a></li>
+            <li>Navigate to <strong>Users → Add user</strong></li>
+            <li>Fill in employee details and assign appropriate role</li>
+            <li>Provide credentials to the new user securely</li>
+        </ol>
+        
+        <div class="security-note">
+            <strong>Security Note:</strong> This restriction protects patient data 
+            and ensures compliance by limiting system access to verified 
+            healthcare professionals only.
+        </div>
+    </div>
+    
+    <div class="form-actions">
+        <a href="{% url 'account_login' %}" class="btn btn-primary">Go to Login</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}
