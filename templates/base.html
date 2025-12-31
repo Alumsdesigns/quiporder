@@ -24,12 +24,22 @@
                     <li><a href="{% url 'therapist_dashboard' %}">Dashboard</a></li>
                     <li><a href="{% url 'equipment_list' %}">Equipment</a></li>
                     <li><a href="{% url 'order_create' %}">Create Order</a></li>
-                    <li><a href="{% url 'account_logout' %}">Logout ({{ user.username }})</a></li>
+                    <li>
+                        <form method="post" action="{% url 'account_logout' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-button">Logout ({{ user.username }})</button>
+                        </form>
+                    </li>
                
                 {# Patient navigation: Read-only order view #}
                 {% elif user.user_type == 'PATIENT' %}
                     <li><a href="{% url 'patient_dashboard' %}">My Orders</a></li>
-                    <li><a href="{% url 'account_logout' %}">Logout ({{ user.username }})</a></li>
+                    <li>
+                        <form method="post" action="{% url 'account_logout' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-button">Logout ({{ user.username }})</button>
+                        </form>
+                    </li>
 
                 {# Fallback for Superuser/Staff they can get Admin panel access #}
                 {% else %}
@@ -37,7 +47,12 @@
                     {% if user.is_staff %}
                         <li><a href="{% url 'admin:index' %}">Admin Panel</a></li>
                     {% endif %}
-                    <li><a href="{% url 'account_logout' %}">Logout ({{ user.username }})</a></li>
+                    <li>
+                        <form method="post" action="{% url 'account_logout' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-button">Logout ({{ user.username }})</button>
+                        </form>
+                    </li>
                 {% endif %}
             {% else %}
                 {# Unauthenticated users: Login only #}
