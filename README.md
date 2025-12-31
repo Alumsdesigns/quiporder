@@ -96,10 +96,10 @@ GRANT ALL PRIVILEGES ON DATABASE quiporder TO yourusername;
 
 ###  Generate Secret Key
 ```python manage.py shell```
-
-```from django.core.management.utils import get_random_secret_key
+run:
+from django.core.management.utils import get_random_secret_key
 print(get_random_secret_key())
-exit()```
+exit()
 
 ###  Setup environment variables in .env place
 and create a .env in the root for local development add the below envirnment variables
@@ -150,37 +150,13 @@ Login with superuser credentials created in step 9.
 ### Project Structure
 ```
 quiporder/
-│  
-└── dashboard/               # Dashboard app
-│   ├── __pycache__  
-│   ├── migrations/          
-│   |    ├── __init__.py
-│   |    └── __pycache__
-│   |         └── __init__.cpython-313.pyc
-|   |
-|   ├── __init__.py          # Makes this a Python package
-|   ├── admin.py             # Register models to appear in admin panel 
-|   ├── apps.py              # App configuration
-|   ├── models.py            # Database tables (User, Therapist, Patient)
-|   ├── tests.py             # Test code goes here
-|   └── views.py             # Authentication views
-|   
-└── docs/                    # Documents folder holding assest and software architecture erd and flow diagrams
-│   └── screenshots_verify_tests/       
-│   └── erd.md  
-│   └── flow-horizontal-view.md
+│     
+└── docs/            
 |
 └── equipment/  
 │   ├── __pycache__
 │   ├──  migrations/  
-│   |   ├── 0001_initial.py
-│   |   ├── 0002_alter_equipmentorder_options_equipment_category_and_more.py
-│   |   ├── 0003_alter_equipment_available_quantity_and_more.py
-│   |   ├── 0004_alter_equipmentorder_quantity.py
-│   |   ├── 0005_alter_equipment_available_quantity.py
-│   |   ├── 0006_alter_equipmentorder_status.py
-│   |   └── 0007_equipmentorder_deleted_at_equipmentorder_deleted_by.py
-│   ├── __init__.py         # Tells Python this is a package
+│   ├── __init__.py         
 |   ├── admin.py
 |   |── apps.py
 │   ├── models.py            # Equipment, Order models
@@ -201,15 +177,7 @@ quiporder/
 │
 └──users/                  # User management app
 |  ├──  __pycache__/ 
-│  │
 |  ├──  migrations/          # Tracks database changes
-│  |     ├── init__.py
-│  |     ├── __pycache__
-│  |     ├── 0001_initial.py
-│  |     ├── 0002_alter_customuser_email_therapistprofile_and_more.py
-│  |     ├── 0003_alter_customuser_options_customuser_date_of_birth_and_more.py
-│  |     └── 0004_alter_customuser_email.py
-|  │
 |  ├── __init__.py          # Makes this a Python package
 |  ├── admin.py             # Register models to appear in admin panel 
 |  ├── apps.py              # App configuration
@@ -222,7 +190,6 @@ quiporder/
 ├── README.md                # This file  
 ├── requirements.txt         # Python dependencies
 └── .env.example             # Environment variables template
-
 ```
 
 # Manual Testing, Admin CRUD Validation
@@ -404,7 +371,7 @@ id = 1 is typically the first created user, often a superuser or admin
 The patient user likely has a different id
 
 
-5. Filter for specific records (example for patient1):
+ Filter for specific records (example for patient1):
 
 Tip: The id column is usually the primary key; use it to reference specific records for further queries.
 
@@ -541,6 +508,7 @@ WHERE u.username = 'patient1';
 ```
 
 This query is correct and authoritative. 
+
 It worked because:
 
 I filtered by a real human identifier (username).
@@ -567,7 +535,7 @@ FROM users_customuser
 ORDER BY id;
 ```
 You will see something like:
-```
+
  id |  username  |         email          | user_type 
 ----+------------+------------------------+-----------
   1 | Damaris    |                        | THERAPIST
@@ -611,7 +579,7 @@ Always join profile tables to users_customuser to verify human-readable fields.
 
 If a direct WHERE user_id = X query returns no rows, verify the correct user ID first.
 
-**See screenshots of commands exected:**
+**See screenshots of commands executed:**
 The screenshots below demonstrate direct PostgreSQL verification of data created via the Django Admin interface. They show successful execution of psql commands to inspect schemas, query tables, and validate foreign key relationships between CustomUser, profile, and equipment-related models. This confirms that Admin UI actions are correctly persisted to PostgreSQL, migrations are applied as intended, and relational integrity is enforced at the database level.
 ![PostgreSQL table inspection and schema verification](docs/screenshots_verify_tests/psql_test_1.png)
 ![Joined queries validating user, profile, and foreign key relationships](docs/screenshots_verify_tests/psql_test_2.png)
@@ -630,7 +598,7 @@ What screenshots proves:
 
 - Your CRUD setup is working end-to-end
 
-## Iteration Improvements from Round 1 Observational User Testing
+## Iteration improvements from round 1 Observational User Testing
 
 #### Testing Context
 
@@ -898,7 +866,7 @@ flake8 equipment/ users/ quiporder/ --exclude=migrations,__pycache__ --max-line-
 - Max line length: 120 characters
 - Ignored: E501 (line too long), W503/W504 (line break style - both valid)
 
-### Errors found belo:
+### Errors found below:
 ```
 flake8 equipment/ users/ quiporder/ --exclude=migrations,__pycache__ --max-line-length=120 --ignore=E501,W503
 equipment/admin.py:22:1: E302 expected 2 blank lines, found 1
@@ -1058,11 +1026,6 @@ users/models.py:32:1: W293 blank line contains whitespace
 users/models.py:73:1: E302 expected 2 blank lines, found 1
 users/models.py:101:1: W391 blank line at end of file
 users/tests.py:1:1: F401 'django.test.TestCase' imported but unused
-users/views.py:1:1: F401 'django.shortcuts.render' import```
-
-**Result:** 0 errors - All Python code PEP8 compliant
-
-see screenshot
 ```
 
 reduced errors too
@@ -1073,24 +1036,48 @@ equipment/tests.py:1:1: F401 'django.test.TestCase' imported but unused
 users/tests.py:1:1: F401 'django.test.TestCase' imported but unused
 users/views.py:1:1: F401 'django.shortcuts.render' imported but unused
 ```
+**Final result**
+I manual fixed these see.  **0 errors** - All Python code is PEP8 compliant
+![fixed python validations with flake8 and manually](docs/pep8_python_validations/pep8_python_validation_example.png)
 
-I manual fixed these see 
-![fixed python validations with flake8 and manually](docs/pep8_python_validation/pep8_python_validation_example.png)
+---
 
 ## HTML (W3C)
 
-Key pages validated using W3C Markup Validator (https://validator.w3.org/):
+All HTML templates validated using W3C Markup Validation Service.
 
-### Pages Tested:
-1. **Home page** (`/`) - Pass
-2. **Login page** (`/accounts/login/`) - Pass
-3. **Therapist Dashboard** (`/equipment/dashboard/`) - Pass
-4. **Order Form** (`/equipment/order/create/`) - Pass
-5. **Patient Dashboard** (`/equipment/patient/dashboard/`) -  Pass
+### Validation Tool
+- **Service:** W3C Markup Validator
+- **URL:** https://validator.w3.org/
 
-### Results:
-All pages validated successfully with semantic HTML5.
+### Pages Validated
 
+| Page | URL | Result |
+|------|-----|--------|
+| Home | `/` |  Pass |
+| Login | `/accounts/login/` |  Pass |
+| Signup Info | `/accounts/signup` |  Pass |
+| Therapist Dashboard | `/equipment/dashboard/` | Pass |
+| Patient Dashboard | `/equipment/patient/dashboard/` | Pass |
+| Equipment List | `/equipment/list/` | Pass |
+| Create Order | `/equipment/order/create/` | Pass |
+| Delete Confirmation | `/equipment/order/delete/<id>/` | Pass |
+
+### Validation Process
+1. Navigate to page in browser
+2. Right-click → View Page Source
+3. Copy entire HTML
+4. Paste into W3C Validator (Direct Input)
+5. Review results
+
+### Results
+All pages validated successfully with:
+- Semantic HTML5
+- Proper DOCTYPE
+- Valid attributes
+- Accessible markup
+
+---
 
 ### Results:
 All CSS validated successfully using CSS3 standards.

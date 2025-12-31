@@ -48,7 +48,6 @@ INSTALLED_APPS = [
 
     'users',
     'equipment',
-    'dashboard',
 ]
 
 MIDDLEWARE = [

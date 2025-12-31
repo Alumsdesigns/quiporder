@@ -108,9 +108,6 @@ textarea.form-control {
     margin: 0 auto;
 }
 
-/**
- * Checkbox styling for "Remember me"
- */
 .form-check {
     display: flex;
     align-items: flex-start;
@@ -130,9 +127,6 @@ textarea.form-control {
     font-size: 0.95rem;
 }
 
-/**
- * Footer links (Sign up, Forgot password)
- */
 .form-footer {
     margin-top: 2rem;
     padding-top: 1.5rem;
@@ -189,10 +183,6 @@ textarea.form-control {
    INFO BOX STYLING (for signup_closed page)
    ============================================================================ */
 
-/**
- * Information box for signup restrictions
- * Used to explain admin-only registration policy
- */
 .info-box {
     background: white;
     padding: 2rem;
@@ -242,10 +232,6 @@ textarea.form-control {
     text-decoration: underline;
 }
 
-/**
- * Security notice box
- * Highlighted box for important security information
- */
 .security-note {
     background: #FFF3CD;
     border-left: 4px solid #f39c12;
@@ -262,9 +248,6 @@ textarea.form-control {
    DELETE CONFIRMATION PAGE
    ============================================================================ */
 
-/**
- * Delete confirmation box container
- */
 .delete-confirmation-box {
     background: white;
     padding: 2rem;
@@ -274,9 +257,6 @@ textarea.form-control {
     margin: 0 auto;
 }
 
-/**
- * Order details section
- */
 .order-details {
     background: #F9FAFB;
     padding: 1.5rem;
@@ -291,9 +271,6 @@ textarea.form-control {
     font-size: 1.25rem;
 }
 
-/**
- * Detail rows (label-value pairs)
- */
 .detail-row {
     display: flex;
     justify-content: space-between;
@@ -315,9 +292,6 @@ textarea.form-control {
     text-align: right;
 }
 
-/**
- * Warning message box
- */
 .warning-message {
     background: #FEF3C7;
     border-left: 4px solid #F59E0B;
@@ -330,9 +304,6 @@ textarea.form-control {
     color: #92400E;
 }
 
-/**
- * Danger button for delete action
- */
 .btn-danger {
     background-color: #EF4444;
     color: white;
