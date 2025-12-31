@@ -2,21 +2,18 @@
    DASHBOARD STYLES - Therapist Dashboard
    ============================================== */
 
-/* Dashboard Container */
 .dashboard {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem 0;
 }
 
-/* Dashboard Title */
 .dashboard-title {
     color: #2A9D8F;
     margin-bottom: 2rem;
     font-size: 2rem;
 }
 
-/* Statistics Grid */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -24,7 +21,6 @@
     margin-bottom: 3rem;
 }
 
-/* Stat Card */
 .stat-card {
     background: white;
     padding: 2rem;
@@ -39,20 +35,18 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Stat Card Color Variants */
 .stat-card--primary .stat-number {
-    color: #2A9D8F; /* Teal Blue */
+    color: #2A9D8F;
 }
 
 .stat-card--secondary .stat-number {
-    color: #78C7A6; /* Mint Green */
+    color: #78C7A6;
 }
 
 .stat-card--accent .stat-number {
-    color: #56CFE1; /* Sky Blue */
+    color: #56CFE1;
 }
 
-/* Stat Number */
 .stat-number {
     font-size: 2.5rem;
     font-weight: bold;
@@ -60,14 +54,12 @@
     line-height: 1;
 }
 
-/* Stat Label */
 .stat-label {
     color: #4A5A6A;
     margin-top: 0.5rem;
     font-size: 0.95rem;
 }
 
-/* Action Card */
 .action-card {
     background: white;
     padding: 2rem;
@@ -102,7 +94,6 @@
     color: white;
 }
 
-
 /* ==============================================
    PATIENT DASHBOARD - ORDERS TABLE
    ============================================== */
@@ -116,7 +107,28 @@
     overflow-x: auto;
 }
 
-/* Orders Table */
+.recent-orders {
+    margin-top: 3rem;
+}
+
+.section-title {
+    color: #2A9D8F;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    color: #6B7280;
+    margin-bottom: 1.5rem;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .orders-table {
     width: 100%;
     border-collapse: collapse;
@@ -124,6 +136,7 @@
 
 .orders-table thead {
     background: #2A9D8F;
+    color: white;
 }
 
 .orders-table th {
@@ -131,6 +144,9 @@
     padding: 1rem;
     text-align: left;
     font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .orders-table td {
@@ -138,15 +154,15 @@
     border-bottom: 1px solid #e0e0e0;
 }
 
-.orders-table tbody tr:hover {
-    background: #f5f9f8;
-}
-
 .orders-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* Status Badges */
+
+.orders-table tbody tr:hover {
+    background: #f5f9f8;
+}
+
 .status-badge {
     display: inline-block;
     padding: 0.375rem 0.75rem;
@@ -158,36 +174,96 @@
 
 .status-pending {
     background: #FFF3CD;
-    color: #856404;
+    color: #92400E;
 }
 
 .status-approved {
-    background: #D1ECF1;
-    color: #0C5460;
+    background: #DBEAFE;
+    color: #1E40AF;
 }
 
 .status-in_transit {
-    background: #D4EDDA;
-    color: #155724;
+    background: #D1FAE5;
+    color: #065F46;
 }
 
 .status-delivered {
-    background: #78C7A6;
-    color: white;
+    background: #D1FAE5;
+    color: #065F46;
 }
 
 .status-cancelled {
-    background: #F8D7DA;
-    color: #721C24;
+    background: #FEE2E2;
+    color: #991B1B;
 }
 
-/* Empty State */
+.status-draft {
+    background: #F3F4F6;
+    color: #374151;
+}
+
+.action-cell {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.btn-small {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-edit {
+    background: #2A9D8F;
+    color: white;
+}
+
+.btn-edit:hover {
+    background: #238276;
+    transform: translateY(-1px);
+}
+
+.btn-delete {
+    background: #EF4444;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #DC2626;
+    transform: translateY(-1px);
+}
+
+.text-muted {
+    color: #9CA3AF;
+}
+
+
 .empty-state {
     background: white;
-    padding: 3rem 2rem;
+    padding: 3rem 1rem;
     border-radius: 8px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #6B7280;
+}
+
+.empty-state p {
+    margin: 0.5rem 0;
+}
+
+.empty-state a {
+    color: #2A9D8F;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.empty-state a:hover {
+    text-decoration: underline;
 }
 
 .empty-message {
@@ -201,9 +277,14 @@
     font-size: 1rem;
 }
 
-/* Add at bottom of dashboard.css */
+.btn-secondary {
+    background: #6B7280;
+}
 
-/* Text Utilities */
+.btn-secondary:hover {
+    background: #4B5563;
+}
+
 .text-success {
     color: #78C7A6;
     font-weight: 600;
@@ -213,6 +294,7 @@
     color: #e74c3c;
     font-weight: 600;
 }
+
 
 /* ==============================================
    RESPONSIVE STYLES
@@ -241,6 +323,17 @@
     .orders-table th,
     .orders-table td {
         padding: 0.75rem 0.5rem;
+    }
+
+        .action-cell {
+        flex-direction: column;
+        gap: 0.25rem;
+        align-items: flex-start;
+    }
+    
+    .btn-small {
+        width: 100%;
+        text-align: center;
     }
 }
 

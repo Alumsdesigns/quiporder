@@ -12,6 +12,7 @@
 <div class="dashboard">
     <h1 class="dashboard-title">Therapist Dashboard</h1>
 
+    {# Statistics Cards - Existing #}
     <div class="stats-grid">
         <div class="stat-card stat-card--primary">
             <h2 class="stat-number">{{ total_equipment }}</h2>
@@ -34,10 +35,65 @@
         </div>
     </div>
 
+    {# Admin Access #}
     <div class="action-card">
-        <h2 class="action-title">Quick Actions</h2>
-        <p class="action-description">Use the admin panel to manage equipment, patients, and orders.</p>
+        <h2 class="action-title">Administration</h2>
+        <p class="action-description">Access the admin panel to manage users, equipment inventory, and system settings.</p>
         <a href="/admin/" class="btn btn-primary">Go to Admin Panel</a>
     </div>
+
+    {#  Recent Orders Section #}
+    <section class="recent-orders">
+        <h2 class="section-title">Recent Orders</h2>
+        <p class="section-subtitle">Your last 10 orders with quick actions</p>
+        
+        <div class="table-responsive">
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Equipment</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Ordered</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in recent_orders %}
+                    <tr>
+                        <td>{{ order.patient.user.get_full_name }}</td>
+                        <td>{{ order.equipment.name }}</td>
+                        <td>{{ order.quantity }}</td>
+                        <td>
+                            <span class="status-badge status-{{ order.status|lower }}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                        <td>{{ order.ordered_at|date:"M d, Y g:i A" }}</td>
+                        <td class="action-cell">
+                            {# Show edit/delete ONLY if within 24 hours AND user is creator #}
+                            {% if order.can_edit and order.created_by == user %}
+                                <a href="{% url 'order_edit' order.pk %}" class="btn-small btn-edit">Edit</a>
+                                <a href="{% url 'order_delete' order.pk %}" class="btn-small btn-delete">Delete</a>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <p>No orders yet.</p>
+                            <p><a href="{% url 'order_create' %}">Create your first order</a></p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
 </div>
 {% endblock %}
