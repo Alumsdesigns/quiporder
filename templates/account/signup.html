@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign Up - Quiporder{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="form-title">Create Your Account</h1>
+    <p class="form-subtitle">Join Quiporder to manage equipment orders</p>
+
+    {# Display form errors #}
+    {% if form.errors %}
+        <div class="alert alert-error">
+            <p><strong>Please correct the errors below:</strong></p>
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ field.label }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        
+        {# Username field #}
+        <div class="form-group">
+            <label for="id_username" class="form-label">
+                Username <span class="required">*</span>
+            </label>
+            <input 
+                type="text" 
+                name="username" 
+                id="id_username" 
+                class="form-control" 
+                placeholder="Choose a username"
+                required
+                autofocus
+                value="{{ form.username.value|default:'' }}"
+            >
+            <small class="form-help">Choose a unique username</small>
+        </div>
+
+        {# Email field #}
+        <div class="form-group">
+            <label for="id_email" class="form-label">
+                Email <span class="required">*</span>
+            </label>
+            <input 
+                type="email" 
+                name="email" 
+                id="id_email" 
+                class="form-control" 
+                placeholder="your.email@example.com"
+                required
+                value="{{ form.email.value|default:'' }}"
+            >
+            <small class="form-help">We'll never share your email</small>
+        </div>
+
+        {# First Name field #}
+        <div class="form-group">
+            <label for="id_first_name" class="form-label">
+                First Name <span class="required">*</span>
+            </label>
+            <input 
+                type="text" 
+                name="first_name" 
+                id="id_first_name" 
+                class="form-control" 
+                placeholder="Enter your first name"
+                required
+                value="{{ form.first_name.value|default:'' }}"
+            >
+        </div>
+
+        {# Last Name field #}
+        <div class="form-group">
+            <label for="id_last_name" class="form-label">
+                Last Name <span class="required">*</span>
+            </label>
+            <input 
+                type="text" 
+                name="last_name" 
+                id="id_last_name" 
+                class="form-control" 
+                placeholder="Enter your last name"
+                required
+                value="{{ form.last_name.value|default:'' }}"
+            >
+        </div>
+
+        {# 🔥 NEW: User Type field #}
+        <div class="form-group">
+            <label for="id_user_type" class="form-label">
+                I am a <span class="required">*</span>
+            </label>
+            <select name="user_type" id="id_user_type" class="form-control" required>
+                <option value="">-- Select your role --</option>
+                <option value="THERAPIST">Occupational Therapist</option>
+                <option value="PATIENT">Patient</option>
+            </select>
+            <small class="form-help">Select whether you are a therapist or patient</small>
+        </div>
+
+        {# Password field #}
+        <div class="form-group">
+            <label for="id_password1" class="form-label">
+                Password <span class="required">*</span>
+            </label>
+            <input 
+                type="password" 
+                name="password1" 
+                id="id_password1" 
+                class="form-control" 
+                placeholder="Choose a strong password"
+                required
+            >
+            <small class="form-help">
+                Must be at least 8 characters, not too common, and not all numeric
+            </small>
+        </div>
+
+        {# Password confirmation field #}
+        <div class="form-group">
+            <label for="id_password2" class="form-label">
+                Confirm Password <span class="required">*</span>
+            </label>
+            <input 
+                type="password" 
+                name="password2" 
+                id="id_password2" 
+                class="form-control" 
+                placeholder="Re-enter your password"
+                required
+            >
+            <small class="form-help">Enter the same password again</small>
+        </div>
+
+        {# Submit button #}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Account</button>
+        </div>
+
+        <div class="form-footer">
+            <p>Already have an account? <a href="{% url 'account_login' %}">Sign in here</a></p>
+        </div>
+    </form>
+</div>
+{% endblock %}
