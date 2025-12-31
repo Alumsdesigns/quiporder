@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign In - Quiporder{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="form-title">Sign In to Quiporder</h1>
+    <p class="form-subtitle">Welcome back! Please sign in to continue.</p>
+
+    {# Display any messages (errors/success) #}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        
+        {# Username field #}
+        <div class="form-group">
+            <label for="id_login" class="form-label">
+                Username or Email <span class="required">*</span>
+            </label>
+            <input 
+                type="text" 
+                name="login" 
+                id="id_login" 
+                class="form-control" 
+                placeholder="Enter your username or email"
+                required
+                autofocus
+            >
+            <small class="form-help">Use the username or email you registered with</small>
+        </div>
+
+        {# Password field #}
+        <div class="form-group">
+            <label for="id_password" class="form-label">
+                Password <span class="required">*</span>
+            </label>
+            <input 
+                type="password" 
+                name="password" 
+                id="id_password" 
+                class="form-control" 
+                placeholder="Enter your password"
+                required
+            >
+            <small class="form-help">Enter your password</small>
+        </div>
+
+        {# Remember me checkbox #}
+        <div class="form-group form-check">
+            <input 
+                type="checkbox" 
+                name="remember" 
+                id="id_remember" 
+                class="form-check-input"
+            >
+            <label for="id_remember" class="form-check-label">
+                Remember me on this device
+            </label>
+        </div>
+
+        {# Submit button and links #}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Sign In</button>
+        </div>
+
+        <div class="form-footer">
+            <p>Don't have an account? <a href="{% url 'account_signup' %}">Sign up here</a></p>
+            <p><a href="{% url 'account_reset_password' %}">Forgot your password?</a></p>
+        </div>
+    </form>
+</div>
+{% endblock %}

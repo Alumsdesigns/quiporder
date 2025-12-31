@@ -104,7 +104,104 @@ textarea.form-control {
     text-align: center;
 }
 
-/* Responsive */
+/* ============================================================================
+   AUTHENTICATION FORMS (Login/Signup)
+   ============================================================================ */
+
+/**
+ * Auth-specific form styling
+ * Applies to login and signup forms
+ */
+.auth-form {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/**
+ * Checkbox styling for "Remember me"
+ */
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-check-input {
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+}
+
+.form-check-label {
+    margin: 0;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+/**
+ * Footer links (Sign up, Forgot password)
+ */
+.form-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #E0E0E0;
+    text-align: center;
+}
+
+.form-footer p {
+    margin: 0.5rem 0;
+    color: #4A5A6A;
+}
+
+.form-footer a {
+    color: #2A9D8F;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/**
+ * Alert messages for errors/success
+ */
+.alert {
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+}
+
+.alert-error {
+    background: #F8D7DA;
+    color: #721C24;
+    border: 1px solid #F5C6CB;
+}
+
+.alert-success {
+    background: #D4EDDA;
+    color: #155724;
+    border: 1px solid #C3E6CB;
+}
+
+.alert ul {
+    margin: 0.5rem 0 0 1.5rem;
+    padding: 0;
+}
+
+.alert li {
+    margin: 0.25rem 0;
+}
+
+/* ============================================================================
+    RESPONSIVE AUTH FORMS
+   ============================================================================ */
+
 @media (max-width: 768px) {
     .form-container {
         padding: 1rem;
@@ -120,5 +217,12 @@ textarea.form-control {
     
     .form-actions .btn {
         width: 100%;
+    }
+        .auth-form {
+        padding: 1.5rem;
+    }
+    
+    .form-container {
+        padding: 1rem;
     }
 }
