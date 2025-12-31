@@ -816,6 +816,32 @@ and run:
    DEBUG=True
 ```
 
+## **Testing Updates after anoymous observibility testing 
+
+**Subjects: 5 users - 3 therapist and 2 users
+Date:  20-12-2025**
+
+The request was for a view to see which user had superuser permissions, this was added as per below
+
+### **BEFORE Old Code:**
+```
+Username | First | Last | Email | DOB | Role | Active | Staff
+---------|-------|------|-------|-----|------|--------|------
+admin    | Admin | User | ...   | ... |      | ✓      | ✓     ← Blank! Confusing!
+drjones  | Dr.   | Jones| ...   | ... | THERAPIST | ✓ | ☐
+patient1 | John  | Doe  | ...   | ... | PATIENT   | ✓ | ☐
+```
+
+### **AFTER view with Updates:**
+```
+Username | First | Last | Email | DOB | Role                      | Active | Staff | Superuser
+---------|-------|------|-------|-----|---------------------------|--------|-------|----------
+admin    | Admin | User | ...   | ... | System Administrator      | ✓      | ✓     | ✓
+drjones  | Dr.   | Jones| ...   | ... | Occupational Therapist    | ✓      | ☐     | ☐
+patient1 | John  | Doe  | ...   | ... | Patient 
+```
+
+
 ### Production Deployment
 
 For production Heroku, the SECRET_KEY is stored in Config Vars (environment variables) and never committed to the repository.
