@@ -3,7 +3,6 @@
 # example.com/patients/ -> shows patient list
 # example.com/equipment/ -> shows equipment list
 # Like a phone directory for your website
-# quiporder/urls.py 
 """
 URL configuration for quiporder project.
 
@@ -19,6 +18,12 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+
+Includes:
+- Admin panel
+- Authentication (allauth) with custom signup override
+- Equipment management
+- Home page
 """
 from django.contrib import admin
 from django.urls import path, include
@@ -26,6 +31,11 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+        path(
+        'accounts/signup/', 
+        TemplateView.as_view(template_name='account/signup_closed.html'), 
+        name='account_signup'
+    ),
     path('accounts/', include('allauth.urls')),
     path('equipment/', include('equipment.urls')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
