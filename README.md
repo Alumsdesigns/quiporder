@@ -56,8 +56,7 @@ cd quip-order
 # Create isolated Python environment
 python -m venv venv
 
-# Activate it
-# On Mac/Linux:
+# Activate itOn Mac/Linux:
 source venv/bin/activate
 
 # On Windows:
@@ -66,12 +65,10 @@ venv\Scripts\activate
 
 ```
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  
+# On Windows: venv\Scripts\activate
 pip install django
-django-admin startproject quipster .
-python manage.py startapp users
-python manage.py startapp equipment
-python manage.py startapp dashboard
+django-admin startproject quiporder .
 ```
 
 ### Install Dependencies
@@ -79,7 +76,32 @@ python manage.py startapp dashboard
 pip install -r requirements.txt
 ```
 
-###  Setup environment variables
+### 5. Setup PostgreSQL Database
+```bash
+# Login to PostgreSQL
+psql -U postgres
+
+# Create database
+CREATE DATABASE quiporder;
+
+# Create user (if needed)
+CREATE USER yourusername WITH PASSWORD 'yourpassword';
+
+# Grant privileges
+GRANT ALL PRIVILEGES ON DATABASE quiporder TO yourusername;
+
+# Exit
+\q
+```
+
+###  Generate Secret Key
+```python manage.py shell```
+
+```from django.core.management.utils import get_random_secret_key
+print(get_random_secret_key())
+exit()```
+
+###  Setup environment variables in .env place
 and create a .env in the root for local development add the below envirnment variables
 ```
 SECRET_KEY='see below how to generate this'
@@ -94,13 +116,36 @@ POSTGRES_PORT=5432
 ```
 
 ### Run migrations
-python manage.py migrate
+```python manage.py makemigrations```
+```python manage.py migrate```
 
-### Create superuser
-python manage.py createsuperuser
 
 ### Run development server
-python manage.py runserver
+```python manage.py runserver```
+
+Visit: http://127.0.0.1:8000/
+
+### 11. Access Admin Panel
+```http://127.0.0.1:8000/admin/```
+Login with superuser credentials created in step 9.
+
+### 12. Collect Static Files (Optional for Local Development)
+# Only needed if static files aren't loading
+```python manage.py collectstatic --noinput```
+
+## Troubleshooting
+
+### Database Connection Error
+- Verify PostgreSQL is running: `pg_isready`
+- Check credentials in `.env` file
+- Ensure database exists: `psql -l`
+
+### Static Files Not Loading
+```python manage.py collectstatic --noinput```
+
+### Migration Errors
+# Reset migrations (WARNING: Data loss!)
+```python manage.py migrate --run-syncdb```
 
 ### Project Structure
 ```
@@ -774,7 +819,7 @@ DEBUG=True
 - No sensitive credentials in repository
 
 **Technical Implementation:**
-```python
+```python manage.py shell```
 # settings.py
 from decouple import config
 
