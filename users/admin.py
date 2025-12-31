@@ -13,11 +13,13 @@ Registers:
 
 Allows managing users and related profiles via the Django admin panel.
 """
+
+
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     """Custom user admin with enhanced role display."""
     model = CustomUser
-    
+
     list_display = (
         'username',
         'first_name',
@@ -41,7 +43,7 @@ class CustomUserAdmin(UserAdmin):
                 'email',
                 'date_of_birth',
                 'user_type',
-             )}),
+                )}),
         ('Permissions', {
             'fields': (
                 'is_staff',
@@ -49,7 +51,7 @@ class CustomUserAdmin(UserAdmin):
                 'groups',
                 'user_permissions',
             )
-            }),
+        }),
     )
 
     add_fieldsets = (
@@ -66,17 +68,17 @@ class CustomUserAdmin(UserAdmin):
                 'user_type',
                 'is_staff',
                 'is_active',
-                )}
-        ),
+            )}
+         ),
     )
 
     search_fields = (
-        'username', 
-        'first_name', 
-        'last_name', 
+        'username',
+        'first_name',
+        'last_name',
         'email',
-        'user_type' 
-        )
+        'user_type'
+    )
 
     ordering = ('username',)
 
@@ -90,7 +92,7 @@ class CustomUserAdmin(UserAdmin):
             )
         else:
             return '-'
-    
+
     get_role_display.short_description = 'Role'
     get_role_display.admin_order_field = 'user_type'
 
@@ -100,17 +102,18 @@ class TherapistProfileAdmin(admin.ModelAdmin):
     """Admin interface for therapist profiles."""
 
     list_display = (
-        'user', 
+        'user',
         'license_number',
-        'max_caseload', 
+        'max_caseload',
         'status'
-        )
+    )
     search_fields = (
         'user__username',
         'user__first_name',
         'user__last_name',
         'license_number',
     )
+
 
 @admin.register(PatientProfile)
 class PatientProfileAdmin(admin.ModelAdmin):
@@ -122,7 +125,7 @@ class PatientProfileAdmin(admin.ModelAdmin):
         'medical_record_number',
         'status',
         'admission_date',
-        )
+    )
 
     readonly_fields = ('admission_date',)
 
@@ -133,4 +136,3 @@ class PatientProfileAdmin(admin.ModelAdmin):
         'medical_record_number',
         'assigned_therapist__user__username',
     )
-

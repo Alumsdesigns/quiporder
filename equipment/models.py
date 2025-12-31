@@ -35,7 +35,10 @@ class Equipment(models.Model):
     category = models.CharField(
         max_length=20, choices=CATEGORY_CHOICES, default="MOBILITY"
     )
-    size = models.CharField(max_length=10, choices=SIZE_CHOICES, default="MEDIUM")
+    size = models.CharField(
+        max_length=10,
+        choices=SIZE_CHOICES,
+        default="MEDIUM")
     total_quantity = models.PositiveIntegerField(
         help_text="Total units owned by facility"
     )
@@ -59,14 +62,14 @@ class Equipment(models.Model):
         """Calculate what percentage of equipment is currently out."""
         if self.total_quantity == 0:
             return 0
-        return (
-            (self.total_quantity - self.available_quantity) / self.total_quantity
-        ) * 100
+        return ((self.total_quantity - self.available_quantity)
+                / self.total_quantity) * 100
 
-    # Validation method to ensure available_quantity doesn't exceed total_quantity + added None checks and proper error messages
+    # Validation method to ensure available_quantity doesn't exceed
+    # total_quantity + added None checks and proper error messages
     def clean(self):
         """Validate Equipment fields comprehensively.
-        
+
         Three-level validation:
         1. Basic: available <= total
         2. Business: total >= allocated orders
@@ -74,7 +77,8 @@ class Equipment(models.Model):
         """
         # Check if fields have values before comparing prevents TypeError
         if self.total_quantity is None:
-            raise ValidationError({"total_quantity": "Total quantity is required."})
+            raise ValidationError(
+                {"total_quantity": "Total quantity is required."})
 
         if self.available_quantity is None:
             raise ValidationError(
@@ -86,22 +90,24 @@ class Equipment(models.Model):
             raise ValidationError(
                 {
                     "available_quantity": (
-                        f"Available quantity ({self.available_quantity}) cannot be more than "
-                        f"total quantity ({self.total_quantity}). "
-                        f"Please reduce available quantity to {self.total_quantity} or less."
-                    )
-                }
-            )
+                        f"Available quantity ({
+                            self.available_quantity}) cannot be more than " f"total quantity ({
+                            self.total_quantity}). " f"Please reduce available quantity to {
+                            self.total_quantity} or less.")})
 
         # Check against active orders only for existing equipment
         if self.pk:
-            active_statuses = ["PENDING", "APPROVED", "IN_TRANSIT", "DELIVERED"]
+            active_statuses = [
+                "PENDING",
+                "APPROVED",
+                "IN_TRANSIT",
+                "DELIVERED"]
 
             # Calculate total of all active orders for this equipment
             total_allocated = (
                 EquipmentOrder.objects.filter(
-                    equipment=self, 
-                    status__in=active_statuses, 
+                    equipment=self,
+                    status__in=active_statuses,
                     deleted_at__isnull=True
                 ).aggregate(total=Sum("quantity"))["total"]
                 or 0
@@ -175,8 +181,9 @@ class EquipmentOrder(models.Model):
     ]
 
     patient = models.ForeignKey(
-        PatientProfile, on_delete=models.CASCADE, related_name="equipment_orders"
-    )
+        PatientProfile,
+        on_delete=models.CASCADE,
+        related_name="equipment_orders")
 
     equipment = models.ForeignKey(
         Equipment, on_delete=models.CASCADE, related_name="orders"
@@ -188,7 +195,10 @@ class EquipmentOrder(models.Model):
         help_text="Number of units to assign to patient",
     )
 
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="DRAFT")
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="DRAFT")
 
     notes = models.TextField(
         blank=True,
@@ -228,7 +238,10 @@ class EquipmentOrder(models.Model):
 
     def __str__(self):
         deleted_marker = " [DELETED]" if self.deleted_at else ""
-        return f"{self.equipment.name} → {self.patient.user.get_full_name()} ({self.get_status_display()}){deleted_marker}"
+        return f"{
+            self.equipment.name} → {
+            self.patient.user.get_full_name()} ({
+            self.get_status_display()}){deleted_marker}"
 
     def clean(self):
         """Validate order before saving - enforce three rules."""
@@ -237,12 +250,15 @@ class EquipmentOrder(models.Model):
         # Comprehensive validation of order quantity
         if self.equipment and self.quantity:
             # Calculate total of ALL active orders for this equipment
-            active_statuses = ["PENDING", "APPROVED", "IN_TRANSIT", "DELIVERED"]
-
+            active_statuses = [
+                "PENDING",
+                "APPROVED",
+                "IN_TRANSIT",
+                "DELIVERED"]
 
             total_active_orders = (
                 EquipmentOrder.objects.filter(
-                    equipment=self.equipment, 
+                    equipment=self.equipment,
                     status__in=active_statuses,
                     deleted_at__isnull=True,
                 )
@@ -310,25 +326,29 @@ class EquipmentOrder(models.Model):
 
     def save(self, *args, **kwargs):
         """Override save to update inventory and create status history."""
-        
+
         # Extract current_user from kwargs for audit trail
         current_user = kwargs.pop("current_user", None)
-        
+
         is_new = self.pk is None
         old_status = None
         old_quantity = 0
-        
+
         if not is_new:
             old_order = EquipmentOrder.objects.get(pk=self.pk)
             old_status = old_order.status
             old_quantity = old_order.quantity
-            
+
             # Active → Cancelled/Returned
-            if old_status not in ['CANCELLED', 'RETURNED'] and self.status in ['CANCELLED', 'RETURNED']:
+            if old_status not in [
+                    'CANCELLED',
+                    'RETURNED'] and self.status in [
+                    'CANCELLED',
+                    'RETURNED']:
                 # Order cancelled/returned - restore inventory
                 self.equipment.available_quantity += old_quantity
                 self.equipment.save()
-            
+
             # Cancelled/Returned → Active (REACTIVATION)
             elif old_status in ['CANCELLED', 'RETURNED'] and self.status not in ['CANCELLED', 'RETURNED']:
                 # Order reactivated - reduce inventory
@@ -346,7 +366,7 @@ class EquipmentOrder(models.Model):
                         f"Shortage: {self.quantity - self.equipment.available_quantity} units\n"
                         f"Action: Increase inventory or reduce order quantity"
                     )
-            
+
             # DRAFT → Active (ACTIVATION) - MISSING IN DOCUMENT 6
             elif old_status == 'DRAFT' and self.status not in ['DRAFT', 'CANCELLED', 'RETURNED']:
                 # Moving from DRAFT to active status - reduce inventory
@@ -364,16 +384,17 @@ class EquipmentOrder(models.Model):
                         f"Shortage: {self.quantity - self.equipment.available_quantity} units\n"
                         f"Action: Increase inventory or reduce order quantity"
                     )
-            
+
             # Active → DRAFT (DEACTIVATION) - MISSING IN DOCUMENT 6
             elif old_status not in ['DRAFT', 'CANCELLED', 'RETURNED'] and self.status == 'DRAFT':
                 # Moving from active to DRAFT - restore inventory
                 self.equipment.available_quantity += old_quantity
                 self.equipment.save()
-            
+
             # Active → Active (QUANTITY CHANGE)
             elif old_status not in ['CANCELLED', 'RETURNED', 'DRAFT'] and self.status not in ['CANCELLED', 'RETURNED', 'DRAFT']:
-                # Order quantity changed while active - adjust inventory properly
+                # Order quantity changed while active - adjust inventory
+                # properly
                 quantity_difference = self.quantity - old_quantity
                 if quantity_difference != 0:
                     new_available = self.equipment.available_quantity - quantity_difference
@@ -409,9 +430,9 @@ class EquipmentOrder(models.Model):
                         f"Action: Reduce quantity or wait for returns"
                     )
             # If status IS DRAFT/CANCELLED/RETURNED, don't touch inventory
-        
+
         super().save(*args, **kwargs)
-        
+
         # Create status history entry if status changed
         if is_new or (old_status and old_status != self.status):
             EquipmentOrderStatusHistory.objects.create(
@@ -420,7 +441,7 @@ class EquipmentOrder(models.Model):
                 new_status=self.status,
                 changed_by=current_user
             )
-    
+
     # Soft delete method
     def delete(self, using=None, keep_parents=False, current_user=None):
         """
@@ -472,7 +493,9 @@ class EquipmentOrderStatusHistory(models.Model):
         help_text="User who made this status change",
     )
     changed_at = models.DateTimeField(auto_now_add=True)
-    notes = models.TextField(blank=True, help_text="Optional notes about status change")
+    notes = models.TextField(
+        blank=True,
+        help_text="Optional notes about status change")
 
     class Meta:
         verbose_name = "Status History"
@@ -483,4 +506,7 @@ class EquipmentOrderStatusHistory(models.Model):
         changed_by_name = (
             self.changed_by.get_full_name() if self.changed_by else "System"
         )
-        return f"{self.order.equipment.name}: {self.old_status} → {self.new_status} by {changed_by_name}"
+        return f"{
+            self.order.equipment.name}: {
+            self.old_status} → {
+            self.new_status} by {changed_by_name}"

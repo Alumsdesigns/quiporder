@@ -16,11 +16,20 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='equipmentorder',
             name='deleted_at',
-            field=models.DateTimeField(blank=True, help_text='When this order was soft-deleted null = not deleted', null=True),
+            field=models.DateTimeField(
+                blank=True,
+                help_text='When this order was soft-deleted null = not deleted',
+                null=True),
         ),
         migrations.AddField(
             model_name='equipmentorder',
             name='deleted_by',
-            field=models.ForeignKey(blank=True, help_text='User who deleted this order', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='deleted_orders', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                blank=True,
+                help_text='User who deleted this order',
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='deleted_orders',
+                to=settings.AUTH_USER_MODEL),
         ),
     ]

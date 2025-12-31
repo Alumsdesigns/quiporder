@@ -12,21 +12,41 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='customuser',
-            options={'verbose_name': 'user', 'verbose_name_plural': 'users'},
+            options={
+                'verbose_name': 'user',
+                'verbose_name_plural': 'users'},
         ),
         migrations.AddField(
             model_name='customuser',
             name='date_of_birth',
-            field=models.DateField(blank=True, null=True),
+            field=models.DateField(
+                blank=True,
+                null=True),
         ),
         migrations.AddField(
             model_name='therapistprofile',
             name='status',
-            field=models.CharField(choices=[('ACTIVE', 'Active'), ('INACTIVE', 'Inactive'), ('ON_LEAVE', 'On Leave')], default='ACTIVE', max_length=20),
+            field=models.CharField(
+                choices=[
+                    ('ACTIVE',
+                     'Active'),
+                    ('INACTIVE',
+                     'Inactive'),
+                    ('ON_LEAVE',
+                     'On Leave')],
+                default='ACTIVE',
+                max_length=20),
         ),
         migrations.AlterField(
             model_name='patientprofile',
             name='status',
-            field=models.CharField(choices=[('ACTIVE', 'Active'), ('DISCHARGED', 'Discharged')], default='ACTIVE', max_length=20),
+            field=models.CharField(
+                choices=[
+                    ('ACTIVE',
+                     'Active'),
+                    ('DISCHARGED',
+                     'Discharged')],
+                default='ACTIVE',
+                max_length=20),
         ),
     ]

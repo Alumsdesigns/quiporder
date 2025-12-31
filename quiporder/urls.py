@@ -31,9 +31,9 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-        path(
-        'accounts/signup/', 
-        TemplateView.as_view(template_name='account/signup_closed.html'), 
+    path(
+        'accounts/signup/',
+        TemplateView.as_view(template_name='account/signup_closed.html'),
         name='account_signup'
     ),
     path('accounts/', include('allauth.urls')),

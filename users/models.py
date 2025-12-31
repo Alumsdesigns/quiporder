@@ -11,6 +11,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+
 class CustomUser(AbstractUser):
     """
     Custom user model that extends Django's AbstractUser.
@@ -18,18 +19,18 @@ class CustomUser(AbstractUser):
     - Authentication identity lives here
     - Human-readable names, DOB, email
     """
-    
+
     USER_TYPE_CHOICES = [
         ('THERAPIST', 'Occupational Therapist'),
         ('PATIENT', 'Patient'),
     ]
-    
+
     user_type = models.CharField(
         max_length=10,
         choices=USER_TYPE_CHOICES,
         help_text="User role: Therapist or Patient"
     )
-    
+
     # Email optional for now
     email = models.EmailField(blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
@@ -70,6 +71,7 @@ class TherapistProfile(models.Model):
             return f"{full_name} (License: {self.license_number})"
         return f"{self.user.username} (License: {self.license_number})"
 
+
 class PatientProfile(models.Model):
     """
     Clinical metadata for patients.
@@ -98,4 +100,3 @@ class PatientProfile(models.Model):
         if full_name:
             return f"{full_name} (MRN: {self.medical_record_number})"
         return f"{self.user.username} (MRN: {self.medical_record_number})"
-

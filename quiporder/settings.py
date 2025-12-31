@@ -27,7 +27,9 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-temporary-key')
 
 # SECURITY WARNING: don't run with debug turned on in production! DEBUG = True
 DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -43,7 +45,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    
+
     'users',
     'equipment',
     'dashboard',
@@ -58,7 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware', 
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -111,11 +113,11 @@ WSGI_APPLICATION = 'quiporder.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': "django.db.backends.postgresql",
-         "NAME": config("POSTGRES_DB", default="quiporder"),
-         "USER": config("POSTGRES_USER"),
-         "PASSWORD": config("POSTGRES_PASSWORD"),
-         "HOST": config("POSTGRES_HOST", default="localhost"),
-         "PORT": config("POSTGRES_PORT", default="5432"),
+        "NAME": config("POSTGRES_DB", default="quiporder"),
+        "USER": config("POSTGRES_USER"),
+        "PASSWORD": config("POSTGRES_PASSWORD"),
+        "HOST": config("POSTGRES_HOST", default="localhost"),
+        "PORT": config("POSTGRES_PORT", default="5432"),
     }
 }
 
@@ -157,7 +159,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Authentication redirects  after successful login. These are FALLBACK values - the custom adapter overrides them
+# Authentication redirects  after successful login. These are FALLBACK
+# values - the custom adapter overrides them
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -169,7 +172,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # This tells django-allauth to use OUR custom adapter instead of default
 # The adapter handles:
 # 1. Blocking public signup (admin-only registration)
-# 2. Role-based login redirects (therapist → dashboard, patient → patient dashboard)
+# 2. Role-based login redirects (therapist → dashboard, patient → patient
+# dashboard)
 ACCOUNT_ADAPTER = 'users.adapters.NoSignupAccountAdapter'
 
 # Django-allauth settings
@@ -181,6 +185,3 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Changed from 'username'
 
 # Username requirements
 ACCOUNT_USERNAME_REQUIRED = True
-
-
-

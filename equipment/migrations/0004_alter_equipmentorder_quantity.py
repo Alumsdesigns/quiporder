@@ -14,6 +14,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='equipmentorder',
             name='quantity',
-            field=models.PositiveIntegerField(default=1, help_text='Number of units to assign to patient', validators=[django.core.validators.MinValueValidator(1)]),
+            field=models.PositiveIntegerField(
+                default=1,
+                help_text='Number of units to assign to patient',
+                validators=[
+                    django.core.validators.MinValueValidator(1)]),
         ),
     ]

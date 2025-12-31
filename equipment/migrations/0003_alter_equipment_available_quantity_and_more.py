@@ -6,18 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('equipment', '0002_alter_equipmentorder_options_equipment_category_and_more'),
+        ('equipment',
+         '0002_alter_equipmentorder_options_equipment_category_and_more'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='equipment',
             name='available_quantity',
-            field=models.PositiveIntegerField(help_text='Units currently available (not assigned to patients)'),
+            field=models.PositiveIntegerField(
+                help_text='Units currently available (not assigned to patients)'),
         ),
         migrations.AlterField(
             model_name='equipment',
             name='total_quantity',
-            field=models.PositiveIntegerField(help_text='Total units owned by facility'),
+            field=models.PositiveIntegerField(
+                help_text='Total units owned by facility'),
         ),
     ]

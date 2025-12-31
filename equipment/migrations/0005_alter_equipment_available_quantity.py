@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='equipment',
             name='available_quantity',
-            field=models.PositiveIntegerField(help_text='Units currently available not assigned to patients'),
+            field=models.PositiveIntegerField(
+                help_text='Units currently available not assigned to patients'),
         ),
     ]
