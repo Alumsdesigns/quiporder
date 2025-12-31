@@ -8,55 +8,61 @@
     
     <title>{% block title %}Quiporder - Equipment Management{% endblock %}</title>
     
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    
-    <!-- Block for page-specific CSS -->
+
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="container">
             <a href="/" class="brand">Quiporder</a>
             
         <ul class="nav-links">
             {% if user.is_authenticated %}
+                {# Therapist navigation #}
                 {% if user.user_type == 'THERAPIST' %}
                     <li><a href="{% url 'therapist_dashboard' %}">Dashboard</a></li>
                     <li><a href="{% url 'equipment_list' %}">Equipment</a></li>
-                                <li><a href="{% url 'order_create' %}">Create Order</a></li>
+                    <li><a href="{% url 'order_create' %}">Create Order</a></li>
+                    <li><a href="{% url 'account_logout' %}">Logout ({{ user.username }})</a></li>
+               
+                {# Patient navigation: Read-only order view #}
                 {% elif user.user_type == 'PATIENT' %}
                     <li><a href="{% url 'patient_dashboard' %}">My Orders</a></li>
+                    <li><a href="{% url 'account_logout' %}">Logout ({{ user.username }})</a></li>
+
+                {# Fallback for Superuser/Staff they can get Admin panel access #}
+                {% else %}
+                    {# Users without user_type (superusers reated via createsuperuser) #}
+                    {% if user.is_staff %}
+                        <li><a href="{% url 'admin:index' %}">Admin Panel</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'account_logout' %}">Logout ({{ user.username }})</a></li>
                 {% endif %}
-                <li><a href="{% url 'account_logout' %}">Logout ({{ user.username }})</a></li>
             {% else %}
+                {# Unauthenticated users: Login only #}
                 <li><a href="{% url 'account_login' %}">Login</a></li>
-                <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+                {# Signup removed - accounts created by admin only #}
             {% endif %}
         </ul>
     </nav>
     
-    <!-- Main Content Area -->
+
     <main class="container">
-        <!-- Messages/Alerts -->
+
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
         {% endif %}
         
-        <!-- Page Content -->
         {% block content %}{% endblock %}
     </main>
     
-    <!-- Footer -->
     <footer>
         <p>&copy; 2025 Quiporder - Equipment Management for Healthcare</p>
     </footer>
-    
-    <!-- JavaScript (optional) -->
-    {# <script src="{% static 'js/main.js' %}"></script> #}
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>

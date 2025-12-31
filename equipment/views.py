@@ -62,7 +62,12 @@ def equipment_list(request):
 
 @login_required
 def order_create(request):
-    """Create new equipment order for therapists only."""
+    """
+    Create equipment order for patient.
+    
+    Validates stock availability before creating order.
+    Therapists only. Requires login.
+    """
     if request.user.user_type != 'THERAPIST':
         messages.error(request, 'Access denied. Therapists only.')
         return redirect('home')
