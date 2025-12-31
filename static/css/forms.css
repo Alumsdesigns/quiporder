@@ -199,6 +199,80 @@ textarea.form-control {
 }
 
 /* ============================================================================
+   INFO BOX STYLING (for signup_closed page)
+   ============================================================================ */
+
+/**
+ * Information box for signup restrictions
+ * Used to explain admin-only registration policy
+ */
+.info-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.info-box h2 {
+    color: #2A9D8F;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.info-box h3 {
+    color: #4A5A6A;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+}
+
+.info-box p {
+    line-height: 1.6;
+    color: #4A5A6A;
+    margin-bottom: 1rem;
+}
+
+.info-box ul,
+.info-box ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.info-box li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+    color: #4A5A6A;
+}
+
+.info-box a {
+    color: #2A9D8F;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.info-box a:hover {
+    text-decoration: underline;
+}
+
+/**
+ * Security notice box
+ * Highlighted box for important security information
+ */
+.security-note {
+    background: #FFF3CD;
+    border-left: 4px solid #f39c12;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    border-radius: 4px;
+}
+
+.security-note strong {
+    color: #856404;
+}
+
+
+/* ============================================================================
     RESPONSIVE AUTH FORMS
    ============================================================================ */
 
@@ -224,5 +298,17 @@ textarea.form-control {
     
     .form-container {
         padding: 1rem;
+    }
+    
+    .info-box {
+        padding: 1.5rem;
+    }
+    
+    .info-box h2 {
+        font-size: 1.3rem;
+    }
+    
+    .info-box h3 {
+        font-size: 1.1rem;
     }
 }
