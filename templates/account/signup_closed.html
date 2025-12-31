@@ -26,6 +26,7 @@
             <li>Provide your employee ID and department details</li>
             <li>Your account will be created within 24 hours</li>
             <li>You'll receive login credentials via secure email</li>
+            <li>Use the login credentials provided to access the system</li>
         </ul>
         
         <h3>For Administrators:</h3>
@@ -35,8 +36,10 @@
         <ol>
             <li>Login to the <a href="{% url 'admin:index' %}">admin panel</a></li>
             <li>Navigate to <strong>Users → Add user</strong></li>
-            <li>Fill in employee details and assign appropriate role</li>
-            <li>Provide credentials to the new user securely</li>
+            <li>Fill in employee details and assign appropriate role (Therapist or Patient)</li>
+            <li>Set a temporary password for the new user</li>
+            <li>Securely send login credentials to the employee via official email</li>
+            <li>Instruct the employee to change their password on first login</li>
         </ol>
         
         <div class="security-note">
