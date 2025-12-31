@@ -43,26 +43,85 @@ class EquipmentAdmin(admin.ModelAdmin):
             return "In Stock"
     stock_status.short_description = 'Status'
 
+class DeletedFilter(admin.SimpleListFilter):
+    """
+    Custom filter for soft-deleted orders.
+    
+    Provides clear Yes/No options instead of confusing date-based filtering.
+    Makes it easy to view active orders, deleted orders, or all orders.
+    
+    This replaces the default 'deleted_at' filter which showed dates
+    instead of clear Active/Deleted options.
+    """
+    title = 'deleted status'
+    parameter_name = 'is_deleted'
+
+    def lookups(self, request, model_admin):
+        """
+        🔥 Define filter options that appear in sidebar.
+        
+        Returns:
+            Tuple of (value, display_name) pairs
+        """
+        return (
+            ('active', 'Active Orders'),
+            ('deleted', 'Deleted Orders'),
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Filter the queryset based on selected option.
+        
+        Args:
+            request: HTTP request
+            queryset: Current queryset to filter
+            
+        Returns:
+            Filtered queryset based on selection
+        """
+        if self.value() == 'active':
+            return queryset.filter(deleted_at__isnull=True)
+        if self.value() == 'deleted':
+            return queryset.filter(deleted_at__isnull=False)
+        return queryset 
 
 @admin.register(EquipmentOrder)
 class EquipmentOrderAdmin(admin.ModelAdmin):
     """
     Admin configuration for Equipment Orders.
+    
+    Features:
     - Therapist-only 'created_by' selection
     - Read-only timestamps
     - DRAFT status support (doesn't reduce inventory until moved to PENDING)
+    - Soft delete support (deleted orders hidden by default)
+    - Visual deletion indicators
+    - Filter to view deleted orders
     """
-    list_display = ['get_patient_name', 'equipment', 'quantity', 'status', 'created_by', 'ordered_at']
-    list_filter = ['status', 'ordered_at', 'equipment__category']
+    list_display = [
+        'get_patient_name', 
+        'equipment', 
+        'quantity', 
+        'status', 
+        'order_status', 
+        'created_by', 
+        'ordered_at'
+    ]
+    list_filter = [
+        'status', 
+        DeletedFilter,
+        'ordered_at', 
+        'equipment__category'
+    ]
     search_fields = [
         'patient__user__username', 
         'patient__user__first_name', 
         'patient__user__last_name', 
         'equipment__name',
         'notes'
-        ]
+    ]
     readonly_fields = ['ordered_at']
-    ordering = ['-ordered_at']
+    ordering = ['deleted_at', '-ordered_at']
 
     # Add fieldsets for better form organization
     fieldsets = (
@@ -78,7 +137,51 @@ class EquipmentOrderAdmin(admin.ModelAdmin):
             'description': 'DRAFT orders do not reduce inventory. Change to PENDING to allocate stock.'
         }),
     )
+
+    def get_queryset(self, request):
+        """
+        Override queryset to hide soft-deleted orders by default.
+
+        Now checks for 'is_deleted' parameter (from DeletedFilter)
+        instead of 'deleted_at' parameter.
+        
+        Users can view deleted orders by:
+        1. Clicking 'Deleted Orders' in the sidebar filter
+        2. Clicking 'All' to see everything
+        
+        This keeps the main list clean while preserving audit trail.
+        """
+        qs = super().get_queryset(request)
+        
+        if 'is_deleted' not in request.GET:
+            return qs.filter(deleted_at__isnull=True)
+        
+        return qs
+
+
+    def order_status(self, obj):
+        """
+        Display clear status indicator for orders.
+        
+        - Column header: "Order Status"
+        - Active display: "Active" (green)
+        - Deleted display: "Deleted" (red)
+        
+        Shows:
+        - Green "Active" for active orders
+        - Red "Deleted" for soft-deleted orders
+        """
+        if obj.deleted_at:
+            return format_html(
+                '<span style="color: #e74c3c; font-weight: bold;">Deleted</span>'
+            )
+        return format_html(
+            '<span style="color: #27ae60; font-weight: bold;">Active</span>'
+        )
+    order_status.short_description = 'Order Status'  
+    order_status.admin_order_field = 'deleted_at'
     
+
     def get_patient_name(self, obj):
         """Display patient's full name cleanly."""
         return obj.patient.user.get_full_name() or obj.patient.user.username
@@ -97,22 +200,31 @@ class EquipmentOrderAdmin(admin.ModelAdmin):
             kwargs["queryset"] = db_field.related_model.objects.filter(user_type='THERAPIST')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
     
-    # Auto-populate created_by with current user
     def save_model(self, request, obj, form, change):
         """Auto-set created_by to current user if not set."""
         if not obj.created_by:
             obj.created_by = request.user
         
-        # Pass current user so history shows actual therapist
         obj.save(current_user=request.user)
 
-    # Override delete to pass current_user
+
     def delete_model(self, request, obj):
-        """Soft delete with user tracking."""
+        """
+        Soft delete with user tracking.
+        
+        NOTE: Soft delete does NOT return stock to available quantity.
+        This preserves audit trail and prevents inventory manipulation.
+        Stock can be manually adjusted if needed via Equipment admin.
+        """
         obj.delete(current_user=request.user)
     
     def delete_queryset(self, request, queryset):
-        """Soft delete multiple objects."""
+        """
+        Soft delete multiple objects.
+        
+        NOTE: Soft delete does NOT return stock to available quantity.
+        This preserves audit trail and prevents inventory manipulation.
+        """
         for obj in queryset:
             obj.delete(current_user=request.user)
 
@@ -153,7 +265,6 @@ class EquipmentOrderStatusHistoryAdmin(admin.ModelAdmin):
     ]
     ordering = ['-changed_at']
 
-    # Custom method to display therapist details
     def get_changed_by_details(self, obj):
         """
         Display therapist name, username, and ID who made the change.
@@ -167,10 +278,8 @@ class EquipmentOrderStatusHistoryAdmin(admin.ModelAdmin):
         user = obj.changed_by
         full_name = user.get_full_name() or user.username
         
-        # Build detailed string with name, username, and ID
         details = f"{full_name} ({user.username}) [ID: {user.id}]"
         
-        # Add therapist-specific info if available
         if hasattr(user, 'therapistprofile'):
             license_num = user.therapistprofile.license_number
             details += f" [License: {license_num}]"
@@ -179,7 +288,6 @@ class EquipmentOrderStatusHistoryAdmin(admin.ModelAdmin):
     
     get_changed_by_details.short_description = 'Changed By (Therapist)'
     
-    # Add detail view for individual history entries
     fieldsets = (
         ('Order Information', {
             'fields': ('order',)
