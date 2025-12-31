@@ -1,11 +1,3 @@
-# The control panel python
-# Contains:
-# - Which database to use (SQLite, PostgreSQL)
-# - Security settings (SECRET_KEY)
-# - Which apps are installed
-# - Time zones, languages
-# Think of it as our project's config file
-
 """
 Django settings for quiporder project.
 
@@ -23,7 +15,6 @@ from decouple import config
 # import dj_database_url
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -38,7 +29,6 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-temporary-key')
 DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,16 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-     'django.contrib.sites',
+    'django.contrib.sites',
 
-    # Third party
     'crispy_forms',
     'crispy_bootstrap5',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     
-    # Local apps
     'users',
     'equipment',
     'dashboard',
@@ -73,7 +61,6 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware', 
 ]
 
-# Custom user model
 AUTH_USER_MODEL = 'users.CustomUser'
 
 SITE_ID = 1
@@ -83,17 +70,14 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Crispy Forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# Static files
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -120,7 +104,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'quiporder.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -170,29 +153,34 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-# Authentication redirects
-# Redirect after successful login
+# Authentication redirects  after successful login. These are FALLBACK values - the custom adapter overrides them
+
 LOGIN_REDIRECT_URL = '/'
-
-# Redirect after logout
 LOGOUT_REDIRECT_URL = '/'
-
-# Redirect if user tries to access login-required page
 LOGIN_URL = '/accounts/login/'
 
 # Email configuration for local development
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# This tells django-allauth to use OUR custom adapter instead of default
+# The adapter handles:
+# 1. Blocking public signup (admin-only registration)
+# 2. Role-based login redirects (therapist → dashboard, patient → patient dashboard)
+ACCOUNT_ADAPTER = 'users.adapters.NoSignupAccountAdapter'
+
 # Django-allauth settings
-ACCOUNT_EMAIL_VERIFICATION = 'none'  # Disable email verification for dev
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# Changed Email now required for better user management
+ACCOUNT_EMAIL_REQUIRED = True  # Changed from False
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Changed from 'username'
+
+# Username requirements
+ACCOUNT_USERNAME_REQUIRED = True
+
 
 
