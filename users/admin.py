@@ -1,6 +1,6 @@
-# Register models to appear in admin panel
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.utils.html import format_html
 from .models import CustomUser, TherapistProfile, PatientProfile
 
 """
@@ -15,6 +15,7 @@ Allows managing users and related profiles via the Django admin panel.
 """
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
+    """Custom user admin with enhanced role display."""
     model = CustomUser
     
     list_display = (
@@ -23,9 +24,10 @@ class CustomUserAdmin(UserAdmin):
         'last_name',
         'email',
         'date_of_birth',
-        'user_type',
+        'get_role_display',
         'is_active',
         'is_staff',
+        'is_superuser',
     )
 
     list_filter = ('user_type', 'is_staff', 'is_active')
@@ -67,11 +69,36 @@ class CustomUserAdmin(UserAdmin):
                 )}
         ),
     )
-    search_fields = ('username', 'first_name', 'last_name', 'email')
+
+    search_fields = (
+        'username', 
+        'first_name', 
+        'last_name', 
+        'email',
+        'user_type' 
+        )
+
     ordering = ('username',)
+
+    def get_role_display(self, obj):
+        """Display user role in admin list."""
+        if obj.user_type:
+            return obj.get_user_type_display()
+        elif obj.is_superuser:
+            return format_html(
+                '<span style="color: #e74c3c; font-weight: bold;">System Administrator</span>'
+            )
+        else:
+            return '-'
+    
+    get_role_display.short_description = 'Role'
+    get_role_display.admin_order_field = 'user_type'
+
 
 @admin.register(TherapistProfile)
 class TherapistProfileAdmin(admin.ModelAdmin):
+    """Admin interface for therapist profiles."""
+
     list_display = (
         'user', 
         'license_number',
@@ -87,6 +114,8 @@ class TherapistProfileAdmin(admin.ModelAdmin):
 
 @admin.register(PatientProfile)
 class PatientProfileAdmin(admin.ModelAdmin):
+    """Admin interface for patient profiles."""
+
     list_display = (
         'user',
         'assigned_therapist',
