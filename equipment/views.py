@@ -52,20 +52,10 @@ def therapist_dashboard(request):
         'created_by'
     ).order_by('-ordered_at')[:10]
 
+    # Add can_edit property to each order (24-hour window check)
     for order in recent_orders:
         time_since_order = timezone.now() - order.ordered_at
         order.can_edit = time_since_order < timedelta(hours=24)
-        
-        # DEBUG print to console
-        print(f"Order #{order.id}:")
-        print(f"  Ordered at: {order.ordered_at}")
-        print(f"  Now: {timezone.now()}")
-        print(f"  Time since: {time_since_order}")
-        print(f"  Can edit: {order.can_edit}")
-        print(f"  Created by: {order.created_by}")
-        print(f"  Current user: {request.user}")
-        print("---")
-
 
     context = {
         'total_equipment': total_equipment,
