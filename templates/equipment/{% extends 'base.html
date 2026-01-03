@@ -1,0 +1,65 @@
+@login_required
+def therapist_dashboard(request):
+    """
+    Therapist dashboard showing overview statistics and recent orders.
+    ...
+    """
+    # RBAC check
+    if request.user.user_type != 'THERAPIST' and not request.user.is_superuser:
+        messages.error(request, 'Access denied. Therapists only.')
+        return redirect('home')
+
+    # Get statistics
+    total_equipment = Equipment.objects.count()
+    total_orders = EquipmentOrder.objects.filter(deleted_at__isnull=True).count()
+    pending_orders = EquipmentOrder.objects.filter(
+        status='PENDING',
+        deleted_at__isnull=True
+    ).count()
+    active_patients = PatientProfile.objects.filter(status='ACTIVE').count()
+
+    # Get recent orders with relationships
+    recent_orders = EquipmentOrder.objects.filter(
+        deleted_at__isnull=True
+    ).select_related(
+        'patient__user',
+        'equipment',
+        'created_by'
+    ).order_by('-ordered_at')[:10]
+
+    # 🔥 ADD DEBUG CODE HERE (REPLACE EXISTING FOR LOOP) 🔥
+    for order in recent_orders:
+        time_since_order = timezone.now() - order.ordered_at
+        order.can_edit = time_since_order < timedelta(hours=24)
+        
+        # DEBUG - print to console
+        print(f"Order #{order.id}:")
+        print(f"  Ordered at: {order.ordered_at}")
+        print(f"  Now: {timezone.now()}")
+        print(f"  Time since: {time_since_order}")
+        print(f"  Can edit: {order.can_edit}")
+        print(f"  Created by: {order.created_by}")
+        print(f"  Current user: {request.user}")
+        print("---")
+
+    context = {
+        'total_equipment': total_equipment,
+        'total_orders': total_orders,
+        'pending_orders': pending_orders,
+        'active_patients': active_patients,
+        'recent_orders': recent_orders,
+    }
+
+    return render(request, 'equipment/therapist_dashboard.html', context)
+
+
+
+    There will be three supermoons in 2026 starting with the first Moon of the new year on 3 January, known as the Wolf Moon.
+
+
+        
+# Add can_edit property to each order (24-hour window check)
+    twenty_four_hours_ago = timezone.now() - timedelta(hours=24)
+    for order in recent_orders:
+        time_since_order = timezone.now() - order.ordered_at
+        order.can_edit = time_since_order < timedelta(hours=24)

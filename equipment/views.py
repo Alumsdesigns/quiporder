@@ -28,10 +28,12 @@ def therapist_dashboard(request):
     - Recent orders table with edit/delete actions
     - 24-hour edit window indicator
     """
+     # RBAC check
     if request.user.user_type != 'THERAPIST' and not request.user.is_superuser:
         messages.error(request, 'Access denied. Therapists only.')
         return redirect('home')
 
+    # Get statistics
     total_equipment = Equipment.objects.count()
     total_orders = EquipmentOrder.objects.filter(
         deleted_at__isnull=True).count()
@@ -41,6 +43,7 @@ def therapist_dashboard(request):
     ).count()
     active_patients = PatientProfile.objects.filter(status='ACTIVE').count()
 
+    # Get recent orders with relationships
     recent_orders = EquipmentOrder.objects.filter(
         deleted_at__isnull=True
     ).select_related(
@@ -49,9 +52,20 @@ def therapist_dashboard(request):
         'created_by'
     ).order_by('-ordered_at')[:10]
 
-    twenty_four_hours_ago = timezone.now() - timedelta(hours=24)
     for order in recent_orders:
-        order.can_edit = order.ordered_at > twenty_four_hours_ago
+        time_since_order = timezone.now() - order.ordered_at
+        order.can_edit = time_since_order < timedelta(hours=24)
+        
+        # DEBUG print to console
+        print(f"Order #{order.id}:")
+        print(f"  Ordered at: {order.ordered_at}")
+        print(f"  Now: {timezone.now()}")
+        print(f"  Time since: {time_since_order}")
+        print(f"  Can edit: {order.can_edit}")
+        print(f"  Created by: {order.created_by}")
+        print(f"  Current user: {request.user}")
+        print("---")
+
 
     context = {
         'total_equipment': total_equipment,

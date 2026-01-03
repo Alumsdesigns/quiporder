@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Create Order - Quiporder{% endblock %}
+{% block title %}
+    {% if is_edit %}Edit Order{% else %}Create Order{% endif %} - Quiporder
+{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/forms.css' %}">
@@ -9,12 +11,21 @@
 
 {% block content %}
 <div class="form-container">
-    <h1 class="form-title">Create Equipment Order</h1>
-    <p class="form-subtitle">Order equipment for a patient</p>
+    <h1 class="form-title">
+        {% if is_edit %}Edit Equipment Order{% else %}Create Equipment Order{% endif %}
+    </h1>
+    <p class="form-subtitle">
+        {% if is_edit %}
+            Update order details (within 24 hours of creation)
+        {% else %}
+            Order equipment for a patient
+        {% endif %}
+    </p>
 
     <form method="post" class="order-form">
         {% csrf_token %}
         
+        {# Patient Selection #}
         <div class="form-group">
             <label for="patient" class="form-label">
                 Patient <span class="required">*</span>
@@ -22,7 +33,8 @@
             <select name="patient" id="patient" class="form-control" required>
                 <option value="">-- Select Patient --</option>
                 {% for patient in patients %}
-                <option value="{{ patient.id }}">
+                <option value="{{ patient.id }}"
+                    {% if is_edit and order.patient.id == patient.id %}selected{% endif %}>
                     {{ patient.user.get_full_name }} (MRN: {{ patient.medical_record_number }})
                 </option>
                 {% endfor %}
@@ -30,6 +42,7 @@
             <small class="form-help">Select the patient who needs this equipment</small>
         </div>
 
+        {# Equipment Selection #}
         <div class="form-group">
             <label for="equipment" class="form-label">
                 Equipment <span class="required">*</span>
@@ -37,7 +50,8 @@
             <select name="equipment" id="equipment" class="form-control" required>
                 <option value="">-- Select Equipment --</option>
                 {% for item in equipment %}
-                <option value="{{ item.id }}">
+                <option value="{{ item.id }}"
+                    {% if is_edit and order.equipment.id == item.id %}selected{% endif %}>
                     {{ item.name }} - {{ item.get_category_display }} 
                     (Available: {{ item.available_quantity }})
                 </option>
@@ -46,6 +60,7 @@
             <small class="form-help">Choose from available equipment</small>
         </div>
 
+         {# Quantity #}
         <div class="form-group">
             <label for="quantity" class="form-label">
                 Quantity <span class="required">*</span>
@@ -56,12 +71,13 @@
                 id="quantity" 
                 class="form-control" 
                 min="1" 
-                value="1"
+                value="{% if is_edit %}{{ order.quantity }}{% else %}1{% endif %}"
                 required
             >
             <small class="form-help">Number of items needed</small>
         </div>
 
+        {# Notes #}
         <div class="form-group">
             <label for="notes" class="form-label">
                 Notes <span class="optional">(optional)</span>
@@ -72,12 +88,15 @@
                 class="form-control" 
                 rows="4"
                 placeholder="Add any special instructions or notes..."
-            ></textarea>
+            >{% if is_edit %}{{ order.notes }}{% endif %}</textarea>
             <small class="form-help">Any additional information about this order</small>
         </div>
 
+        {# Form Actions #}
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Create Order</button>
+            <button type="submit" class="btn btn-primary">
+                  {% if is_edit %}Update Order{% else %}Create Order{% endif %}
+            </button>
             <a href="{% url 'therapist_dashboard' %}" class="btn btn-secondary">Cancel</a>
         </div>
     </form>

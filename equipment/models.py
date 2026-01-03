@@ -1,10 +1,9 @@
-# Create your models here.
-# Equipment, EquipmentCategory, EquipmentOrder tables
 """
 Models for equipment app.
 
 - Equipment represents items available for allocation
 - EquipmentOrder tracks assignment of equipment to patients
+- Equipment, EquipmentCategory, EquipmentOrder tables
 """
 
 from django.db import models

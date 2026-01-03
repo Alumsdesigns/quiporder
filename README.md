@@ -1090,6 +1090,14 @@ All code has been validated and follows industry standards:
 
 
 No critical errors found.
+
+### Future improvements
+
+- Better Calender Picker
+- When adding patient or terapist profile in username dropdown have the users full name also in parentesis
+- Forget password functionality
+
+
 ### Production Deployment
 
 For production Heroku, the SECRET_KEY is stored in Config Vars (environment variables) and never committed to the repository.
