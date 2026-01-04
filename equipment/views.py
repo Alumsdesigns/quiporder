@@ -188,6 +188,7 @@ def order_create(request):
 
     return render(request, 'equipment/order_form.html', context)
 
+
 @login_required
 def order_edit(request, pk):
     """
