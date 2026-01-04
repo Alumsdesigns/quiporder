@@ -229,7 +229,7 @@ ___
 # Manual testing above Verification in screenshots below
 
  **Visual evidence** of manual testing completed via the Django Admin interface.  
-All screenshots are stored in `docs/screenshots_verify_tests/` and demonstrate successful CRUD operations for users, patients, therapists, and equipment.
+All screenshots are stored in `docs/screenshots_verify_tests_admin_updates/` and demonstrate successful CRUD operations for users, patients, therapists, and equipment.
 
 ---
 
@@ -238,14 +238,14 @@ All screenshots are stored in `docs/screenshots_verify_tests/` and demonstrate s
 ### 1.1 Therapist User Created
 Confirms a therapist user was successfully created in Django Admin.
 
-![Therapist User Added](docs/screenshots_verify_tests/user_terapist_added.png)
+![Therapist User Added](docs/screenshots_verify_tests_admin_updates/user_terapist_added.png)
 
 ---
 
 ### 1.2 Multiple Users Created
 Confirms multiple users (therapist + patient) exist and were saved correctly.
 
-![Users Created](docs/screenshots_verify_tests/users_created.png)
+![Users Created](docs/screenshots_verify_tests_admin_updates/users_created.png)
 
 ---
 
@@ -254,7 +254,7 @@ Confirms multiple users (therapist + patient) exist and were saved correctly.
 ### 2.1 Therapist Added
 Confirms therapist profile creation and association with a user account.
 
-![Add Therapist](docs/screenshots_verify_tests/add_terapist.png)
+![Add Therapist](docs/screenshots_verify_tests_admin_updates/add_terapist.png)
 
 ---
 
@@ -263,14 +263,14 @@ Confirms therapist profile creation and association with a user account.
 ### 3.1 Patient Added
 Confirms patient user creation.
 
-![Patient Added](docs/screenshots_verify_tests/patient_added.png)
+![Patient Added](docs/screenshots_verify_tests_admin_updates/patient_added.png)
 
 ---
 
 ### 3.2 Patient Profile Linked
 Confirms patient profile creation and linkage to assigned therapist.
 
-![Patient 1 Added](docs/screenshots_verify_tests/patient1_added.png)
+![Patient 1 Added](docs/screenshots_verify_tests_admin_updates/patient1_added.png)
 
 ---
 
@@ -279,14 +279,14 @@ Confirms patient profile creation and linkage to assigned therapist.
 ### 4.1 Equipment Updated
 Confirms equipment quantities can be edited and saved correctly.
 
-![Change Equipment](docs/screenshots_verify_tests/change_eqip.png)
+![Change Equipment](docs/screenshots_verify_tests_admin_updates/change_eqip.png)
 
 ---
 
 ### 4.2 Equipment Deleted
 Confirms equipment deletion works as expected.
 
-![Deleted Equipment](docs/screenshots_verify_tests/deleted_eqipment.png)
+![Deleted Equipment](docs/screenshots_verify_tests_admin_updates/deleted_eqipment.png)
 
 ---
 
@@ -682,7 +682,7 @@ Previous issue: Some systems store therapist name directly on PatientProfile.
 
 **Users appreciated:**
 
-- Easier reading of patient and therapist details through consistent naming and DOB display.
+- Easier reading of patient and therapist details through consistent naming display.
 
 - Equipment details being separated into category and size for clarity.
 
@@ -1043,8 +1043,10 @@ users/tests.py:1:1: F401 'django.test.TestCase' imported but unused
 users/views.py:1:1: F401 'django.shortcuts.render' imported but unused
 ```
 **Final result**
-I manual fixed these see.  **0 errors** - All Python code is PEP8 compliant
-![fixed python validations with flake8 and manually](docs/pep8_python_validations/pep8_python_validation_example.png)
+I manual fixed errors while iterating examples below:  **0 errors** - All Python code is PEP8 compliant
+![fixed python validations with flake8 and manually](docs/pep8_python_validations/pep8_python_validation_example_1.png)
+![fixed python validations with flake8 and manually](docs/pep8_python_validations/pep8_python_validation_example_2.png)
+
 
 ---
 
