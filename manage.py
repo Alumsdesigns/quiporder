@@ -20,9 +20,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# Your Swiss Army knife for Django python
-# This file lets you run commands like:
-# python manage.py runserver    -> Start development server
-# python manage.py migrate      -> Update database
-# python manage.py createsuperuser -> Create admin account

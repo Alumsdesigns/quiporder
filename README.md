@@ -41,7 +41,7 @@ This system streamlines the workflow for occupational therapists by providing:
 - Python 3.13+
 - PostgreSQL 14+
 - `python-decouple` for environment variable management
-- Git
+-  Git
 
 ### Installation Steps
 
@@ -52,57 +52,47 @@ cd quip-order
 ```
 
 #### 2. Create Virtual Environment
-```
-# Create isolated Python environment
-python -m venv venv
+```python -m venv venv```
 
 # Activate itOn Mac/Linux:
-source venv/bin/activate
-
-# On Windows:
-venv\Scripts\activate
-```
-
 ```
 python -m venv venv
 source venv/bin/activate  
-# On Windows: venv\Scripts\activate
-pip install django
-django-admin startproject quiporder .
 ```
 
 ### Install Dependencies
 ```
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ### 5. Setup PostgreSQL Database
-```bash
-# Login to PostgreSQL
-psql -U postgres
 
-# Create database
-CREATE DATABASE quiporder;
+### Login to PostgreSQL
+```psql -U postgres```
 
-# Create user (if needed)
-CREATE USER yourusername WITH PASSWORD 'yourpassword';
+### Create database
+```CREATE DATABASE quiporder;```
 
-# Grant privileges
-GRANT ALL PRIVILEGES ON DATABASE quiporder TO yourusername;
+### Create user (if needed)
+```CREATE USER yourusername WITH PASSWORD 'yourpassword';```
 
-# Exit
-\q
-```
+### Grant privileges
+```GRANT ALL PRIVILEGES ON DATABASE quiporder TO yourusername;```
+
+### Exit
+```\q```
+
 
 ###  Generate Secret Key
-```python manage.py shell```
-run:
+```
+python manage.py shell
 from django.core.management.utils import get_random_secret_key
 print(get_random_secret_key())
 exit()
+```
 
 ###  Setup environment variables in .env place
-and create a .env in the root for local development add the below envirnment variables
+Create a .env in the root for local development add it to .gitignore and add the below:
 ```
 SECRET_KEY='see below how to generate this'
 DEBUG=True (never have true in production)
@@ -125,26 +115,20 @@ POSTGRES_PORT=5432
 
 Visit: http://127.0.0.1:8000/
 
-### 11. Access Admin Panel
+### Access Admin Panel
 ```http://127.0.0.1:8000/admin/```
 Login with superuser credentials created in step 9.
 
-### 12. Collect Static Files (Optional for Local Development)
-# Only needed if static files aren't loading
+### Collect Static Files (Optional for Local Development) Only needed if static files aren't loading locally
 ```python manage.py collectstatic --noinput```
 
-## Troubleshooting
-
-### Database Connection Error
+## Troubleshooting Database Connection Error
 - Verify PostgreSQL is running: `pg_isready`
 - Check credentials in `.env` file
 - Ensure database exists: `psql -l`
 
-### Static Files Not Loading
-```python manage.py collectstatic --noinput```
 
-### Migration Errors
-# Reset migrations (WARNING: Data loss!)
+### Migration errors reset migrations (WARNING: Data loss!)
 ```python manage.py migrate --run-syncdb```
 
 ### Project Structure
@@ -159,55 +143,73 @@ quiporder/
 │   ├── __init__.py         
 |   ├── admin.py
 |   |── apps.py
-│   ├── models.py            # Equipment, Order models
-│   ├── tests.py             # CRUD test operations
-│   └── views.py             # Equipment tests
+│   ├── models.py            
+│   ├── tests.py             
+│   ├── urls.py            
+│   └── views.py            
 │
-└── quiporder/             # Main project configuration
-│   ├──  __pycache__/       # Tracks database changes
-│   ├── __init__.py        # Tells Python this is a package
-│   ├── asgi.py            # For async servers 
-│   ├── settings.py        # Project settings
-│   ├── urls.py            # URL routing
-│   └── wsgi.py            # For deploying to web servers
+└── quiporder/            
+│   ├──  __pycache__/       
+│   ├── __init__.py        
+│   ├── asgi.py            
+│   ├── settings.py        
+│   ├── urls.py            
+│   └── wsgi.py            
+│
 └──static/                 
-|   └── css
-|   └── js
-|   └── images
+|   ├── css/
+|   ├── images/
+|   └── js/
 │
-└──users/                  # User management app
+└── templates/  
+│   ├── account/
+|   |     ├── login.html
+|   |     └── signup_closed.html
+|   ├── equipment/
+|   |     ├── equipment_list.html
+|   |     ├── order_confirm_delete.html
+|   |     ├── order_form.html
+|   |     ├── patient_dashboard.html
+|   |     └── therapist_dashboard.html
+|   |    
+│   ├──  base.html  
+│   └──  home.html        
+│
+└──users/                  
 |  ├──  __pycache__/ 
-|  ├──  migrations/          # Tracks database changes
-|  ├── __init__.py          # Makes this a Python package
-|  ├── admin.py             # Register models to appear in admin panel 
-|  ├── apps.py              # App configuration
-|  ├── models.py            # Database tables (User, Therapist, Patient)
-|  ├── tests.py             # Test code goes here
-|  └── views.py             # Authentication views
+|  ├──  migrations/        
+|  ├── __init__.py          
+|  ├── admin.py             
+|  ├── apps.py              
+|  ├── models.py            
+|  ├── tests.py             
+|  └── views.py             
 │
-├── .gitignore               # Git ignore rules
-├── manage.py                # Django management script
-├── README.md                # This file  
-├── requirements.txt         # Python dependencies
-└── .env.example             # Environment variables template
+├── .gitignore               
+├── manage.py               
+├── README.md              
+├── requirements.txt      
+└── .env                     
 ```
 
-# Manual Testing, Admin CRUD Validation
+## Manual Testing, Admin CRUD Validation
 
 This checklist validates that each core data model can be read, created, edited, and deleted using the Django admin interface, confirming that the data layer is wired correctly before any API or UI work begins
 
 ## Local dev Admin Access
 
-Open terminal in root of your project and run ```python manage.py runserver```
+Open terminal in root of your project and run 
+```python manage.py runserver```
 
 Open the admin panel at:
 http://127.0.0.1:8000/admin/
 
-Log in using a staff user account details.
+Log in using a staff user account details provided by admin.
 
----
+___
 
-This checklist ensures all models are testable via Django admin.
+
+### This checklist ensures all models are testable via Django admin
 
 | Step | Model / Action | Data Example | Status  | Notes |
 |------|----------------|-------------|----------------|-------|
@@ -598,7 +600,7 @@ What screenshots proves:
 
 - Your CRUD setup is working end-to-end
 
-## Iteration improvements from round 1 Observational User Testing
+## Iteration improvements from round 1 Observational User Testing of the admin panel
 
 #### Testing Context
 
@@ -688,13 +690,11 @@ Previous issue: Some systems store therapist name directly on PatientProfile.
 
 Improved admin interface to display derived names and email directly for search and filtering implemented in admin refinements.
 
-**6. UI Scope Refinement and Removal of Non-Essential Admin Features and other changes needed on UI** 
 
 **Observations**
 
-During testing, users interacted only with patient management, therapist profiles, equipment, and orders. However, the default Django Admin interface exposed additional system-level components (e.g. Sites framework, social account configuration, email confirmation tables) that were not relevant to the Quip-Order workflow and caused confusion for non-technical users.
-
  While the underlying data model and database relationships fully support Quip-Order’s functional requirements at this stage, further UI refinements are required to align the user interface with the intended therapist and patient workflows outlined in the flow diagram below:
+
 
 ```mermaid
 flowchart TD
@@ -753,7 +753,13 @@ flowchart TD
 ```
 *Improvements Implemented & Identified*
 
-In particular, unused framework-level features such as Django Sites and social authentication models should be hidden or de-scoped, and custom role-based dashboards should be introduced to complement or replace Django Admin for core CRUD operations in future iterations. These changes would improve usability, enforce clearer role separation, and ensure the interface accurately reflects the system’s real capabilities.
+Custom role-based dashboards should be introduced to complement or replace Django Admin for core CRUD operations in future iterations. These changes would improve usability, enforce clearer role separation, and ensure the interface accurately reflects the system’s real capabilities.
+**1.** Inparticular keeping admin panel for staff level access only with CRUD functionality and the ability to update
+**2.** And creating a UI for both Patient and Occupational Terapist needs with relevant Role Baed Access
+Ui 
+**a)** Patient  Dashboard  -> login -> Read view only orders assigned to the patient on the dashboard if such exist
+**b)** Terapist Dashboard -> Login -> CRUD functionality, create orders, view orders, update/edit orders and delete orders 
+
 ## Security
 
 #### Security Incident Disclosure:
@@ -770,7 +776,7 @@ During initial development (commits 1-5), the Django `SECRET_KEY` was accidental
 1. **Key Rotation:** New SECRET_KEY generated using Django's `get_random_secret_key()`
 2. **Environment Variables:** Moved SECRET_KEY from `settings.py` to `.env` file (gitignored)
 3. **Settings Update:** Configured `python-decouple` to load secrets from environment
-4. **Documentation:** Created `.env.example` template for future developers
+4. **Documentation:** Created `.env` 
 5. **Old Key Invalidated:** Previous key (`django-insecure-1*#%*n...`) no longer in use
 
 **Current Security Posture:**
