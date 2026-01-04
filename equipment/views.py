@@ -28,12 +28,10 @@ def therapist_dashboard(request):
     - Recent orders table with edit/delete actions
     - 24-hour edit window indicator
     """
-     # RBAC check
     if request.user.user_type != 'THERAPIST' and not request.user.is_superuser:
         messages.error(request, 'Access denied. Therapists only.')
         return redirect('home')
 
-    # Get statistics
     total_equipment = Equipment.objects.count()
     total_orders = EquipmentOrder.objects.filter(
         deleted_at__isnull=True).count()
@@ -43,7 +41,6 @@ def therapist_dashboard(request):
     ).count()
     active_patients = PatientProfile.objects.filter(status='ACTIVE').count()
 
-    # Get recent orders with relationships
     recent_orders = EquipmentOrder.objects.filter(
         deleted_at__isnull=True
     ).select_related(
@@ -52,7 +49,6 @@ def therapist_dashboard(request):
         'created_by'
     ).order_by('-ordered_at')[:10]
 
-    # Add can_edit property to each order (24-hour window check)
     for order in recent_orders:
         time_since_order = timezone.now() - order.ordered_at
         order.can_edit = time_since_order < timedelta(hours=24)
@@ -191,7 +187,6 @@ def order_create(request):
     }
 
     return render(request, 'equipment/order_form.html', context)
-
 
 @login_required
 def order_edit(request, pk):
