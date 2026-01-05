@@ -1,5 +1,65 @@
 # Quiporder - Occupational Therapy Management System
 
+**Live Site:** [View Deployed Site](#) *(Need to add link when deployed)*
+
+---
+
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+   - [Key Functionality](#key-functionality)
+   - [Project Purpose](#project-purpose)
+   - [Tech Stack](#tech-stack)
+   - [System Design Diagrams](#system-design-diagrams)
+   - [Role-Based Access](#role-based-access-and-dashboards)
+
+2. [User Stories](#user-stories)
+   - [GitHub Projects Board](#agile-planning-and-iteration)
+
+3. [Features](#features) (Need to add all!!!!!!!!!!!!!!!!)
+   - [Staff/Admin Features](#staff--admin)
+   - [Therapist Features](#therapists)
+   - [Patient Features](#patients)
+
+4. [Design](#design) (Need to add all!!!!!!!!!!!!!!!!)
+   - [Wireframes](#wireframes) *(If you have them)*
+   - [Color Scheme](#color-scheme) *(If you have it)*
+   - [Typography](#typography) *(If you have it)*
+   - [Database Design (ERD)](#entity-relationship-diagram-erd)
+   - [Application Flow](#application-flow--role-based-workflows)
+
+5. [Technologies Used](#technologies-used) (Need to add all!!!!!!!!!!!!!!!!)
+   - [Core Technologies](#core-technologies)
+   - [Django Packages](#django-packages--extensions)
+   - [Development Tools](#development-tools)
+   - [Deployment](#deployment--hosting)
+
+6. [Security & Data Protection](#security--data-protection)
+   - [Authentication & Authorization](#authentication--authorization)
+   - [Account Registration](#account-registration--approval)
+   - [Secret Management](#secret-management)
+   - [Django Security Features](#django-security-features) (Need to verify i am using these!!!!!!!!!!!!!!!!)
+
+7. [Agile Methodology](#agile-planning-and-iteration)
+   - [GitHub Projects](#github-projects-board)
+   - [User Testing](#iteration-improvements-from-round-1-observational-user-testing-of-the-admin-panel)
+
+8. [Testing](#testing)
+   - [Manual Testing](#manual-testing-admin-crud-validation)
+   - [Database Verification](#manual-database-verification---django-admin---postgresql)
+   - [Code Validation](#code-validation)
+   - [Testing Summary](#testing-summary)
+
+9. [Deployment](#deployment)
+   - [Local Setup](#setup-instructions)
+   - [Heroku Deployment](#production-deployment-steps)
+   - [Troubleshooting](#troubleshooting-deployment)
+
+10. [Future Features](#future-improvements)
+
+11. [Credits & Acknowledgments](#acknowledgement)
+
+---
 ## Project Overview
 
 ### Quiporder
@@ -15,7 +75,7 @@ Therapist-facing features use **PatientProfile.status** (ACTIVE / DISCHARGED) to
 
 </br>
 
-### Key functionality includes
+### Key Functionality
 
 - Equipment ordering and inventory tracking.
 - Role-based access control (Staff/Admin, Therapists, Patients).
@@ -1778,7 +1838,7 @@ heroku logs --tail
 # Verify DATABASE_URL
 heroku config:get DATABASE_URL
 
-# Reset database (⚠️ DATA LOSS!)
+# Reset database (DATA LOSS!)
 heroku pg:reset DATABASE_URL
 heroku run python manage.py migrate
 ```
@@ -2212,12 +2272,12 @@ CSRF_COOKIE_SECURE = True
 
 This security implementation demonstrates:
 
-- ✅ **LO3 (Authentication & Authorization):** Role-based login with restricted access
-- ✅ **LO6.4 (Security):** DEBUG=False, secrets in environment variables, no passwords in git
-- ✅ **Industry Best Practices:** CSRF protection, password hashing, input validation
-- ✅ **Real-World Application:** Healthcare-appropriate security model
-- ✅ **Transparency:** Security incident properly disclosed and remediated
-- ✅ **Compliance-Ready:** Audit trails, soft deletes, access controls
+- **LO3 (Authentication & Authorization):** Role-based login with restricted access
+- **LO6.4 (Security):** DEBUG=False, secrets in environment variables, no passwords in git
+- **Industry Best Practices:** CSRF protection, password hashing, input validation
+- **Real-World Application:** Healthcare-appropriate security model
+- **Transparency:** Security incident properly disclosed and remediated
+- **Compliance-Ready:** Audit trails, soft deletes, access controls
 
 All security measures follow Django documentation and OWASP recommendations.
 
