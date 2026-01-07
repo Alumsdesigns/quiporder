@@ -12,11 +12,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
-# import dj_database_url
+import os  
+import dj_database_url  
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -26,10 +26,40 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-temporary-key')
 
 # SECURITY WARNING: don't run with debug turned on in production! DEBUG = True
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
     default='localhost,127.0.0.1').split(',')
+
+# ['quiporder.herokuapp.com'] add in prod
+
+# CSRF & Security Settings
+if DEBUG:
+    # LOCAL DEVELOPMENT
+    CSRF_COOKIE_SECURE = False # True in production only
+    SESSION_COOKIE_SECURE = False
+    CSRF_TRUSTED_ORIGINS = [
+        'http://127.0.0.1:8000',
+        'http://localhost:8000',
+    ]
+else:
+    # PRODUCTION (Heroku)
+    CSRF_COOKIE_SECURE = False # True in production only
+    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
+    # Heroku app URL
+    heroku_app_name = config('HEROKU_APP_NAME', default='')
+    if heroku_app_name:
+        CSRF_TRUSTED_ORIGINS = [f'https://{heroku_app_name}.herokuapp.com']
+
+# Common settings
+CSRF_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -109,26 +139,27 @@ WSGI_APPLICATION = 'quiporder.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_DB", default="quiporder"),
-        "USER": config("POSTGRES_USER"),
-        "PASSWORD": config("POSTGRES_PASSWORD"),
-        "HOST": config("POSTGRES_HOST", default="localhost"),
-        "PORT": config("POSTGRES_PORT", default="5432"),
+# Database configuration
+# Use DATABASE_URL if it exists (Heroku), otherwise use local PostgreSQL
+if 'DATABASE_URL' in os.environ:
+    # Production (Heroku)
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
-
-
-# Alternative: Use DATABASE_URL for Heroku compatibility
-# Uncomment below and comment out DATABASES above if using DATABASE_URL
-# import dj_database_url
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=f"postgresql://{config('POSTGRES_USER')}:{config('POSTGRES_PASSWORD')}@{config('POSTGRES_HOST')}:{config('POSTGRES_PORT')}/{config('POSTGRES_DB')}"
-#     )
-# }
+else:
+    # Local development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('POSTGRES_DB', default='quiporder'),
+            'USER': config('POSTGRES_USER'),
+            'PASSWORD': config('POSTGRES_PASSWORD'),
+            'HOST': config('POSTGRES_HOST', default='localhost'),
+            'PORT': config('POSTGRES_PORT', default='5432'),
+        }
 
 
 # Password validation
