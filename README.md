@@ -80,7 +80,7 @@ Therapist-facing features use **PatientProfile.status** (ACTIVE / DISCHARGED) to
 - Equipment ordering and inventory tracking.
 - Role-based access control (Staff/Admin, Therapists, Patients).
 
-- - Staff Django Admin screens (restricted to staff users and superusers via Django’s built-in permissions) for:
+  - Staff Django Admin screens (restricted to staff users and superusers via Django’s built-in permissions) for:
   - Creating and managing CustomUser accounts.
   - Creating and updating TherapistProfile and PatientProfile.
   - Assigning therapists to patients so they appear correctly in front-end therapist dashboards.
@@ -454,7 +454,7 @@ Confirms therapist profile creation and association with a user account.
 
 ---
 
-### 3. Patient Setup
+### 3. Patient Setupjshint static/js/forms.js
 
 #### 3.1 Patient Added
 Confirms patient user creation.
@@ -1334,39 +1334,36 @@ This installs all required Python packages including Django, psycopg2, django-al
 
 ---
 
-#### 4. Setup PostgreSQL Database
+---
 
-**Start PostgreSQL:**
+#### 4. Setup Environment Variables
 
-**macOS (Homebrew):**
+Create a `.env` file in the project root directory:
 ```bash
-brew services start postgresql
+touch .env
 ```
 
-**Linux:**
-```bash
-sudo service postgresql start
+Add the following to `.env`:
+```env
+SECRET_KEY=your-generated-secret-key-here
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+POSTGRES_DB=quiporder
+POSTGRES_USER=yourusername. # Must match your Postgres superuser role
+POSTGRES_PASSWORD=yourpassword
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
 ```
 
-**Windows:** PostgreSQL should start automatically, or use pgAdmin.
 
-**Create Database:**
-```bash
-# Login to PostgreSQL
-psql -U postgres
+Verify environment variables are set in terminal, example run:
+```echo #POSTGRES_DB``` you should see quiporder if you do not you can export this in your terminal, its also good practice to set in your .zshrc or check you are not overriding it in zshrc or by running the echo command. To export them direct in the terminal you can run ```POSTGRES_PORT=5432``` check all variavles are set in wth the same ```echo $variable-name``` command in the terminal
 
-# Create database
-CREATE DATABASE quiporder;
-
-# Create user (optional - use your own credentials)
-CREATE USER yourusername WITH PASSWORD 'yourpassword';
-
-# Grant privileges
-GRANT ALL PRIVILEGES ON DATABASE quiporder TO yourusername;
-
-# Exit PostgreSQL
-\q
-```
+**Important:** 
+- Replace `your-generated-secret-key-here` with the key from step 6 below
+- Replace `yourusername` and `yourpassword` with your PostgreSQL credentials
+- **Never commit `.env` to version control** (already in `.gitignore`)
 
 ---
 
@@ -1384,38 +1381,83 @@ print(get_random_secret_key())
 exit()
 ```
 
-**Copy the generated key** - you'll need it in the next step.
+**Copy the generated key** - you'll need into your .env file you created in dstep 4.
 
----
+Exit the shell type ```exit()``` and enter
 
-#### 6. Setup Environment Variables
+#### 6. Setup PostgreSQL Database
 
-Create a `.env` file in the project root directory:
+**Start PostgreSQL:**
+
+**macOS (Homebrew):**
 ```bash
-touch .env
+brew services start postgresql
 ```
 
-Add the following to `.env`:
-```env
-SECRET_KEY=your-generated-secret-key-here
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-POSTGRES_DB=quiporder
-POSTGRES_USER=yourusername
-POSTGRES_PASSWORD=yourpassword
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
+**Linux:**
+```bash
+sudo service postgresql start
 ```
 
-**Important:** 
-- Replace `your-generated-secret-key-here` with the key from step 5
-- Replace `yourusername` and `yourpassword` with your PostgreSQL credentials
-- **Never commit `.env` to version control** (already in `.gitignore`)
+**Windows:** PostgreSQL should start automatically, or use pgAdmin.
+
+**Verify Postgres is running:**
+```brew services list | grep postgres```
+```pg_isready -h localhost -p 5432```
+
+You should see accepting connections on port 5432.
+
+
+**Next you need to run and create your database:**
+
+```bash
+# Login to PostgreSQL Login to PostgreSQL 
+psql -U postgres
+
+# Example Connects as role myuser to database mydatabase:
+psql -U myuser -d mydatabase
+
+
+# First Check existing databases:
+\l
+
+# Create database
+CREATE DATABASE quiporder;
+
+# Verify roles: 
+\du
+
+
+# Create user (optional - use your own credentials)
+CREATE USER <enter-a-made-up-username> WITH PASSWORD <'enter-a-password';
+
+# Grant privileges
+GRANT ALL PRIVILEGES ON DATABASE quiporder TO yourusername;
+
+# Exit PostgreSQL
+\q
+```
+Update your .env variables with POSTGRES_USER and POSTGRES_PASSWORD with the username and password you chose
 
 ---
 
-#### 7. Run Database Migrations
+#### 7. Verify PostgreSQL Connectivity
+Before running migrations, confirm Django can connect:
+**Using current OS user (default)**
+```psql -d quiporder```
+
+ **OR, specify a Postgres user explicitly**
+```psql -U <your_postgres_user> -d quiporder```
+
+Should connect without errors.
+Optional: check inside psql:
+```\l ```   -- list databases
+```\dt ```  -- list tables (should be empty initially)
+```\q```    -- exit
+
+---
+
+#### 8. Run Database Migrations
 
 Apply database migrations to create all required tables:
 ```bash
@@ -1427,7 +1469,7 @@ You should see output confirming migrations were applied.
 
 ---
 
-#### 8. Create Superuser
+#### 9. Create Django Superuser (Admin)
 
 Create an admin account to access the Django admin panel:
 ```bash
@@ -1435,16 +1477,21 @@ python manage.py createsuperuser
 ```
 
 Follow the prompts to set:
-- Email address
-- First name
-- Last name
-- Password
+
+**Prompts and answers:**
+```
+Username
+User type (THERAPIST/PATIENT): THERAPIST
+Password: ********
+Password (again): ********
+Superuser created successfully.
+```
 
 **Important:** This superuser will have full admin access. Regular therapist and patient accounts should be created through the admin panel after logging in.
 
 ---
 
-#### 9. Run Development Server
+#### 10. Run Development Server
 
 Start the Django development server:
 ```bash
@@ -1458,7 +1505,7 @@ Starting development server at http://127.0.0.1:8000/
 
 ---
 
-#### 10. Access the Application
+#### 11. Access the Application
 
 **Main Site:**
 - Visit: http://127.0.0.1:8000/
@@ -1515,6 +1562,8 @@ pip install -r requirements.txt
 python manage.py runserver 8001
 ```
 
+or follow the guide at the bottom of 4. Setup Environment Variables above
+
 ---
 
 ### Next Steps
@@ -1530,10 +1579,14 @@ Once the server is running:
    - Navigate to Equipment in admin panel
    - Add equipment items with quantities
 
-3. **Test Features:**
+3. **Test Features as Therapist:**
    - Login as therapist
    - Create equipment orders
    - Test CRUD operations
+
+4. **Test Features as Patient:**
+   - Login as patient
+   - View orders
 
 ---
 
@@ -1574,8 +1627,9 @@ Before deploying, ensure you have
 - [ ] Images displaying properly
 
 #### **Functionality:**
-- [ ] Login/Logout working
-- [ ] CRUD operations working
+- [ ] Login/Logout working as admin, therapist and patient
+- [ ] CRUD operations working in admin and for therapists
+- [ ] Patient logs i and can view orders only, if there is any
 - [ ] Admin panel accessible
 - [ ] All pages loading correctly
 
