@@ -2200,6 +2200,117 @@ if order.created_by != request.user:
 
 ---
 
+## Error Handling
+
+Custom error pages provide user-friendly feedback when issues occur, maintaining brand consistency and accessibility standards.
+
+### Error Pages
+
+| Code | Page | Trigger | Features |
+|------|------|---------|----------|
+| **403** | Forbidden | Permission denied | Login option, clear explanation |
+| **404** | Not Found | Invalid URL | Helpful navigation, typo guidance |
+| **405** | Method Not Allowed | Wrong HTTP method | Technical details for developers |
+| **500** | Server Error | Application crash | User-friendly message, retry option |
+
+### Design
+
+- **Consistent branding**: Matches dashboard color scheme (#2A9D8F)
+- **Accessibility**: WCAG 2.1 AA compliant with ARIA labels and keyboard navigation
+- **Responsive**: Mobile-first design with stacked buttons on small screens
+- **Actions**: Clear navigation options (Homepage, Login, Go Back)
+
+### Implementation
+
+**Error Handlers** (`quiporder/urls.py`):
+```python
+handler403 = 'quiporder.views.error_403'
+handler404 = 'quiporder.views.error_404'
+handler405 = 'quiporder.views.error_405'
+handler500 = 'quiporder.views.error_500'
+```
+
+**Templates**: `templates/errors/` | **Styles**: `static/css/errors.css`
+
+### Local Testing
+
+Error pages activate when `DEBUG=False`. In development (`DEBUG=True`), Django shows detailed debug pages for troubleshooting.
+
+#### Option 1: Quick Test (Recommended)
+
+1. **Temporarily set in `settings.py`:**
+```python
+   DEBUG = False
+   ALLOWED_HOSTS = ['*']
+```
+
+2. **Clear cache and restart:**
+```bash
+   rm -rf staticfiles/
+   find . -type d -name "__pycache__" -exec rm -r {} + 2>/dev/null
+   python manage.py collectstatic --noinput
+   python manage.py runserver
+```
+   *These commands clear cached files to ensure CSS updates are visible.*
+
+3. **Test in incognito/private window:**
+   - 403: Try accessing `/admin/` without login
+   - 404: Visit `/page-does-not-exist/`
+   - 405: Rare in browser (works automatically when triggered)
+   - 500: Requires server error (test in production)
+
+4. **Revert settings:**
+```python
+   DEBUG = config('DEBUG', default=True, cast=bool)
+   ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+```
+
+**Why incognito mode?** Prevents browser from showing cached versions of error pages.
+
+**Why clear staticfiles?** Django caches CSS files; clearing ensures latest styles are loaded.
+
+#### Option 2: Manual Test Views
+
+For more control, create temporary test views in `equipment/views.py`:
+```python
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseNotAllowed
+
+def test_403(request):
+    raise PermissionDenied("Testing 403")
+
+def test_405(request):
+    return HttpResponseNotAllowed(['POST'])
+
+def test_500(request):
+    raise Exception("Testing 500")
+```
+
+Add URLs in `equipment/urls.py`:
+```python
+path('test-403/', views.test_403, name='test_403'),
+path('test-405/', views.test_405, name='test_405'),
+path('test-500/', views.test_500, name='test_500'),
+```
+
+Visit (with `DEBUG=False`):
+- `http://127.0.0.1:8000/equipment/test-403/`
+- `http://127.0.0.1:8000/equipment/test-405/`
+- `http://127.0.0.1:8000/equipment/test-500/`
+
+**⚠️ Important:** Remove test views and URLs before production deployment.
+
+### Production Deployment
+
+Error pages work automatically on Heroku:
+```bash
+heroku config:set DEBUG=False
+```
+
+No additional configuration needed. Custom error pages display automatically when errors occur.
+
+---
+
 ### Data Protection
 
 #### Audit Trail

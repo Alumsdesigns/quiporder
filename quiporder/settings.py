@@ -23,16 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ----------------------------------------------------------------------
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-temporary-key')
 
-# SECURITY WARNING: don't run with debug turned on in production! DEBUG = True
-# DEBUG = config('DEBUG', default=True, cast=bool)
-# ALLOWED_HOSTS = config(
-#     'ALLOWED_HOSTS',
-#     default='localhost,127.0.0.1').split(',')
+# SECURITY !! don't run with debug turned on in production! DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1').split(',')
 # Test 500 + 405 run below
-DEBUG = False  # Hard-coded False (ignores .env file) for 500 + 405
-ALLOWED_HOSTS = [ '*']  # 'localhost', '127.0.0.1', Allow all hosts for 500 http://127.0.0.1:8000/equipment/test-500/
+# DEBUG = False  # Hard-coded False (ignores .env file) for 500 + 405
+# ALLOWED_HOSTS = [ '*']  # 'localhost', '127.0.0.1', Allow all hosts for 500 http://127.0.0.1:8000/equipment/test-500/
 
-# ['quiporder.herokuapp.com'] add in prod
+# ['quiporder.herokuapp.com'] add in prod for allowed hosts
+
+# For Heroku production, set via environment variables:
+# DEBUG=False
+# ALLOWED_HOSTS=your-app-name.herokuapp.com
 
 # ----------------------------------------------------------------------
 # CSRF & SESSION SETTINGS
@@ -48,7 +52,7 @@ if DEBUG:
     # LOCAL DEVELOPMENT
     CSRF_COOKIE_SECURE = False # True in production only
     SESSION_COOKIE_SECURE = False
-    SECURE_SSL_REDIRECT = False  # ← No HTTPS locally
+    SECURE_SSL_REDIRECT = False  # No HTTPS locally
     CSRF_TRUSTED_ORIGINS = [
         'http://127.0.0.1:8000',
         'http://localhost:8000',
@@ -56,10 +60,10 @@ if DEBUG:
 else:
     # PRODUCTION (Heroku)
     CSRF_COOKIE_SECURE = False # True in production only keep False for local testing
-    SESSION_COOKIE_SECURE = False  # ← Keep False for local testing then True
-    SECURE_SSL_REDIRECT =  False  # ← DISABLE for local testing with DEBUG=False True
-    # SECURE_HSTS_SECONDS = 3600  # ← Comment out for local
-    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # ← Comment out for local
+    SESSION_COOKIE_SECURE = False  # Keep False for local testing then True
+    SECURE_SSL_REDIRECT =  False  # DISABLE for local testing with DEBUG=False True
+    # SECURE_HSTS_SECONDS = 3600  # Comment out for local
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Comment out for local
     # SECURE_HSTS_PRELOAD = True 
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     
