@@ -72,8 +72,8 @@
                         </td>
                         <td>{{ order.ordered_at|date:"M d, Y g:i A" }}</td>
                         <td class="action-cell">
-                            {# Show edit/delete ONLY if within 24 hours AND user is creator #}
-                            {% if order.can_edit and order.created_by == user %}
+                            {# Show edit/delete ONLY if within 21 days AND user is creator #}
+                            {% if order.can_edit and order.created_by == request.user %}
                                 <a href="{% url 'order_edit' order.pk %}" class="btn-small btn-edit">Edit</a>
                                 <a href="{% url 'order_delete' order.pk %}" class="btn-small btn-delete">Delete</a>
                             {% else %}

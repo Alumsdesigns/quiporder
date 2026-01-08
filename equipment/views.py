@@ -51,7 +51,7 @@ def therapist_dashboard(request):
 
     for order in recent_orders:
         time_since_order = timezone.now() - order.ordered_at
-        order.can_edit = time_since_order < timedelta(hours=24)
+        order.can_edit = time_since_order < timedelta(days=21)
 
     context = {
         'total_equipment': total_equipment,
@@ -173,7 +173,7 @@ def order_create(request):
             request, f'Order created successfully! {quantity}x {
                 equipment.name} for {
                 patient.user.get_full_name()}')
-        return redirect('therapist_dashboard')
+        return redirect('')
 
     patients = PatientProfile.objects.filter(
         status='ACTIVE').select_related('user')
@@ -192,7 +192,7 @@ def order_create(request):
 @login_required
 def order_edit(request, pk):
     """
-    Edit equipment order within 24 hours.
+    Edit equipment order within 21 days.
 
     Access: Therapists and superusers only
     Restriction: Only order creator can edit
@@ -209,10 +209,10 @@ def order_edit(request, pk):
         return redirect('therapist_dashboard')
 
     time_diff = timezone.now() - order.ordered_at
-    if time_diff > timedelta(hours=24):
+    if time_diff > timedelta(days=21):
         messages.error(
             request,
-            'Orders can only be edited within 24 hours of creation.')
+            'Orders can only be edited within within 21 days of creation.')
         return redirect('therapist_dashboard')
 
     if request.method == 'POST':
@@ -284,7 +284,7 @@ def order_edit(request, pk):
 @login_required
 def order_delete(request, pk):
     """
-    Soft delete equipment order within 24 hours.
+    Soft delete equipment order within 21 days.
 
     Access: Therapists and superusers only
     Restriction: Only order creator can delete
@@ -302,10 +302,10 @@ def order_delete(request, pk):
         return redirect('therapist_dashboard')
 
     time_diff = timezone.now() - order.ordered_at
-    if time_diff > timedelta(hours=24):
+    if time_diff > timedelta(days=21):
         messages.error(
             request,
-            'Orders can only be deleted within 24 hours of creation.')
+            'Orders can only be deleted within 3 weeks of creation.')
         return redirect('therapist_dashboard')
 
     if request.method == 'POST':
