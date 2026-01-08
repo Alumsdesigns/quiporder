@@ -1,8 +1,3 @@
-# The traffic director python
-# Maps URLs to views:
-# example.com/patients/ -> shows patient list
-# example.com/equipment/ -> shows equipment list
-# Like a phone directory for your website
 """
 URL configuration for quiporder project.
 
@@ -40,3 +35,8 @@ urlpatterns = [
     path('equipment/', include('equipment.urls')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]
+
+handler403 = 'quiporder.views.error_403'  
+handler404 = 'quiporder.views.error_404'  
+handler405 = 'quiporder.views.error_405'  
+handler500 = 'quiporder.views.error_500'  

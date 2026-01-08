@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}405 - Method Not Allowed - Quiporder{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/errors.css' %}">
+{% endblock %}
+
+{% block content %}
+<main id="main-content" role="main">
+    <div class="error-container">
+        <h1 class="error-code" id="error-heading">405</h1>
+
+        <h2 class="error-title">Method Not Allowed</h2>
+
+        <p class="error-description">
+            The request method you used is not allowed for this resource.
+            This typically happens when a form is submitted incorrectly or
+            when trying to access a resource in an unsupported way.
+        </p>
+
+        <nav class="error-actions" aria-label="Error page navigation">
+            <a href="/" class="error-btn-primary" aria-label="Go to homepage">
+                Return to Homepage
+            </a>
+            <button onclick="history.back()" class="error-btn-secondary" aria-label="Go back to previous page">
+                Go Back
+            </button>
+        </nav>
+
+        <div class="error-help">
+            <p>
+                If you continue to see this error, please contact technical support.
+            </p>
+        </div>
+    </div>
+</main>
+{% endblock %}

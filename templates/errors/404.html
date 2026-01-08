@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}404 - Page Not Found - Quiporder{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/errors.css' %}">
+{% endblock %}
+
+{% block content %}
+<main id="main-content" role="main">
+    <div class="error-container">
+        <h1 class="error-code" id="error-heading">404</h1>
+
+        <h2 class="error-title">Page Not Found</h2>
+
+        <p class="error-description">
+            Sorry, the page you're looking for doesn't exist or has been moved.
+            The URL might be mistyped or the resource may have been removed.
+        </p>
+
+        <nav class="error-actions" aria-label="Error page navigation">
+            <a href="/" class="error-btn-primary" aria-label="Go to homepage">
+                Return to Homepage
+            </a>
+            <button onclick="history.back()" class="error-btn-secondary" aria-label="Go back to previous page">
+                Go Back
+            </button>
+        </nav>
+
+        <div class="error-help">
+            <p>
+                Try checking the URL for typos or return to the homepage to find what you need.
+            </p>
+        </div>
+    </div>
+</main>
+{% endblock %}

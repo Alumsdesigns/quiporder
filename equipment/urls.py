@@ -30,4 +30,8 @@ urlpatterns = [
         'order/delete/<int:pk>/',
         views.order_delete,
         name='order_delete'),
+        # DELETE BELOW FOR PRODCUTION used to test locally
+    path('test-403/', views.test_403, name='test_403'), 
+    path('test-405/', views.test_405, name='test_405'),
+    path('test-500/', views.test_500, name='test_500'),
 ]

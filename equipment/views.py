@@ -315,3 +315,21 @@ def order_delete(request, pk):
 
     context = {'order': order}
     return render(request, 'equipment/order_confirm_delete.html', context)
+
+
+# temporary for testing locally remove for deployment
+
+def test_403(request):
+    """Temporary test view for 403 error."""
+    from django.core.exceptions import PermissionDenied
+    raise PermissionDenied("🧪 Testing 403 Forbidden error page")
+
+
+def test_405(request):
+    """Test 405 Method Not Allowed error page."""
+    from django.http import HttpResponseNotAllowed
+    return HttpResponseNotAllowed(['POST'])  # Only allows POST, but GET triggers 405
+
+def test_500(request):
+    """Temporary test view for 500 error."""
+    raise Exception("🧪 Testing 500 Internal Server Error page")

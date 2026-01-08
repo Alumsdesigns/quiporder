@@ -18,35 +18,49 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-
+# ----------------------------------------------------------------------
+# SECURITY SETTINGS
+# ----------------------------------------------------------------------
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-temporary-key')
 
 # SECURITY WARNING: don't run with debug turned on in production! DEBUG = True
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='localhost,127.0.0.1').split(',')
+# DEBUG = config('DEBUG', default=True, cast=bool)
+# ALLOWED_HOSTS = config(
+#     'ALLOWED_HOSTS',
+#     default='localhost,127.0.0.1').split(',')
+# Test 500 + 405 run below
+DEBUG = False  # Hard-coded False (ignores .env file) for 500 + 405
+ALLOWED_HOSTS = [ '*']  # 'localhost', '127.0.0.1', Allow all hosts for 500 http://127.0.0.1:8000/equipment/test-500/
 
 # ['quiporder.herokuapp.com'] add in prod
+
+# ----------------------------------------------------------------------
+# CSRF & SESSION SETTINGS
+# ----------------------------------------------------------------------
+CSRF_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # CSRF & Security Settings
 if DEBUG:
     # LOCAL DEVELOPMENT
     CSRF_COOKIE_SECURE = False # True in production only
     SESSION_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False  # ← No HTTPS locally
     CSRF_TRUSTED_ORIGINS = [
         'http://127.0.0.1:8000',
         'http://localhost:8000',
     ]
 else:
     # PRODUCTION (Heroku)
-    CSRF_COOKIE_SECURE = False # True in production only
-    SESSION_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = False # True in production only keep False for local testing
+    SESSION_COOKIE_SECURE = False  # ← Keep False for local testing then True
+    SECURE_SSL_REDIRECT =  False  # ← DISABLE for local testing with DEBUG=False True
+    # SECURE_HSTS_SECONDS = 3600  # ← Comment out for local
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # ← Comment out for local
+    # SECURE_HSTS_PRELOAD = True 
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     
     # Heroku app URL
@@ -54,13 +68,9 @@ else:
     if heroku_app_name:
         CSRF_TRUSTED_ORIGINS = [f'https://{heroku_app_name}.herokuapp.com']
 
-# Common settings
-CSRF_COOKIE_HTTPONLY = False
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SAMESITE = 'Lax'
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-
+# ----------------------------------------------------------------------
+# INSTALLED APPS
+# ----------------------------------------------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -80,6 +90,9 @@ INSTALLED_APPS = [
     'equipment',
 ]
 
+# ----------------------------------------------------------------------
+# MIDDLEWARE
+# ----------------------------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -92,8 +105,10 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
+# ----------------------------------------------------------------------
+# AUTHENTICATION
+# ----------------------------------------------------------------------
 AUTH_USER_MODEL = 'users.CustomUser'
-
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
@@ -101,9 +116,29 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5"
+# This tells django-allauth to use OUR custom adapter instead of default
+# The adapter handles:
+# 1. Blocking public signup (admin-only registration)
+# 2. Role-based login redirects (therapist → dashboard, patient → patient
+# dashboard)
+ACCOUNT_ADAPTER = 'users.adapters.NoSignupAccountAdapter'
+# Django-allauth settings
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
+ACCOUNT_EMAIL_REQUIRED = True  # Changed from False
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email' # Changed from 'username'
+# Username requirements
+ACCOUNT_USERNAME_REQUIRED = True
+
+# Authentication redirects  after successful login. These are FALLBACK values - the custom adapter overrides them
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/accounts/login/'
+
+# ----------------------------------------------------------------------
+# STATIC & MEDIA FILES
+# ----------------------------------------------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
@@ -112,12 +147,11 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-ROOT_URLCONF = 'quiporder.urls'
+# ----------------------------------------------------------------------
+# TEMPLATES
+# ----------------------------------------------------------------------
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 TEMPLATES = [
     {
@@ -134,15 +168,17 @@ TEMPLATES = [
     },
 ]
 
+
+# ----------------------------------------------------------------------
+# WSGI
+# ----------------------------------------------------------------------
 WSGI_APPLICATION = 'quiporder.wsgi.application'
+ROOT_URLCONF = 'quiporder.urls'
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-# Database configuration
-# Use DATABASE_URL if it exists (Heroku), otherwise use local PostgreSQL
+# ----------------------------------------------------------------------
+# DATABASE
+# ----------------------------------------------------------------------
 if 'DATABASE_URL' in os.environ:
-    # Production (Heroku)
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
@@ -150,7 +186,6 @@ if 'DATABASE_URL' in os.environ:
         )
     }
 else:
-    # Local development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -163,9 +198,9 @@ else:
     }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
+# ----------------------------------------------------------------------
+# PASSWORD VALIDATION
+# ----------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -181,38 +216,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
+# ----------------------------------------------------------------------
+# INTERNATIONALIZATION
+# ----------------------------------------------------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Authentication redirects  after successful login. These are FALLBACK
-# values - the custom adapter overrides them
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-LOGIN_URL = '/accounts/login/'
-
-# Email configuration for local development
+# ----------------------------------------------------------------------
+# EMAIL (dev only)
+# ----------------------------------------------------------------------
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# This tells django-allauth to use OUR custom adapter instead of default
-# The adapter handles:
-# 1. Blocking public signup (admin-only registration)
-# 2. Role-based login redirects (therapist → dashboard, patient → patient
-# dashboard)
-ACCOUNT_ADAPTER = 'users.adapters.NoSignupAccountAdapter'
 
-# Django-allauth settings
-ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-# Changed Email now required for better user management
-ACCOUNT_EMAIL_REQUIRED = True  # Changed from False
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Changed from 'username'
 
-# Username requirements
-ACCOUNT_USERNAME_REQUIRED = True

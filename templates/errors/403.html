@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}403 - Access Forbidden - Quiporder{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/errors.css' %}">
+{% endblock %}
+
+{% block content %}
+<main id="main-content" role="main">
+    <div class="error-container">
+        <h1 class="error-code" id="error-heading">403</h1>
+
+        <h2 class="error-title">Access Forbidden</h2>
+
+        <p class="error-description">
+            You don't have permission to access this resource.
+            This could be because:
+        </p>
+
+        <ul style="text-align: left; max-width: 400px; margin: 20px auto; line-height: 1.8;">
+            <li>You need to log in with an authorized account</li>
+            <li>Your account doesn't have the required permissions</li>
+            <li>You're trying to access a restricted area</li>
+        </ul>
+
+        <nav class="error-actions" aria-label="Error page navigation">
+            <a href="/" class="error-btn-primary" aria-label="Go to homepage">
+                Return to Homepage
+            </a>
+            <a href="{% url 'account_login' %}" class="error-btn-secondary" aria-label="Go to login page">
+                Login
+            </a>
+            <button onclick="history.back()" class="error-btn-secondary" aria-label="Go back to previous page">
+                Go Back
+            </button>
+        </nav>
+
+        <div class="error-help">
+            <p>
+                Need help? Contact your system administrator.
+            </p>
+        </div>
+    </div>
+</main>
+{% endblock %}
