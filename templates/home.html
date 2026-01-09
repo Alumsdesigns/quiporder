@@ -18,7 +18,6 @@
                 Logged in as: <strong>{{ user.get_full_name|default:user.username }}</strong>
             </p>
             <p class="user-type">User Type: {{ user.get_user_type_display }}</p>
-            <p class="coming-soon">Dashboard coming soon!</p>
         </div>
     {% else %}
         <div class="home-cta">

@@ -173,7 +173,7 @@ def order_create(request):
             request, f'Order created successfully! {quantity}x {
                 equipment.name} for {
                 patient.user.get_full_name()}')
-        return redirect('')
+        return redirect('therapist_dashboard')
 
     patients = PatientProfile.objects.filter(
         status='ACTIVE').select_related('user')

@@ -54,6 +54,15 @@
     font-size: 1rem;
 }
 
+.is-invalid {
+    border-color: #EF4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.is-valid {
+    border-color: #10B981 !important;
+}
+
 .required {
     color: #e74c3c;
     font-weight: bold;
