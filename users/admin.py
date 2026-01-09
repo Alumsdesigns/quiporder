@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.sites.models import Site
+from django.contrib.auth.models import Group
 from django.utils.html import format_html
 from .models import CustomUser, TherapistProfile, PatientProfile
 from django.contrib import messages
@@ -11,10 +13,28 @@ Registers:
 - CustomUser
 - TherapistProfile
 - PatientProfile
+- Hide modals we don't use from admin panel
 
 Allows managing users and related profiles via the Django admin panel.
 """
 
+try:
+    admin.site.unregister(Site)
+except admin.sites.NotRegistered:
+    pass
+
+try:
+    admin.site.unregister(Group)
+except admin.sites.NotRegistered:
+    pass
+
+try:
+    from allauth.socialaccount.models import SocialAccount, SocialApp, SocialToken
+    admin.site.unregister(SocialAccount)
+    admin.site.unregister(SocialApp)
+    admin.site.unregister(SocialToken)
+except (ImportError, admin.sites.NotRegistered):
+    pass
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
