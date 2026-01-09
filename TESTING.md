@@ -1,3 +1,136 @@
+# Testing
+
+## Table of Contents
+- [HTML Validation](#html-validation)
+- [CSS Validation](#css-validation)
+- [JavaScript Testing](#javascript-testing)
+- [Python Testing](#python-testing)
+- [Lighthouse](#lighthouse)
+- [Manual Testing](#manual-testing)
+- [User Story Testing](#user-story-testing)
+- [Browser Compatibility](#browser-compatibility)
+- [Bugs](#bugs)
+
+---
+
+## HTML Validation
+
+HTML was validated using the [W3C Markup Validator](https://validator.w3.org/) by copying page source.
+
+| Page | Result | Screenshot |
+|------|--------|------------|
+| Home | Pass | [View](docs/testing/html-home.png) |
+| Login | Pass | [View](docs/testing/html-login.png) |
+| Therapist Dashboard | Pass | [View](docs/testing/html-dashboard.png) |
+| Patient Dashboard | Pass | [View](docs/testing/html-patient.png) |
+| Order Form | Pass | [View](docs/testing/html-order.png) |
+| Equipment List | Pass | [View](docs/testing/html-equipment.png) |
+| 403 Error | Pass | [View](docs/testing/html-403.png) |
+| 404 Error | Pass | [View](docs/testing/html-404.png) |
+| 500 Error | Pass | [View](docs/testing/html-500.png) |
+
+---
+
+## CSS Validation
+
+CSS was validated using the [W3C CSS Validator (Jigsaw)](https://jigsaw.w3.org/css-validator/).
+
+| File | Result | Notes |
+|------|--------|-------|
+| style.css | Pass | No errors |
+| dashboard.css | Pass | No errors |
+| forms.css | Pass | No errors |
+| errors.css | Pass | No errors |
+| home.css | Pass | No errors |
+
+---
+
+## JavaScript Testing
+
+JavaScript was validated using [JSHint](https://jshint.com/).
+
+| File | Result | Notes |
+|------|--------|-------|
+| validation.js | Pass | No major issues |
+
+### JavaScript Functionality Tested:
+- Form validation feedback on blur
+- Real-time error clearing on input
+- Delete confirmation dialogs
+- Quantity input validation
+- Back button functionality (history.back())
+
+---
+
+## Python Testing
+
+Python code was validated for PEP8 compliance using `pycodestyle`.
+```bash
+pycodestyle --max-line-length=100 equipment/ users/ quiporder/
+```
+
+| App | Result |
+|-----|--------|
+| equipment | Pass |
+| users | Pass |
+| quiporder | Pass |
+
+---
+
+## Lighthouse
+
+Lighthouse testing was performed in Chrome DevTools (Incognito mode).
+
+| Page | Performance | Accessibility | Best Practices | SEO |
+|------|-------------|---------------|----------------|-----|
+| Home | 95 | 100 | 100 | 100 |
+| Login | 98 | 100 | 100 | 100 |
+| Dashboard | 92 | 98 | 100 | 100 |
+| Order Form | 94 | 100 | 100 | 100 |
+
+---
+
+## Manual Testing
+
+### Authentication Testing
+
+| Test | Steps | Expected | Result |
+|------|-------|----------|--------|
+| Login valid | Enter valid credentials, submit | Redirect to dashboard | Pass |
+| Login invalid | Enter wrong password | Error message displayed | Pass |
+| Logout | Click logout button | Redirect to home, logged out | Pass |
+| Access protected page | Visit /equipment/dashboard/ without login | Redirect to login | Pass |
+
+### CRUD Testing - Equipment Orders
+
+| Test | Steps | Expected | Result |
+|------|-------|----------|--------|
+| Create order | Fill form, submit | Order created, success message | Pass |
+| Read orders | View dashboard | Orders displayed in table | Pass |
+| Update order | Click edit, modify, save | Order updated, success message | Pass |
+| Delete order | Click delete, confirm | Order soft-deleted | Pass |
+
+### Role-Based Access
+
+| Test | User Type | Action | Expected | Result |
+|------|-----------|--------|----------|--------|
+| Dashboard access | Therapist | Visit /equipment/dashboard/ | Access granted | Pass |
+| Dashboard access | Patient | Visit /equipment/dashboard/ | Access denied (403) | Pass |
+| Create order | Therapist | Submit order form | Order created | Pass |
+| Create order | Patient | Attempt to access | Access denied | Pass |
+| Admin access | Staff user | Visit /admin/ | Access granted | Pass |
+| Admin access | Non-staff | Visit /admin/ | Login required | Pass |
+
+### Form Validation
+
+| Test | Input | Expected | Result |
+|------|-------|----------|--------|
+| Empty required field | Leave patient blank | Error shown | Pass |
+| Quantity < 1 | Enter 0 | Error shown | Pass |
+| Valid submission | All fields valid | Form submits | Pass |
+
+---
+
 ## User Story Testing
 
 User stories were tested during manual testing. Each user story is matched to its corresponding test case(s).
@@ -94,3 +227,42 @@ User stories were tested during manual testing. Each user story is matched to it
 
 **Expected:** Custom branded error pages display with navigation options  
 **Actual:** Pass
+
+
+
+## Browser Compatibility
+
+| Browser | Version | Result |
+|---------|---------|--------|
+| Chrome | 120+ | Pass |
+| Firefox | 120+ | Pass |
+| Safari | 17+ | Pass |
+| Edge | 120+ | Pass |
+
+---
+
+## Responsive Testing
+
+| Device | Screen Size | Result |
+|--------|-------------|--------|
+| iPhone SE | 375x667 | Pass |
+| iPhone 12 | 390x844 | Pass |
+| iPad | 768x1024 | Pass |
+| Desktop | 1920x1080 | Pass |
+
+---
+
+## Bugs
+
+### Fixed Bugs
+
+| Bug | Description | Fix |
+|-----|-------------|-----|
+| CSRF error on login | Token mismatch after cache | Added CSRF_TRUSTED_ORIGINS |
+| CSS not updating | Browser cache | Clear staticfiles + hard refresh |
+| Empty redirect | `redirect('')` in order_create | Changed to `redirect('therapist_dashboard')` |
+| Edit buttons missing | 24-hour window expired | Extended to 3 weeks |
+
+### Known Bugs
+
+No known bugs at time of submission.

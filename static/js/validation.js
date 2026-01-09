@@ -1,4 +1,9 @@
+
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // =========================================================================
+    // FORM VALIDATION FEEDBACK
+    // =========================================================================
     
     const forms = document.querySelectorAll('form');
     
@@ -6,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const inputs = form.querySelectorAll('input, select, textarea');
         
         inputs.forEach(function(input) {
-
             input.addEventListener('blur', function() {
                 validateField(this);
             });
@@ -22,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param {HTMLElement} field - The input element to validate
      */
     function validateField(field) {
-
         if (!field.required) {
             return;
         }
@@ -41,6 +44,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // =========================================================================
+    // QUANTITY INPUT - Prevent negative/zero
+    // =========================================================================
     
     const quantityInputs = document.querySelectorAll('input[name="quantity"]');
     
@@ -53,5 +59,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
 });
