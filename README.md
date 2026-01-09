@@ -297,9 +297,85 @@ This project implements role-based login and separated access as required in LO3
 
 Quiporder is planned and tracked using a GitHub Projects kanban board:
 
-##### User Stories:
+### User Stories:
 
 The user stories used for planning and development of Quiporder are documented below. All user stories were tracked and managed using GitHub Projects.
+
+## User Stories
+
+User stories were tested as part of manual testing and can be matched to test cases by their keys. See TESTING.md
+
+### Authentication & Access
+
+* **US1:** As a site admin, I can create user accounts so that therapists and patients can access the system with appropriate permissions.
+
+* **US2:** As a therapist, I can log in to the system so that I can access the therapist dashboard and manage equipment orders.
+
+* **US3:** As a patient, I can log in to the system so that I can view my equipment orders on a read-only dashboard.
+
+* **US4:** As a site admin, I can assign user roles (therapist/patient) so that users have appropriate access levels.
+
+* **US5:** As a non-authenticated user, I cannot access protected pages so that patient data remains secure.
+
+### Therapist Features
+
+* **US6:** As a therapist, I can view the dashboard so that I can see statistics on equipment, orders, and patients.
+
+* **US7:** As a therapist, I can create equipment orders for patients so that they receive the equipment they need.
+
+* **US8:** As a therapist, I can edit my orders within 3 weeks so that I can correct any mistakes.
+
+* **US9:** As a therapist, I can delete my orders within 3 weeks so that incorrect orders can be removed.
+
+* **US10:** As a therapist, I can view a list of recent orders so that I can track order status and history.
+
+* **US11:** As a therapist, I can see order status badges so that I can quickly identify pending, approved, or delivered orders.
+
+* **US12:** As a therapist, I can access the admin panel (if staff) so that I can manage system data.
+
+### Patient Features
+
+* **US13:** As a patient, I can view my orders on my dashboard so that I can see what equipment has been ordered for me.
+
+* **US14:** As a patient, I cannot edit or delete orders so that order integrity is maintained.
+
+* **US15:** As a patient, I can see order status so that I know if my equipment is pending, approved, or delivered.
+
+### Equipment Management
+
+* **US16:** As a therapist, I can view available equipment so that I know what can be ordered.
+
+* **US17:** As a therapist, I can see equipment quantities so that I know current stock levels.
+
+* **US18:** As a site admin, I can add new equipment so that it becomes available for ordering.
+
+* **US19:** As a site admin, I can edit equipment details so that information stays accurate.
+
+* **US20:** As a site admin, I can manage equipment inventory so that stock levels are maintained.
+
+### Patient Management
+
+* **US21:** As a site admin, I can create patient profiles so that therapists can order equipment for them.
+
+* **US22:** As a site admin, I can assign patients to therapists so that care relationships are tracked.
+
+* **US23:** As a site admin, I can set patient status (active/discharged) so that only active patients appear in order forms.
+
+### Security & Data Protection
+
+* **US24:** As a site admin, I cannot grant staff privileges to patient accounts so that security is maintained.
+
+* **US25:** As a user, I see custom error pages (403, 404, 500) so that errors are handled gracefully.
+
+* **US26:** As a site admin, I can soft delete orders so that audit trails are preserved.
+
+### Accessibility & UX
+
+* **US27:** As a user, I can navigate using keyboard only so that the site is accessible.
+
+* **US28:** As a user, I can use the site on mobile devices so that I can access it anywhere.
+
+* **US29:** As a user, I receive clear feedback messages so that I know when actions succeed or fail.
 
 
 - **GitHub Projects board:** https://github.com/users/Alumsdesigns/projects/4/views/1
