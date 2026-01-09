@@ -198,7 +198,7 @@
     }
 }
 
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
     .error-container {
         border: 3px solid #000000;
     }

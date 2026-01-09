@@ -3,11 +3,6 @@
    Medical Equipment Management System
    ============================================================================ */
 
-/* ----------------------------------------------------------------------------
-   CSS CUSTOM PROPERTIES (Variables)
-   - Centralized design tokens for consistency
-   - Easy to maintain and update
-   ---------------------------------------------------------------------------- */
 :root {
     /* TYPOGRAPHY - Inter for body, Roboto for headings */
     --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
