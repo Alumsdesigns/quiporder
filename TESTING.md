@@ -1,17 +1,58 @@
 # Testing
 
 ## Table of Contents
+
+- [Python Code Validation](#python-code-validation)
 - [HTML Validation](#html-validation)
 - [CSS Validation](#css-validation)
 - [JavaScript Testing](#javascript-testing)
-- [Python Testing](#python-testing)
 - [Lighthouse](#lighthouse)
 - [Manual Testing](#manual-testing)
 - [User Story Testing](#user-story-testing)
 - [Browser Compatibility](#browser-compatibility)
+- [Python Testing](#python-testing)
 - [Bugs](#bugs)
 
 ---
+
+## HTML (W3C)
+
+All HTML templates validated using W3C Markup Validation Service.
+
+### Validation Tool
+- **Service:** W3C Markup Validator
+- **URL:** https://validator.w3.org/
+
+### Pages Validated
+
+| Page | URL | Result |
+|------|-----|--------|
+| Home | `/` |  Pass |
+| Login | `/accounts/login/` |  Pass |
+| Signup Info | `/accounts/signup` |  Pass |
+| Therapist Dashboard | `/equipment/dashboard/` | Pass |
+| Patient Dashboard | `/equipment/patient/dashboard/` | Pass |
+| Equipment List | `/equipment/list/` | Pass |
+| Create Order | `/equipment/order/create/` | Pass |
+| Delete Confirmation | `/equipment/order/delete/<id>/` | Pass |
+
+### Validation Process
+1. Navigate to page in browser
+2. Right-click → View Page Source
+3. Copy entire HTML
+4. Paste into W3C Validator (Direct Input)
+5. Review results
+
+### Results
+All pages validated successfully with:
+- Semantic HTML5
+- Proper DOCTYPE
+- Valid attributes
+- Accessible markup
+- All CSS validated successfully using CSS3 standards.
+
+--
+
 
 ## HTML Validation
 
@@ -44,36 +85,266 @@ CSS was validated using the [W3C CSS Validator (Jigsaw)](https://jigsaw.w3.org/c
 | home.css | Pass | No errors |
 
 ---
-
-## JavaScript Testing
+### JavaScript Testing
 
 JavaScript was validated using [JSHint](https://jshint.com/).
 
 | File | Result | Notes |
 |------|--------|-------|
-| validation.js | Pass | No major issues |
+| validation.js | Pass | No errors, ES6 features used |
 
-### JavaScript Functionality Tested:
-- Form validation feedback on blur
-- Real-time error clearing on input
-- Delete confirmation dialogs
-- Quantity input validation
-- Back button functionality (history.back())
+### JavaScript Functionality Tested
+
+| Test | Steps | Expected | Result |
+|------|-------|----------|--------|
+| Script loads | Open any page, check DevTools console | No errors | Pass |
+| Empty required field | Click in field, click out without typing | Red border appears | Pass |
+| Type in invalid field | Start typing in red-bordered field | Red border clears | Pass |
+| Quantity = 0 | Enter 0 in quantity field, tab out | Value changes to 1 | Pass |
+| Quantity negative | Enter -5 in quantity field | Value changes to 1 | Pass |
+| Form submission | Fill valid data, submit | Form submits normally | Pass |
+| Django validation | Submit with server-side error | Django error displays | Pass |
+
+### JavaScript Features
+
+| Feature | Description | File |
+|---------|-------------|------|
+| Field validation | Real-time feedback on blur event | validation.js |
+| Quantity enforcement | Prevents 0 or negative values | validation.js |
+| Back navigation | history.back() on error pages | Inline in templates |
 
 ---
 
-## Python Testing
+### Python Code Validation
 
-Python code was validated for PEP8 compliance using `pycodestyle`.
-```bash
-pycodestyle --max-line-length=100 equipment/ users/ quiporder/
+<details>
+
+#### Python (PEP8)
+
+Validated using flake8:
+```
+flake8 equipment/ users/ quiporder/ --exclude=migrations,__pycache__ --max-line-length=120 --ignore=E501,W503,W504
 ```
 
-| App | Result |
-|-----|--------|
-| equipment | Pass |
-| users | Pass |
-| quiporder | Pass |
+**Configuration:**
+- Max line length: 120 characters
+- Ignored: E501 (line too long), W503/W504 (line break style - both valid)
+
+### Errors found below:
+```
+flake8 equipment/ users/ quiporder/ --exclude=migrations,__pycache__ --max-line-length=120 --ignore=E501,W503
+equipment/admin.py:22:1: E302 expected 2 blank lines, found 1
+equipment/admin.py:46:1: E302 expected 2 blank lines, found 1
+equipment/admin.py:49:1: W293 blank line contains whitespace
+equipment/admin.py:52:1: W293 blank line contains whitespace
+equipment/admin.py:62:1: W293 blank line contains whitespace
+equipment/admin.py:74:1: W293 blank line contains whitespace
+equipment/admin.py:78:1: W293 blank line contains whitespace
+equipment/admin.py:86:24: W291 trailing whitespace
+equipment/admin.py:88:1: E302 expected 2 blank lines, found 1
+equipment/admin.py:92:1: W293 blank line contains whitespace
+equipment/admin.py:102:28: W291 trailing whitespace
+equipment/admin.py:103:21: W291 trailing whitespace
+equipment/admin.py:104:20: W291 trailing whitespace
+equipment/admin.py:105:18: W291 trailing whitespace
+equipment/admin.py:106:24: W291 trailing whitespace
+equipment/admin.py:107:22: W291 trailing whitespace
+equipment/admin.py:111:18: W291 trailing whitespace
+equipment/admin.py:113:22: W291 trailing whitespace
+equipment/admin.py:117:35: W291 trailing whitespace
+equipment/admin.py:118:37: W291 trailing whitespace
+equipment/admin.py:119:36: W291 trailing whitespace
+equipment/admin.py:132:34: W291 trailing whitespace
+equipment/admin.py:134:10: E121 continuation line under-indented for hanging indent
+equipment/admin.py:147:1: W293 blank line contains whitespace
+equipment/admin.py:151:1: W293 blank line contains whitespace
+equipment/admin.py:155:1: W293 blank line contains whitespace
+equipment/admin.py:158:1: W293 blank line contains whitespace
+equipment/admin.py:162:5: E303 too many blank lines (2)
+equipment/admin.py:165:1: W293 blank line contains whitespace
+equipment/admin.py:169:1: W293 blank line contains whitespace
+equipment/admin.py:181:52: W291 trailing whitespace
+equipment/admin.py:183:1: W293 blank line contains whitespace
+equipment/admin.py:185:5: E303 too many blank lines (2)
+equipment/admin.py:191:5: E303 too many blank lines (2)
+equipment/admin.py:202:1: W293 blank line contains whitespace
+equipment/admin.py:207:1: W293 blank line contains whitespace
+equipment/admin.py:211:5: E303 too many blank lines (2)
+equipment/admin.py:214:1: W293 blank line contains whitespace
+equipment/admin.py:220:1: W293 blank line contains whitespace
+equipment/admin.py:224:1: W293 blank line contains whitespace
+equipment/admin.py:252:34: W291 trailing whitespace
+equipment/admin.py:254:32: W291 trailing whitespace
+equipment/admin.py:257:9: E123 closing bracket does not match indentation of opening bracket's line
+equipment/admin.py:271:1: W293 blank line contains whitespace
+equipment/admin.py:277:1: W293 blank line contains whitespace
+equipment/admin.py:280:1: W293 blank line contains whitespace
+equipment/admin.py:282:1: W293 blank line contains whitespace
+equipment/admin.py:286:1: W293 blank line contains whitespace
+equipment/admin.py:288:1: W293 blank line contains whitespace
+equipment/admin.py:290:1: W293 blank line contains whitespace
+equipment/models.py:69:1: W293 blank line contains whitespace
+equipment/models.py:103:36: W291 trailing whitespace
+equipment/models.py:104:48: W291 trailing whitespace
+equipment/models.py:243:13: E303 too many blank lines (2)
+equipment/models.py:245:46: W291 trailing whitespace
+equipment/models.py:313:1: W293 blank line contains whitespace
+equipment/models.py:316:1: W293 blank line contains whitespace
+equipment/models.py:320:1: W293 blank line contains whitespace
+equipment/models.py:325:1: W293 blank line contains whitespace
+equipment/models.py:331:1: W293 blank line contains whitespace
+equipment/models.py:349:1: W293 blank line contains whitespace
+equipment/models.py:367:1: W293 blank line contains whitespace
+equipment/models.py:373:1: W293 blank line contains whitespace
+equipment/models.py:412:1: W293 blank line contains whitespace
+equipment/models.py:414:1: W293 blank line contains whitespace
+equipment/models.py:423:1: W293 blank line contains whitespace
+equipment/tests.py:1:1: F401 'django.test.TestCase' imported but unused
+equipment/urls.py:15:2: W292 no newline at end of file
+equipment/views.py:23:1: W293 blank line contains whitespace
+equipment/views.py:25:1: W293 blank line contains whitespace
+equipment/views.py:34:1: W293 blank line contains whitespace
+equipment/views.py:42:1: W293 blank line contains whitespace
+equipment/views.py:50:1: W293 blank line contains whitespace
+equipment/views.py:54:1: W293 blank line contains whitespace
+equipment/views.py:62:1: W293 blank line contains whitespace
+equipment/views.py:70:1: W293 blank line contains whitespace
+equipment/views.py:77:1: W293 blank line contains whitespace
+equipment/views.py:83:5: E722 do not use bare 'except'
+equipment/views.py:86:1: W293 blank line contains whitespace
+equipment/views.py:94:1: W293 blank line contains whitespace
+equipment/views.py:101:1: W293 blank line contains whitespace
+equipment/views.py:110:1: W293 blank line contains whitespace
+equipment/views.py:117:1: W293 blank line contains whitespace
+equipment/views.py:123:1: W293 blank line contains whitespace
+equipment/views.py:127:1: W293 blank line contains whitespace
+equipment/views.py:136:1: W293 blank line contains whitespace
+equipment/views.py:148:1: W293 blank line contains whitespace
+equipment/views.py:163:1: W293 blank line contains whitespace
+equipment/views.py:165:1: W293 blank line contains whitespace
+equipment/views.py:171:1: W293 blank line contains whitespace
+equipment/views.py:174:1: W293 blank line contains whitespace
+equipment/views.py:180:1: W293 blank line contains whitespace
+equipment/views.py:188:1: W293 blank line contains whitespace
+equipment/views.py:194:1: W293 blank line contains whitespace
+equipment/views.py:198:1: W293 blank line contains whitespace
+equipment/views.py:202:1: W293 blank line contains whitespace
+equipment/views.py:207:1: W293 blank line contains whitespace
+equipment/views.py:213:1: W293 blank line contains whitespace
+equipment/views.py:222:1: W293 blank line contains whitespace
+equipment/views.py:229:1: W293 blank line contains whitespace
+equipment/views.py:234:1: W293 blank line contains whitespace
+equipment/views.py:241:1: W293 blank line contains whitespace
+equipment/views.py:251:1: W293 blank line contains whitespace
+equipment/views.py:257:1: W293 blank line contains whitespace
+equipment/views.py:260:1: W293 blank line contains whitespace
+equipment/views.py:263:1: W293 blank line contains whitespace
+equipment/views.py:270:1: W293 blank line contains whitespace
+equipment/views.py:278:1: W293 blank line contains whitespace
+equipment/views.py:285:1: W293 blank line contains whitespace
+equipment/views.py:289:1: W293 blank line contains whitespace
+equipment/views.py:293:1: W293 blank line contains whitespace
+equipment/views.py:298:1: W293 blank line contains whitespace
+equipment/views.py:303:1: W293 blank line contains whitespace
+equipment/views.py:305:75: W292 no newline at end of file
+quiporder/settings.py:46:1: W293 blank line contains whitespace
+quiporder/settings.py:61:52: W291 trailing whitespace
+quiporder/settings.py:114:10: E131 continuation line unaligned for hanging indent
+quiporder/settings.py:186:1: W391 blank line at end of file
+quiporder/urls.py:34:9: E131 continuation line unaligned for hanging indent
+quiporder/urls.py:35:28: W291 trailing whitespace
+quiporder/urls.py:36:74: W291 trailing whitespace
+users/adapters.py:16:1: W293 blank line contains whitespace
+users/adapters.py:21:1: W293 blank line contains whitespace
+users/adapters.py:25:1: W293 blank line contains whitespace
+users/adapters.py:30:1: W293 blank line contains whitespace
+users/adapters.py:34:1: W293 blank line contains whitespace
+users/adapters.py:40:1: W293 blank line contains whitespace
+users/adapters.py:44:1: W293 blank line contains whitespace
+users/adapters.py:48:1: W293 blank line contains whitespace
+users/adapters.py:52:1: W293 blank line contains whitespace
+users/adapters.py:56:1: W293 blank line contains whitespace
+users/adapters.py:59:23: W292 no newline at end of file
+users/admin.py:16:1: E302 expected 2 blank lines, found 0
+users/admin.py:20:1: W293 blank line contains whitespace
+users/admin.py:44:14: E124 closing bracket does not match visual indentation
+users/admin.py:52:13: E123 closing bracket does not match indentation of opening bracket's line
+users/admin.py:69:17: E123 closing bracket does not match indentation of opening bracket's line
+users/admin.py:70:9: E124 closing bracket does not match visual indentation
+users/admin.py:74:20: W291 trailing whitespace
+users/admin.py:75:22: W291 trailing whitespace
+users/admin.py:76:21: W291 trailing whitespace
+users/admin.py:78:20: W291 trailing whitespace
+users/admin.py:79:9: E123 closing bracket does not match indentation of opening bracket's line
+users/admin.py:93:1: W293 blank line contains whitespace
+users/admin.py:103:16: W291 trailing whitespace
+users/admin.py:105:24: W291 trailing whitespace
+users/admin.py:107:9: E123 closing bracket does not match indentation of opening bracket's line
+users/admin.py:115:1: E302 expected 2 blank lines, found 1
+users/admin.py:125:9: E123 closing bracket does not match indentation of opening bracket's line
+users/admin.py:136:1: W391 blank line at end of file
+users/models.py:14:1: E302 expected 2 blank lines, found 1
+users/models.py:21:1: W293 blank line contains whitespace
+users/models.py:26:1: W293 blank line contains whitespace
+users/models.py:32:1: W293 blank line contains whitespace
+users/models.py:73:1: E302 expected 2 blank lines, found 1
+users/models.py:101:1: W391 blank line at end of file
+users/tests.py:1:1: F401 'django.test.TestCase' imported but unused
+```
+
+reduced errors too
+```
+flake8 equipment/ users/ quiporder/ --exclude=migrations,__pycache__ --max-line-length=120 --ignore=E501,W503
+equipment/models.py:65:65: W504 line break after binary operator
+equipment/tests.py:1:1: F401 'django.test.TestCase' imported but unused
+users/tests.py:1:1: F401 'django.test.TestCase' imported but unused
+users/views.py:1:1: F401 'django.shortcuts.render' imported but unused
+```
+**Final result**
+I manual fixed errors while iterating examples below:  **0 errors** - All Python code is PEP8 compliant
+
+![fixed python validations with flake8 and manually](docs/pep8_python_validations/pep8_python_validation_example_1.png)
+
+
+
+---
+
+## HTML (W3C)
+
+All HTML templates validated using W3C Markup Validation Service.
+
+### Validation Tool
+- **Service:** W3C Markup Validator
+- **URL:** https://validator.w3.org/
+
+### Pages Validated
+
+| Page | URL | Result |
+|------|-----|--------|
+| Home | `/` |  Pass |
+| Login | `/accounts/login/` |  Pass |
+| Signup Info | `/accounts/signup` |  Pass |
+| Therapist Dashboard | `/equipment/dashboard/` | Pass |
+| Patient Dashboard | `/equipment/patient/dashboard/` | Pass |
+| Equipment List | `/equipment/list/` | Pass |
+| Create Order | `/equipment/order/create/` | Pass |
+| Delete Confirmation | `/equipment/order/delete/<id>/` | Pass |
+
+### Validation Process
+1. Navigate to page in browser
+2. Right-click → View Page Source
+3. Copy entire HTML
+4. Paste into W3C Validator (Direct Input)
+5. Review results
+
+### Results
+All pages validated successfully with:
+- Semantic HTML5
+- Proper DOCTYPE
+- Valid attributes
+- Accessible markup
+- All CSS validated successfully using CSS3 standards.
+
 
 ---
 
@@ -229,6 +500,7 @@ User stories were tested during manual testing. Each user story is matched to it
 **Actual:** Pass
 
 
+---
 
 ## Browser Compatibility
 

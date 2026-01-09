@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
-import os  
-import dj_database_url  
+import os
+import dj_database_url
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +30,8 @@ ALLOWED_HOSTS = config(
     default='localhost,127.0.0.1').split(',')
 # Test 500 + 405 run below
 # DEBUG = False  # Hard-coded False (ignores .env file) for 500 + 405
-# ALLOWED_HOSTS = [ '*']  # 'localhost', '127.0.0.1', Allow all hosts for 500 http://127.0.0.1:8000/equipment/test-500/
+# ALLOWED_HOSTS = [ '*']  # 'localhost', '127.0.0.1', Allow all hosts for
+# 500 http://127.0.0.1:8000/equipment/test-500/
 
 # ['quiporder.herokuapp.com'] add in prod for allowed hosts
 
@@ -50,7 +51,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 # CSRF & Security Settings
 if DEBUG:
     # LOCAL DEVELOPMENT
-    CSRF_COOKIE_SECURE = False # True in production only
+    CSRF_COOKIE_SECURE = False  # True in production only
     SESSION_COOKIE_SECURE = False
     SECURE_SSL_REDIRECT = False  # No HTTPS locally
     CSRF_COOKIE_HTTPONLY = False  # ← Already set
@@ -61,12 +62,12 @@ if DEBUG:
     ]
 else:
     # PRODUCTION (Heroku)
-    CSRF_COOKIE_SECURE = True # in production only keep False for local testing # False 
-    SESSION_COOKIE_SECURE = True # Keep False for local testing then True - False 
-    SECURE_SSL_REDIRECT =  True # DISABLE for local testing with DEBUG=False True - False
+    CSRF_COOKIE_SECURE = True  # in production only keep False for local testing # False
+    SESSION_COOKIE_SECURE = True  # Keep False for local testing then True - False
+    SECURE_SSL_REDIRECT = True  # DISABLE for local testing with DEBUG=False True - False
     # SECURE_HSTS_SECONDS = 3600  # Comment out for local
     # SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Comment out for local
-    # SECURE_HSTS_PRELOAD = True 
+    # SECURE_HSTS_PRELOAD = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     # CSRF trusted origins - include local for testing
@@ -74,7 +75,7 @@ else:
         'http://127.0.0.1:8000',
         'http://localhost:8000',
     ]
-    
+
     # Heroku app URL
     heroku_app_name = config('HEROKU_APP_NAME', default='')
     if heroku_app_name:
@@ -139,11 +140,12 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_EMAIL_REQUIRED = True  # Changed from False
 
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email' # Changed from 'username'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Changed from 'username'
 # Username requirements
 ACCOUNT_USERNAME_REQUIRED = True
 
-# Authentication redirects  after successful login. These are FALLBACK values - the custom adapter overrides them
+# Authentication redirects  after successful login. These are FALLBACK
+# values - the custom adapter overrides them
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
@@ -242,7 +244,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # EMAIL (dev only)
 # ----------------------------------------------------------------------
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-
-
-

@@ -36,6 +36,7 @@ try:
 except (ImportError, admin.sites.NotRegistered):
     pass
 
+
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     """Custom admin for user management with role restrictions."""
@@ -69,7 +70,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': (
                 'is_staff',
                 'is_active',
-                'is_superuser', 
+                'is_superuser',
                 'groups',
                 'user_permissions',
             ),
@@ -128,37 +129,38 @@ class CustomUserAdmin(UserAdmin):
         Override save to enforce business rules:
         - PATIENT users can NEVER be superusers
         - PATIENT users can NEVER be staff
-        
+
         Stores corrections in request for message display.
         """
         user_type = form.cleaned_data.get('user_type') or obj.user_type
         is_staff = form.cleaned_data.get('is_staff', False)
         is_superuser = form.cleaned_data.get('is_superuser', False)
-        
+
         request._security_corrections = []
-        
+
         if user_type == 'PATIENT':
             if is_superuser:
                 obj.is_superuser = False
                 request._security_corrections.append('Superuser')
-            
+
             if is_staff:
                 obj.is_staff = False
                 request._security_corrections.append('Staff')
         else:
             if obj.is_superuser and user_type != 'THERAPIST':
                 request._therapist_warning = True
-        
+
         super().save_model(request, obj, form, change)
 
     def response_add(self, request, obj, post_url_continue=None):
         """Customize messages after adding user."""
         from django.contrib import messages
-        
+
         storage = messages.get_messages(request)
         list(storage)
-        
-        if hasattr(request, '_security_corrections') and request._security_corrections:
+
+        if hasattr(
+                request, '_security_corrections') and request._security_corrections:
             messages.warning(
                 request,
                 f'User "{obj.username}" created with security restrictions. '
@@ -166,34 +168,43 @@ class CustomUserAdmin(UserAdmin):
                 f'because patient users cannot have elevated permissions.'
             )
         else:
-            messages.success(request, f'✓ User "{obj.username}" was created successfully.')
-        
+            messages.success(
+                request, f'✓ User "{
+                    obj.username}" was created successfully.')
+
         return super().response_add(request, obj, post_url_continue)
 
     def response_change(self, request, obj):
         """Customize messages after changing user."""
         from django.contrib import messages
-        
+
         storage = messages.get_messages(request)
         list(storage)
-        
-        if hasattr(request, '_security_corrections') and request._security_corrections:
+
+        if hasattr(
+                request, '_security_corrections') and request._security_corrections:
             messages.error(
                 request,
-                f'SECURITY: Cannot grant {" or ".join(request._security_corrections)} '
-                f'to patient user "{obj.username}". User saved WITHOUT these privileges.'
+                f'SECURITY: Cannot grant {
+                    " or ".join(
+                        request._security_corrections)} '
+                f'to patient user "{
+                    obj.username}". User saved WITHOUT these privileges.'
             )
         else:
-            messages.success(request, f'✓ User "{obj.username}" was saved successfully.')
-        
+            messages.success(
+                request, f'✓ User "{
+                    obj.username}" was saved successfully.')
+
         return super().response_change(request, obj)
+
     def get_fieldsets(self, request, obj=None):
         """
         Dynamically modify fieldsets based on user type.
         Remove staff/superuser options for PATIENT users to prevent UI confusion.
         """
         fieldsets = super().get_fieldsets(request, obj)
-        
+
         if obj and obj.user_type == 'PATIENT':
             fieldsets = list(fieldsets)
             for i, (name, options) in enumerate(fieldsets):
@@ -203,7 +214,7 @@ class CustomUserAdmin(UserAdmin):
                         fields.remove('is_staff')
                     if 'is_superuser' in fields:
                         fields.remove('is_superuser')
-                    
+
                     fieldsets[i] = (name, {
                         **options,
                         'fields': tuple(fields),
@@ -214,8 +225,9 @@ class CustomUserAdmin(UserAdmin):
                         ),
                     })
                     break
-        
+
         return fieldsets
+
 
 @admin.register(TherapistProfile)
 class TherapistProfileAdmin(admin.ModelAdmin):
@@ -242,7 +254,8 @@ class TherapistProfileAdmin(admin.ModelAdmin):
         Prevents assigning patient users to therapist profiles.
         """
         if db_field.name == "user":
-            kwargs["queryset"] = CustomUser.objects.filter(user_type='THERAPIST')
+            kwargs["queryset"] = CustomUser.objects.filter(
+                user_type='THERAPIST')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_model(self, request, obj, form, change):
@@ -253,12 +266,14 @@ class TherapistProfileAdmin(admin.ModelAdmin):
         if obj.user.user_type != 'THERAPIST':
             messages.error(
                 request,
-                f'Cannot create TherapistProfile for {obj.user.get_user_type_display()} '
+                f'Cannot create TherapistProfile for {
+                    obj.user.get_user_type_display()} '
                 f'user "{obj.user.username}". Only THERAPIST users allowed.'
             )
-            return  
-            
+            return
+
             super().save_model(request, obj, form, change)
+
 
 @admin.register(PatientProfile)
 class PatientProfileAdmin(admin.ModelAdmin):
@@ -301,9 +316,10 @@ class PatientProfileAdmin(admin.ModelAdmin):
         if obj.user.user_type != 'PATIENT':
             messages.error(
                 request,
-                f'Cannot create PatientProfile for {obj.user.get_user_type_display()} '
+                f'Cannot create PatientProfile for {
+                    obj.user.get_user_type_display()} '
                 f'user "{obj.user.username}". Only PATIENT users allowed.'
             )
             return
-        
+
         super().save_model(request, obj, form, change)

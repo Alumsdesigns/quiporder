@@ -36,7 +36,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]
 
-handler403 = 'quiporder.views.error_403'  
-handler404 = 'quiporder.views.error_404'  
-handler405 = 'quiporder.views.error_405'  
-handler500 = 'quiporder.views.error_500'  
+handler403 = 'quiporder.views.error_403'
+handler404 = 'quiporder.views.error_404'
+handler405 = 'quiporder.views.error_405'
+handler500 = 'quiporder.views.error_500'

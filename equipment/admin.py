@@ -322,7 +322,6 @@ class EquipmentOrderStatusHistoryAdmin(admin.ModelAdmin):
         Regular users cannot delete to preserve audit integrity.
         """
         return request.user.is_superuser
- 
 
     def csrf_debug(request):
         """Debug CSRF - REMOVE BEFORE PRODUCTION"""

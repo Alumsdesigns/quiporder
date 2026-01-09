@@ -1,63 +1,22 @@
 # Quiporder - Occupational Therapy Management System
 
-**Live Site:** [View Deployed Site](#) *(Need to add link when deployed)*
+**Live Site:** [View Deployed Site](https://quiporder-app.herokuapp.com/) *(Need to add link when deployed)*
+
 
 ---
 
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
-   - [Key Functionality](#key-functionality)
-   - [Project Purpose](#project-purpose)
-   - [Tech Stack](#tech-stack)
-   - [System Design Diagrams](#system-design-diagrams)
-   - [Role-Based Access](#role-based-access-and-dashboards)
-
-2. [User Stories](#user-stories)
-   - [GitHub Projects Board](#agile-planning-and-iteration)
-
-3. [Features](#features) (Need to add all!!!!!!!!!!!!!!!!)
-   - [Staff/Admin Features](#staff--admin)
-   - [Therapist Features](#therapists)
-   - [Patient Features](#patients)
-
-4. [Design](#design) (Need to add all!!!!!!!!!!!!!!!!)
-   - [Wireframes](#wireframes) *(If you have them)*
-   - [Color Scheme](#color-scheme) *(If you have it)*
-   - [Typography](#typography) *(If you have it)*
-   - [Database Design (ERD)](#entity-relationship-diagram-erd)
-   - [Application Flow](#application-flow--role-based-workflows)
-
-5. [Technologies Used](#technologies-used) (Need to add all!!!!!!!!!!!!!!!!)
-   - [Core Technologies](#core-technologies)
-   - [Django Packages](#django-packages--extensions)
-   - [Development Tools](#development-tools)
-   - [Deployment](#deployment--hosting)
-
-6. [Security & Data Protection](#security--data-protection)
-   - [Authentication & Authorization](#authentication--authorization)
-   - [Account Registration](#account-registration--approval)
-   - [Secret Management](#secret-management)
-   - [Django Security Features](#django-security-features) (Need to verify i am using these!!!!!!!!!!!!!!!!)
-
-7. [Agile Methodology](#agile-planning-and-iteration)
-   - [GitHub Projects](#github-projects-board)
-   - [User Testing](#iteration-improvements-from-round-1-observational-user-testing-of-the-admin-panel)
-
-8. [Testing](#testing)
-   - [Manual Testing](#manual-testing-admin-crud-validation)
-   - [Database Verification](#manual-database-verification---django-admin---postgresql)
-   - [Code Validation](#code-validation)
-   - [Testing Summary](#testing-summary)
-
-9. [Deployment](#deployment)
-   - [Local Setup](#setup-instructions)
-   - [Heroku Deployment](#production-deployment-steps)
-   - [Troubleshooting](#troubleshooting-deployment)
-
-10. [Future Features](#future-improvements)
-
-11. [Credits & Acknowledgments](#acknowledgement)
+2. [Design](#design)
+3. [Features](#features)
+4. [User Stories](#user-stories)
+5. [Technologies Used](#technologies-used)
+6. [Testing](#testing)
+7. [Deployment](#deployment)
+8. [Security & Data Protection](#security--data-protection)
+9. [Future Features](#future-improvements)
+10. [Credits & Acknowledgments](#acknowledgement)
 
 ---
 ## Project Overview
@@ -301,8 +260,6 @@ Quiporder is planned and tracked using a GitHub Projects kanban board:
 
 The user stories used for planning and development of Quiporder are documented below. All user stories were tracked and managed using GitHub Projects.
 
-## User Stories
-
 User stories were tested as part of manual testing and can be matched to test cases by their keys. See TESTING.md
 
 ### Authentication & Access
@@ -397,6 +354,249 @@ One week was spent on project planning, including the first mentor meeting where
 
 </details>
 
+## Features
+
+### Implemented Features
+
+#### Authentication & Access Control
+
+| Feature | Description | User Type |
+|---------|-------------|-----------|
+| Role-based login | Users redirected to appropriate dashboard | All |
+| Session management | Secure login/logout with Django Allauth | All |
+| Signup restriction | Admin-only account creation | Staff |
+| Login state display | Username shown in navbar when logged in | All |
+
+#### Staff / Admin Features
+
+| Feature | Description |
+|---------|-------------|
+| User management | Create, edit, delete user accounts |
+| Profile management | Create TherapistProfile and PatientProfile |
+| Patient assignment | Assign patients to therapists |
+| Equipment CRUD | Full create, read, update, delete for equipment |
+| Order management | View and update all orders |
+| Status updates | Change order status (Pending → Approved → Delivered) |
+| Audit trail | View status change history |
+
+#### Therapist Features
+
+| Feature | Description |
+|---------|-------------|
+| Dashboard | View statistics (equipment, orders, patients) |
+| Create orders | Order equipment for assigned patients |
+| Edit orders | Modify own orders within 3 weeks |
+| Delete orders | Remove own orders within 3 weeks |
+| View equipment | See available equipment and quantities |
+| Recent orders | Table showing last 10 orders with actions |
+
+#### Patient Features
+
+| Feature | Description |
+|---------|-------------|
+| Dashboard | Read-only view of own orders |
+| Order tracking | See status (Pending, Approved, In Transit, Delivered) |
+| Order history | View all orders assigned to them |
+
+#### UX Features
+
+| Feature | Description |
+|---------|-------------|
+| Responsive design | Mobile-first, works on all devices |
+| Status badges | Color-coded order status indicators |
+| Success/error messages | Django messages for user feedback |
+| Custom error pages | Branded 403, 404, 500 pages |
+| Form validation | Client-side and server-side validation |
+| Keyboard navigation | Accessible without mouse |
+
+---
+
+### Features Screenshots
+
+<details>
+<summary>Home Page</summary>
+
+![Home Page](docs/screenshots/home-page.png)
+</details>
+
+<details>
+<summary>Login Page</summary>
+
+![Login Page](docs/screenshots/login-page.png)
+</details>
+
+<details>
+<summary>Therapist Dashboard</summary>
+
+![Therapist Dashboard](docs/screenshots/therapist-dashboard.png)
+</details>
+
+<details>
+<summary>Patient Dashboard</summary>
+
+![Patient Dashboard](docs/screenshots/patient-dashboard.png)
+</details>
+
+<details>
+<summary>Create Order Form</summary>
+
+![Create Order](docs/screenshots/create-order.png)
+</details>
+
+<details>
+<summary>Equipment List</summary>
+
+![Equipment List](docs/screenshots/equipment-list.png)
+</details>
+
+<details>
+<summary>Admin Panel</summary>
+
+![Admin Panel](docs/screenshots/admin-panel.png)
+</details>
+
+---
+
+## Design
+
+### Wireframes
+
+Low-fidelity wireframes were created to plan the layout and user flow before development.
+
+<details>
+<summary>Login Page</summary>
+
+![Login Wireframe](docs/wireframes/login-wireframe.png)
+</details>
+
+<details>
+<summary>Therapist Dashboard</summary>
+
+![Dashboard Wireframe](docs/wireframes/therapist-dashboard-wireframe.png)
+</details>
+
+<details>
+<summary>Patient Dashboard</summary>
+
+![Patient Dashboard Wireframe](docs/wireframes/patient-dashboard-wireframe.png)
+</details>
+
+<details>
+<summary>Order Form</summary>
+
+![Order Form Wireframe](docs/wireframes/order-form-wireframe.png)
+</details>
+
+*Note: Final implementation evolved from wireframes based on user testing feedback and accessibility requirements.*
+
+---
+
+### Color Scheme
+
+The color palette was chosen to convey trust, professionalism, and calm — essential for a healthcare application.
+
+![Quiporder Color Palette](docs/color_branding/quiporder-colors.png)
+
+*Color palette generated with [Coolors](https://coolors.co/)*
+
+| Role | Color | Hex Code | Usage |
+|------|-------|----------|-------|
+| Primary | Teal | `#2A9D8F` | Navbar, buttons, headings, links |
+| Primary Dark | Dark Teal | `#21867A` | Hover states |
+| Success | Green | `#2ECC71` | Success messages, available stock |
+| Info | Blue | `#4D96FF` | Information alerts, approved status |
+| Warning | Amber | `#F4A261` | Warning alerts, pending status |
+| Error | Coral | `#E76F51` | Error messages, delete buttons |
+| Background | Off-White | `#F8F9FA` | Page backgrounds |
+| Cards | White | `#FFFFFF` | Cards, forms |
+| Border | Light Gray | `#E0E0E0` | Form borders, dividers |
+| Text | Dark Gray | `#333333` | Headings, body text |
+| Text Muted | Slate Gray | `#6C757D` | Help text, labels |
+
+**Color Psychology:**
+- **Teal (#2A9D8F):** Conveys trust, calm, and medical professionalism
+- **Green (#2ECC71):** Success, positive actions, available
+- **Blue (#4D96FF):** Information, approved, professional
+- **Amber (#F4A261):** Attention, warnings, pending actions
+- **Coral (#E76F51):** Errors, deletions, urgent
+
+**Accessibility:**
+- All color combinations meet WCAG 2.1 AA contrast requirements
+- High contrast mode supported via `@media (prefers-contrast: high)`
+- Reduced motion supported via `@media (prefers-reduced-motion: reduce)`
+
+---
+
+### Typography
+
+| Font | Usage | Reason |
+|------|-------|--------|
+| **Inter** | Body text, forms | Highly readable, modern, accessible |
+| **Roboto** | Headings, titles | Professional, familiar, medical-appropriate |
+| System fonts | Fallback | Performance, cross-platform compatibility |
+
+**Font Stack:**
+```css
+--font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+--font-heading: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+```
+
+**Accessibility:**
+- Base font size: 16px (1rem)
+- Line height: 1.5 for readability
+- High contrast ratios (WCAG 2.1 AA compliant)
+
+---
+
+## Technologies Used
+
+### Core Technologies
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Python | 3.13 | Backend programming language |
+| Django | 5.2.8 | Web framework (MVT architecture) |
+| PostgreSQL | 14+ | Relational database |
+| HTML5 | - | Page structure and semantics |
+| CSS3 | - | Styling and responsive design |
+| JavaScript | ES6 | Client-side validation and UX |
+
+### Django Packages & Extensions
+
+| Package | Purpose |
+|---------|---------|
+| django-allauth | Authentication, login, OAuth2 support |
+| django-crispy-forms | Form rendering with Bootstrap 5 |
+| crispy-bootstrap5 | Bootstrap 5 template pack for crispy |
+| python-decouple | Environment variable management |
+| dj-database-url | Database URL parsing for Heroku |
+| whitenoise | Static file serving in production |
+| gunicorn | Production WSGI HTTP server |
+| psycopg2-binary | PostgreSQL database adapter |
+
+### Development Tools
+
+| Tool | Purpose |
+|------|---------|
+| Git | Version control |
+| GitHub | Repository hosting, project management |
+| GitHub Projects | Agile kanban board |
+| VS Code | Code editor |
+| Chrome DevTools | Testing, debugging, responsive design |
+| flake8 | Python PEP8 linting |
+| W3C Validator | HTML validation |
+| Jigsaw | CSS validation |
+| JSHint | JavaScript linting |
+
+### Deployment & Hosting
+
+| Service | Purpose |
+|---------|---------|
+| Heroku | Cloud platform deployment |
+| Heroku Postgres | Production database |
+| GitHub | Source code repository |
+
+---
 
 ### Project Structure
 
@@ -1076,235 +1276,7 @@ drjones  | Dr.   | Jones| ...   | ... | Occupational Therapist    | ✓      | �
 patient1 | John  | Doe  | ...   | ... | Patient 
 ```
 
-### Code Validation
 
-<details>
-
-#### Python (PEP8)
-
-Validated using flake8:
-```
-flake8 equipment/ users/ quiporder/ --exclude=migrations,__pycache__ --max-line-length=120 --ignore=E501,W503,W504
-```
-
-**Configuration:**
-- Max line length: 120 characters
-- Ignored: E501 (line too long), W503/W504 (line break style - both valid)
-
-### Errors found below:
-```
-flake8 equipment/ users/ quiporder/ --exclude=migrations,__pycache__ --max-line-length=120 --ignore=E501,W503
-equipment/admin.py:22:1: E302 expected 2 blank lines, found 1
-equipment/admin.py:46:1: E302 expected 2 blank lines, found 1
-equipment/admin.py:49:1: W293 blank line contains whitespace
-equipment/admin.py:52:1: W293 blank line contains whitespace
-equipment/admin.py:62:1: W293 blank line contains whitespace
-equipment/admin.py:74:1: W293 blank line contains whitespace
-equipment/admin.py:78:1: W293 blank line contains whitespace
-equipment/admin.py:86:24: W291 trailing whitespace
-equipment/admin.py:88:1: E302 expected 2 blank lines, found 1
-equipment/admin.py:92:1: W293 blank line contains whitespace
-equipment/admin.py:102:28: W291 trailing whitespace
-equipment/admin.py:103:21: W291 trailing whitespace
-equipment/admin.py:104:20: W291 trailing whitespace
-equipment/admin.py:105:18: W291 trailing whitespace
-equipment/admin.py:106:24: W291 trailing whitespace
-equipment/admin.py:107:22: W291 trailing whitespace
-equipment/admin.py:111:18: W291 trailing whitespace
-equipment/admin.py:113:22: W291 trailing whitespace
-equipment/admin.py:117:35: W291 trailing whitespace
-equipment/admin.py:118:37: W291 trailing whitespace
-equipment/admin.py:119:36: W291 trailing whitespace
-equipment/admin.py:132:34: W291 trailing whitespace
-equipment/admin.py:134:10: E121 continuation line under-indented for hanging indent
-equipment/admin.py:147:1: W293 blank line contains whitespace
-equipment/admin.py:151:1: W293 blank line contains whitespace
-equipment/admin.py:155:1: W293 blank line contains whitespace
-equipment/admin.py:158:1: W293 blank line contains whitespace
-equipment/admin.py:162:5: E303 too many blank lines (2)
-equipment/admin.py:165:1: W293 blank line contains whitespace
-equipment/admin.py:169:1: W293 blank line contains whitespace
-equipment/admin.py:181:52: W291 trailing whitespace
-equipment/admin.py:183:1: W293 blank line contains whitespace
-equipment/admin.py:185:5: E303 too many blank lines (2)
-equipment/admin.py:191:5: E303 too many blank lines (2)
-equipment/admin.py:202:1: W293 blank line contains whitespace
-equipment/admin.py:207:1: W293 blank line contains whitespace
-equipment/admin.py:211:5: E303 too many blank lines (2)
-equipment/admin.py:214:1: W293 blank line contains whitespace
-equipment/admin.py:220:1: W293 blank line contains whitespace
-equipment/admin.py:224:1: W293 blank line contains whitespace
-equipment/admin.py:252:34: W291 trailing whitespace
-equipment/admin.py:254:32: W291 trailing whitespace
-equipment/admin.py:257:9: E123 closing bracket does not match indentation of opening bracket's line
-equipment/admin.py:271:1: W293 blank line contains whitespace
-equipment/admin.py:277:1: W293 blank line contains whitespace
-equipment/admin.py:280:1: W293 blank line contains whitespace
-equipment/admin.py:282:1: W293 blank line contains whitespace
-equipment/admin.py:286:1: W293 blank line contains whitespace
-equipment/admin.py:288:1: W293 blank line contains whitespace
-equipment/admin.py:290:1: W293 blank line contains whitespace
-equipment/models.py:69:1: W293 blank line contains whitespace
-equipment/models.py:103:36: W291 trailing whitespace
-equipment/models.py:104:48: W291 trailing whitespace
-equipment/models.py:243:13: E303 too many blank lines (2)
-equipment/models.py:245:46: W291 trailing whitespace
-equipment/models.py:313:1: W293 blank line contains whitespace
-equipment/models.py:316:1: W293 blank line contains whitespace
-equipment/models.py:320:1: W293 blank line contains whitespace
-equipment/models.py:325:1: W293 blank line contains whitespace
-equipment/models.py:331:1: W293 blank line contains whitespace
-equipment/models.py:349:1: W293 blank line contains whitespace
-equipment/models.py:367:1: W293 blank line contains whitespace
-equipment/models.py:373:1: W293 blank line contains whitespace
-equipment/models.py:412:1: W293 blank line contains whitespace
-equipment/models.py:414:1: W293 blank line contains whitespace
-equipment/models.py:423:1: W293 blank line contains whitespace
-equipment/tests.py:1:1: F401 'django.test.TestCase' imported but unused
-equipment/urls.py:15:2: W292 no newline at end of file
-equipment/views.py:23:1: W293 blank line contains whitespace
-equipment/views.py:25:1: W293 blank line contains whitespace
-equipment/views.py:34:1: W293 blank line contains whitespace
-equipment/views.py:42:1: W293 blank line contains whitespace
-equipment/views.py:50:1: W293 blank line contains whitespace
-equipment/views.py:54:1: W293 blank line contains whitespace
-equipment/views.py:62:1: W293 blank line contains whitespace
-equipment/views.py:70:1: W293 blank line contains whitespace
-equipment/views.py:77:1: W293 blank line contains whitespace
-equipment/views.py:83:5: E722 do not use bare 'except'
-equipment/views.py:86:1: W293 blank line contains whitespace
-equipment/views.py:94:1: W293 blank line contains whitespace
-equipment/views.py:101:1: W293 blank line contains whitespace
-equipment/views.py:110:1: W293 blank line contains whitespace
-equipment/views.py:117:1: W293 blank line contains whitespace
-equipment/views.py:123:1: W293 blank line contains whitespace
-equipment/views.py:127:1: W293 blank line contains whitespace
-equipment/views.py:136:1: W293 blank line contains whitespace
-equipment/views.py:148:1: W293 blank line contains whitespace
-equipment/views.py:163:1: W293 blank line contains whitespace
-equipment/views.py:165:1: W293 blank line contains whitespace
-equipment/views.py:171:1: W293 blank line contains whitespace
-equipment/views.py:174:1: W293 blank line contains whitespace
-equipment/views.py:180:1: W293 blank line contains whitespace
-equipment/views.py:188:1: W293 blank line contains whitespace
-equipment/views.py:194:1: W293 blank line contains whitespace
-equipment/views.py:198:1: W293 blank line contains whitespace
-equipment/views.py:202:1: W293 blank line contains whitespace
-equipment/views.py:207:1: W293 blank line contains whitespace
-equipment/views.py:213:1: W293 blank line contains whitespace
-equipment/views.py:222:1: W293 blank line contains whitespace
-equipment/views.py:229:1: W293 blank line contains whitespace
-equipment/views.py:234:1: W293 blank line contains whitespace
-equipment/views.py:241:1: W293 blank line contains whitespace
-equipment/views.py:251:1: W293 blank line contains whitespace
-equipment/views.py:257:1: W293 blank line contains whitespace
-equipment/views.py:260:1: W293 blank line contains whitespace
-equipment/views.py:263:1: W293 blank line contains whitespace
-equipment/views.py:270:1: W293 blank line contains whitespace
-equipment/views.py:278:1: W293 blank line contains whitespace
-equipment/views.py:285:1: W293 blank line contains whitespace
-equipment/views.py:289:1: W293 blank line contains whitespace
-equipment/views.py:293:1: W293 blank line contains whitespace
-equipment/views.py:298:1: W293 blank line contains whitespace
-equipment/views.py:303:1: W293 blank line contains whitespace
-equipment/views.py:305:75: W292 no newline at end of file
-quiporder/settings.py:46:1: W293 blank line contains whitespace
-quiporder/settings.py:61:52: W291 trailing whitespace
-quiporder/settings.py:114:10: E131 continuation line unaligned for hanging indent
-quiporder/settings.py:186:1: W391 blank line at end of file
-quiporder/urls.py:34:9: E131 continuation line unaligned for hanging indent
-quiporder/urls.py:35:28: W291 trailing whitespace
-quiporder/urls.py:36:74: W291 trailing whitespace
-users/adapters.py:16:1: W293 blank line contains whitespace
-users/adapters.py:21:1: W293 blank line contains whitespace
-users/adapters.py:25:1: W293 blank line contains whitespace
-users/adapters.py:30:1: W293 blank line contains whitespace
-users/adapters.py:34:1: W293 blank line contains whitespace
-users/adapters.py:40:1: W293 blank line contains whitespace
-users/adapters.py:44:1: W293 blank line contains whitespace
-users/adapters.py:48:1: W293 blank line contains whitespace
-users/adapters.py:52:1: W293 blank line contains whitespace
-users/adapters.py:56:1: W293 blank line contains whitespace
-users/adapters.py:59:23: W292 no newline at end of file
-users/admin.py:16:1: E302 expected 2 blank lines, found 0
-users/admin.py:20:1: W293 blank line contains whitespace
-users/admin.py:44:14: E124 closing bracket does not match visual indentation
-users/admin.py:52:13: E123 closing bracket does not match indentation of opening bracket's line
-users/admin.py:69:17: E123 closing bracket does not match indentation of opening bracket's line
-users/admin.py:70:9: E124 closing bracket does not match visual indentation
-users/admin.py:74:20: W291 trailing whitespace
-users/admin.py:75:22: W291 trailing whitespace
-users/admin.py:76:21: W291 trailing whitespace
-users/admin.py:78:20: W291 trailing whitespace
-users/admin.py:79:9: E123 closing bracket does not match indentation of opening bracket's line
-users/admin.py:93:1: W293 blank line contains whitespace
-users/admin.py:103:16: W291 trailing whitespace
-users/admin.py:105:24: W291 trailing whitespace
-users/admin.py:107:9: E123 closing bracket does not match indentation of opening bracket's line
-users/admin.py:115:1: E302 expected 2 blank lines, found 1
-users/admin.py:125:9: E123 closing bracket does not match indentation of opening bracket's line
-users/admin.py:136:1: W391 blank line at end of file
-users/models.py:14:1: E302 expected 2 blank lines, found 1
-users/models.py:21:1: W293 blank line contains whitespace
-users/models.py:26:1: W293 blank line contains whitespace
-users/models.py:32:1: W293 blank line contains whitespace
-users/models.py:73:1: E302 expected 2 blank lines, found 1
-users/models.py:101:1: W391 blank line at end of file
-users/tests.py:1:1: F401 'django.test.TestCase' imported but unused
-```
-
-reduced errors too
-```
-flake8 equipment/ users/ quiporder/ --exclude=migrations,__pycache__ --max-line-length=120 --ignore=E501,W503
-equipment/models.py:65:65: W504 line break after binary operator
-equipment/tests.py:1:1: F401 'django.test.TestCase' imported but unused
-users/tests.py:1:1: F401 'django.test.TestCase' imported but unused
-users/views.py:1:1: F401 'django.shortcuts.render' imported but unused
-```
-**Final result**
-I manual fixed errors while iterating examples below:  **0 errors** - All Python code is PEP8 compliant
-
-![fixed python validations with flake8 and manually](docs/pep8_python_validations/pep8_python_validation_example_1.png)
-![fixed python validations with flake8 and manually](docs/pep8_python_validations/pep8_python_validation_example_2.png)
-
-
----
-
-## HTML (W3C)
-
-All HTML templates validated using W3C Markup Validation Service.
-
-### Validation Tool
-- **Service:** W3C Markup Validator
-- **URL:** https://validator.w3.org/
-
-### Pages Validated
-
-| Page | URL | Result |
-|------|-----|--------|
-| Home | `/` |  Pass |
-| Login | `/accounts/login/` |  Pass |
-| Signup Info | `/accounts/signup` |  Pass |
-| Therapist Dashboard | `/equipment/dashboard/` | Pass |
-| Patient Dashboard | `/equipment/patient/dashboard/` | Pass |
-| Equipment List | `/equipment/list/` | Pass |
-| Create Order | `/equipment/order/create/` | Pass |
-| Delete Confirmation | `/equipment/order/delete/<id>/` | Pass |
-
-### Validation Process
-1. Navigate to page in browser
-2. Right-click → View Page Source
-3. Copy entire HTML
-4. Paste into W3C Validator (Direct Input)
-5. Review results
-
-### Results
-All pages validated successfully with:
-- Semantic HTML5
-- Proper DOCTYPE
-- Valid attributes
-- Accessible markup
-- All CSS validated successfully using CSS3 standards.
 ---
 
 ### Overall Testing Summary
@@ -1349,6 +1321,7 @@ All code has been validated and follows industry standards. No critical errors f
 - Better Calendar Picker
 - When adding patient or therapist profile in username dropdown have the users full name also in parentheses
 - Forget password functionality
+
 
 ## Setup Instructions
 
@@ -1408,7 +1381,6 @@ pip install -r requirements.txt
 
 This installs all required Python packages including Django, psycopg2, django-allauth, and python-decouple.
 
----
 
 ---
 
