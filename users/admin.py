@@ -18,7 +18,7 @@ Allows managing users and related profiles via the Django admin panel.
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    """Custom user admin with enhanced role display."""
+    """Custom admin for user management with role restrictions."""
     model = CustomUser
 
     list_display = (
@@ -199,7 +199,7 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(TherapistProfile)
 class TherapistProfileAdmin(admin.ModelAdmin):
-    """Admin interface for therapist profiles."""
+    """Admin interface for therapist profiles with user type validation."""
 
     list_display = (
         'user',
@@ -214,6 +214,31 @@ class TherapistProfileAdmin(admin.ModelAdmin):
         'license_number',
     )
 
+    list_filter = ('status',)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Limit user dropdown to only show THERAPIST users.
+        Prevents assigning patient users to therapist profiles.
+        """
+        if db_field.name == "user":
+            kwargs["queryset"] = CustomUser.objects.filter(user_type='THERAPIST')
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        """
+        Validate that only THERAPIST users can have TherapistProfile.
+        Backup validation in case dropdown is bypassed.
+        """
+        if obj.user.user_type != 'THERAPIST':
+            messages.error(
+                request,
+                f'Cannot create TherapistProfile for {obj.user.get_user_type_display()} '
+                f'user "{obj.user.username}". Only THERAPIST users allowed.'
+            )
+            return  
+            
+            super().save_model(request, obj, form, change)
 
 @admin.register(PatientProfile)
 class PatientProfileAdmin(admin.ModelAdmin):
@@ -236,3 +261,29 @@ class PatientProfileAdmin(admin.ModelAdmin):
         'medical_record_number',
         'assigned_therapist__user__username',
     )
+
+    list_filter = ('status',)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Limit dropdowns to correct user types.
+        - user: Only PATIENT users
+        - assigned_therapist: Only TherapistProfiles
+        """
+        if db_field.name == "user":
+            kwargs["queryset"] = CustomUser.objects.filter(user_type='PATIENT')
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        """
+        Validate that only PATIENT users can have PatientProfile.
+        """
+        if obj.user.user_type != 'PATIENT':
+            messages.error(
+                request,
+                f'Cannot create PatientProfile for {obj.user.get_user_type_display()} '
+                f'user "{obj.user.username}". Only PATIENT users allowed.'
+            )
+            return
+        
+        super().save_model(request, obj, form, change)
