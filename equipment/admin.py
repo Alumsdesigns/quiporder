@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.utils.html import format_html
 
 from .models import Equipment, EquipmentOrder, EquipmentOrderStatusHistory
+from django.http import JsonResponse
 
 User = get_user_model()
 
@@ -321,3 +322,13 @@ class EquipmentOrderStatusHistoryAdmin(admin.ModelAdmin):
         Regular users cannot delete to preserve audit integrity.
         """
         return request.user.is_superuser
+ 
+
+    def csrf_debug(request):
+        """Debug CSRF - REMOVE BEFORE PRODUCTION"""
+        return JsonResponse({
+            'csrf_cookie': request.COOKIES.get('csrftoken', 'NOT SET'),
+            'csrf_header': request.META.get('HTTP_X_CSRFTOKEN', 'NOT SET'),
+            'session': request.session.session_key,
+            'user': str(request.user),
+        })

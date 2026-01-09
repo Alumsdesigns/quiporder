@@ -53,19 +53,27 @@ if DEBUG:
     CSRF_COOKIE_SECURE = False # True in production only
     SESSION_COOKIE_SECURE = False
     SECURE_SSL_REDIRECT = False  # No HTTPS locally
+    CSRF_COOKIE_HTTPONLY = False  # ← Already set
+    CSRF_USE_SESSIONS = False     # ← ADD THIS
     CSRF_TRUSTED_ORIGINS = [
         'http://127.0.0.1:8000',
         'http://localhost:8000',
     ]
 else:
     # PRODUCTION (Heroku)
-    CSRF_COOKIE_SECURE = False # True in production only keep False for local testing
-    SESSION_COOKIE_SECURE = False  # Keep False for local testing then True
-    SECURE_SSL_REDIRECT =  False  # DISABLE for local testing with DEBUG=False True
+    CSRF_COOKIE_SECURE = True # in production only keep False for local testing # False 
+    SESSION_COOKIE_SECURE = True # Keep False for local testing then True - False 
+    SECURE_SSL_REDIRECT =  True # DISABLE for local testing with DEBUG=False True - False
     # SECURE_HSTS_SECONDS = 3600  # Comment out for local
     # SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Comment out for local
     # SECURE_HSTS_PRELOAD = True 
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    # CSRF trusted origins - include local for testing
+    CSRF_TRUSTED_ORIGINS = [
+        'http://127.0.0.1:8000',
+        'http://localhost:8000',
+    ]
     
     # Heroku app URL
     heroku_app_name = config('HEROKU_APP_NAME', default='')
