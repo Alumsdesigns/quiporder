@@ -20,7 +20,7 @@
 
 All HTML templates validated using W3C Markup Validation Service.
 
-### Validation Tool
+### HTML (W3C) Validation Tool
 - **Service:** W3C Markup Validator
 - **URL:** https://validator.w3.org/
 
@@ -31,17 +31,22 @@ All HTML templates validated using W3C Markup Validation Service.
 | Home | `/` | Pass |
 | Login | `/accounts/login/` | Pass |
 | Logout | `/accounts/logout/` | Pass |
-| Signup Info | `/accounts/signup/` | Pass |
+**Login as therapist**
 | Therapist Dashboard | `/equipment/dashboard/` | Pass |
+**Logout as therapist and login as a Patient**
 | Patient Dashboard | `/equipment/patient/dashboard/` | Pass |
+**Login as therapist**
 | Equipment List | `/equipment/list/` | Pass |
 | Create Order | `/equipment/order/create/` | Pass |
 | Edit Order | `/equipment/order/edit/1/` | Pass |
 | Delete Confirmation | `/equipment/order/delete/1/` | Pass |
+**Login as admin with superuser access**
 | Admin Panel | `/admin/` | Pass |
-| 403 Error | Trigger by accessing restricted page | Pass |
-| 404 Error | `/this-page-does-not-exist/` | Pass |
-| 500 Error | Server error (test with DEBUG=False) | Pass |
+**Login as admin with superuser access**
+
+
+<p>Scroll down in document to  HTTP Error Handling and HTTP Error Testing </p>
+-------
 
 ### Validation Process
 1. Navigate to page in browser
@@ -50,6 +55,8 @@ All HTML templates validated using W3C Markup Validation Service.
 4. Paste into W3C Validator https://validator.w3.org/#validate_by_input (Direct Input)
 5. Review results
 
+### Fixes
+http://127.0.0.1:8000/equipment/list/ The error we're mainly skipping from h1 to h3 (missing h2). Fixed this. And I had the same in /equipment/order/delete/1/`h3 - h2 error in. These now have been fixed.
 
 ### Results
 All pages validated successfully with:
@@ -59,8 +66,8 @@ All pages validated successfully with:
 - Accessible markup
 - All CSS validated successfully using CSS3 standards.
 
---
 
+---
 
 ## HTML Validation
 
@@ -74,10 +81,6 @@ HTML was validated using the [W3C Markup Validator](https://validator.w3.org/) b
 | Patient Dashboard | Pass | [View](docs/testing/html-patient.png) |
 | Order Form | Pass | [View](docs/testing/html-order.png) |
 | Equipment List | Pass | [View](docs/testing/html-equipment.png) |
-| 403 Error | Pass | [View](docs/testing/html-403.png) |
-| 404 Error | Pass | [View](docs/testing/html-404.png) |
-| 500 Error | Pass | [View](docs/testing/html-500.png) |
-
 ---
 
 ## CSS Validation
@@ -94,6 +97,8 @@ All results in table below.
 | errors.css | Pass | No errors |
 | home.css | Pass | No errors |
 
+
+![exampe]()
 ---
 ### JavaScript Testing
 
@@ -344,7 +349,7 @@ All HTML templates validated using W3C Markup Validation Service.
 | Delete Confirmation | `/equipment/order/delete/<id>/` | Pass |
 
 
-### Error Handling and testing
+### HTTP Error Handling and HTTP Error Testing
 
 Custom error pages provide user-friendly feedback when issues occur, maintaining brand consistency and accessibility standards.
 
@@ -442,7 +447,7 @@ Visit (with `DEBUG=False`):
 - `http://127.0.0.1:8000/equipment/test-405/`
 - `http://127.0.0.1:8000/equipment/test-500/`
 
-**⚠️ Important:** Remove test views and URLs before production deployment.
+**Important:** Remove test views and URLs before production deployment.
 
 ### Production Deployment
 
