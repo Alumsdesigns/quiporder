@@ -4,21 +4,24 @@
 
 .home-container {
     text-align: center;
-    padding: 4rem 0;
+    padding: var(--space-8) var(--space-4);
     max-width: 800px;
     margin: 0 auto;
 }
 
 .home-title {
-    color: #2A9D8F;
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
 }
 
 .home-subtitle {
-    color: #4A5A6A;
-    font-size: 1.1rem;
-    margin: 1rem 0 2rem;
+    font-family: var(--font-primary);
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-6);
 }
 
 .user-info {
@@ -48,6 +51,7 @@
     font-size: 1.1rem;
 }
 
+/* Call to Action Button */
 .home-cta {
     margin-top: 2rem;
 }

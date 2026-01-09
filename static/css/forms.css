@@ -5,19 +5,33 @@
 .form-container {
     max-width: 700px;
     margin: 0 auto;
-    padding: 2rem 0;
+    padding: var(--space-4);
+    text-align: center; 
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;      
+    padding-top: 2rem;      
+    border-top: 1px solid #E0E0E0;
 }
 
 .form-title {
-    color: #2A9D8F;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
+    margin-bottom: var(--space-2);
+    text-align: center; 
 }
 
 .form-subtitle {
-    color: #78909C;
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+    text-align: center; 
 }
 
 .order-form {
@@ -25,10 +39,11 @@
     padding: 2.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;  
 }
 
 .form-group {
-    margin-bottom: 1.75rem;
+    margin-bottom: 2rem;
 }
 
 .form-label {
@@ -79,7 +94,8 @@ textarea.form-control {
     display: block;
     color: #78909C;
     font-size: 0.875rem;
-    margin-top: 0.375rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .form-actions {
@@ -106,6 +122,7 @@ textarea.form-control {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     max-width: 500px;
     margin: 0 auto;
+    text-align: left; 
 }
 
 .form-check {
@@ -128,8 +145,8 @@ textarea.form-control {
 }
 
 .form-footer {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
     border-top: 1px solid #E0E0E0;
     text-align: center;
 }
