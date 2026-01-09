@@ -463,6 +463,23 @@ One week was spent on project planning, including the first mentor meeting where
 
 Low-fidelity wireframes were created to plan the layout and user flow before development.
 
+| Page | URL | Result |
+|------|-----|--------|
+| Home | `/` | Pass |
+| Login | `/accounts/login/` | Pass |
+| Logout | `/accounts/logout/` | Pass |
+| Signup Info | `/accounts/signup/` | Pass |
+| Therapist Dashboard | `/equipment/dashboard/` | Pass |
+| Patient Dashboard | `/equipment/patient/dashboard/` | Pass |
+| Equipment List | `/equipment/list/` | Pass |
+| Create Order | `/equipment/order/create/` | Pass |
+| Edit Order | `/equipment/order/edit/1/` | Pass |
+| Delete Confirmation | `/equipment/order/delete/1/` | Pass |
+| Admin Panel | `/admin/` | Pass |
+| 403 Error | Trigger by accessing restricted page | Pass |
+| 404 Error | `/this-page-does-not-exist/` | Pass |
+| 500 Error | Server error (test with DEBUG=False) | Pass |
+
 <details>
 <summary>Login Page</summary>
 
