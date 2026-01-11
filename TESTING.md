@@ -662,6 +662,6 @@ User stories were tested during manual testing. Each user story is matched to it
 | Empty redirect | `redirect('')` in order_create | Changed to `redirect('therapist_dashboard')` |
 | Edit buttons missing | 24-hour window expired | Extended to 3 weeks |
 
-### Known Bugs
+### Known Bugs on submission
 
 No known bugs at time of submission.

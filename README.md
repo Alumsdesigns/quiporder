@@ -335,7 +335,7 @@ User stories were tested as part of manual testing and can be matched to test ca
 * **US29:** As a user, I receive clear feedback messages so that I know when actions succeed or fail.
 
 
-- **GitHub Projects board:** https://github.com/users/Alumsdesigns/projects/4/views/1
+**[View](https://github.com/users/Alumsdesigns/projects/4/views/1) GitHub Projects board:** 
 
 GitHub Projects was utilized for planning this website.
 I created and track User Stories.
@@ -348,11 +348,14 @@ One week was spent on project planning, including the first mentor meeting where
 - Document iteration rounds, including observational usability testing feedback and subsequent improvements (e.g. admin superuser visibility, clearer dropdown labels, and dashboard refinements) and unexpected bugs and improvements that were identified during testing.
 
 <details>
-<summary><strong>Image of project board in action</strong></summary>
+<summary><strong>Click to view image of Github project board in action</strong></summary>
 
 <img src="docs/agile_project_management_image/quiporder_github_kanban_board.png" alt="GitHub Projects Kanban board" width="100%">
 
+
+
 </details>
+
 
 ## Features
 
@@ -362,10 +365,11 @@ One week was spent on project planning, including the first mentor meeting where
 
 | Feature | Description | User Type |
 |---------|-------------|-----------|
-| Role-based login | Users redirected to appropriate dashboard | All |
+| Role-based login | Users redirected to appropriate dashboard based on role | All |
 | Session management | Secure login/logout with Django Allauth | All |
-| Signup restriction | Admin-only account creation | Staff |
+| Signup restriction | Admin-only account creation for security | Staff |
 | Login state display | Username shown in navbar when logged in | All |
+| Remember me | Optional persistent login checkbox | All |
 
 #### Staff / Admin Features
 
@@ -377,41 +381,142 @@ One week was spent on project planning, including the first mentor meeting where
 | Equipment CRUD | Full create, read, update, delete for equipment |
 | Order management | View and update all orders |
 | Status updates | Change order status (Pending → Approved → Delivered) |
-| Audit trail | View status change history |
+| Audit trail | View status change history in EquipmentOrderStatusHistory |
+| Security enforcement | Patients automatically blocked from staff privileges |
 
 #### Therapist Features
 
 | Feature | Description |
 |---------|-------------|
-| Dashboard | View statistics (equipment, orders, patients) |
-| Create orders | Order equipment for assigned patients |
-| Edit orders | Modify own orders within 3 weeks |
-| Delete orders | Remove own orders within 3 weeks |
-| View equipment | See available equipment and quantities |
-| Recent orders | Table showing last 10 orders with actions |
+| Dashboard | View statistics (equipment count, orders, patients) |
+| Create orders | Order equipment for any active patient |
+| Edit orders | Modify own orders within 21 days |
+| Delete orders | Soft-delete own orders within 21 days |
+| View equipment | See available equipment and stock levels |
+| Recent orders | Table showing last 10 orders with Edit/Delete actions |
+| Stock validation | Cannot order more than available quantity |
 
 #### Patient Features
 
 | Feature | Description |
 |---------|-------------|
-| Dashboard | Read-only view of own orders |
-| Order tracking | See status (Pending, Approved, In Transit, Delivered) |
+| Dashboard | Read-only view of personal orders |
+| Order tracking | See status (Pending → Approved → In Transit → Delivered) |
 | Order history | View all orders assigned to them |
+| Status badges | Color-coded visual status indicators |
 
-#### UX Features
+#### UX & Accessibility Features
 
 | Feature | Description |
 |---------|-------------|
-| Responsive design | Mobile-first, works on all devices |
+| Responsive design | Mobile-first CSS, works on all devices |
 | Status badges | Color-coded order status indicators |
 | Success/error messages | Django messages for user feedback |
-| Custom error pages | Branded 403, 404, 500 pages |
-| Form validation | Client-side and server-side validation |
-| Keyboard navigation | Accessible without mouse |
+| Custom error pages | Branded 403, 404, 405, 500 pages |
+| Form validation | Client-side (JS) and server-side (Django) |
+| Keyboard navigation | Full accessibility without mouse |
+| High contrast support | `prefers-contrast: high` CSS media query |
+| Reduced motion | `prefers-reduced-motion: reduce` support |
+
+#### Data Integrity & Security
+
+| Feature | Description |
+|---------|-------------|
+| Soft delete | Orders marked deleted, not removed from database |
+| Audit trail | Every status change logged with user and timestamp |
+| Inventory validation | Cannot order more than available stock |
+| Ownership enforcement | Users can only edit/delete their own orders |
+| CSRF protection | All forms protected against cross-site forgery |
+| Role-based access | `@login_required` and view-level permission checks |
 
 ---
 
 ### Features Screenshots
+
+<details>
+<summary>Home Page</summary>
+
+![Home Page](docs/screenshots/home-page.png)
+</details>
+
+<details>
+<summary>Login Page</summary>
+
+![Login Page](docs/screenshots/login-page.png)
+</details>
+
+<details>
+<summary>Therapist Dashboard</summary>
+
+![Therapist Dashboard](docs/screenshots/therapist-dashboard.png)
+</details>
+
+<details>
+<summary>Patient Dashboard</summary>
+
+![Patient Dashboard](docs/screenshots/patient-dashboard.png)
+</details>
+
+<details>
+<summary>Create Order Form</summary>
+
+![Create Order](docs/screenshots/create-order.png)
+</details>
+
+<details>
+<summary>Edit Order Form</summary>
+
+![Edit Order](docs/screenshots/edit-order.png)
+</details>
+
+<details>
+<summary>Delete Confirmation</summary>
+
+![Delete Order](docs/screenshots/delete-order.png)
+</details>
+
+<details>
+<summary>Equipment List</summary>
+
+![Equipment List](docs/screenshots/equipment-list.png)
+</details>
+
+<details>
+<summary> Admin Panel</summary>
+
+![Admin Panel](docs/screenshots/admin-panel.png)
+</details>
+
+<details>
+<summary>Success Message</summary>
+
+![Success Message](docs/screenshots/success-message.png)
+</details>
+
+<details>
+<summary> Error Message</summary>
+
+![Error Message](docs/screenshots/error-message.png)
+</details>
+
+<details>
+<summary> 403 Forbidden Page</summary>
+
+![403 Error](docs/screenshots/403-error.png)
+</details>
+
+<details>
+<summary> 404 Not Found Page</summary>
+
+![404 Error](docs/screenshots/404-error.png)
+</details>
+
+<details>
+<summary> Mobile Responsive View</summary>
+
+![Mobile View](docs/screenshots/mobile-view.png)
+</details>
+
 
 <details>
 <summary>Home Page</summary>
