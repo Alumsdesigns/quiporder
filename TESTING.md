@@ -101,9 +101,21 @@ JavaScript was validated using [JSHint](https://jshint.com/).
 
 ![View images no errors in JSHint](docs/jslint_checks/jshint-error-free.png)
 
+### JavaScript Testing
+
+JavaScript was validated using [JSHint](https://jshint.com/) with ES6 configuration.
+
 | File | Result | Notes |
 |------|--------|-------|
-| validation.js | Pass | No errors, ES6 features used |
+| validation.js | Pass | No errors or warnings |
+
+What the metrics mean (FYI - no action needed):
+Metri cYour Value Meaning8 functions. Good Not too manyLargest: 9 statements GoodFunctions are smallComplexity: 7 Acceptable
+
+**JSHint Metrics:**
+- Functions: 8
+- Largest function: 9 statements
+- Cyclomatic complexity: 7 (acceptable)
 
 ### JavaScript Functionality Tested
 

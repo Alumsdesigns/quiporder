@@ -1355,7 +1355,7 @@ All code has been validated and follows industry standards. No critical errors f
 
 ### Planned for Q2 2025 (April)
 
-**Note** A board is craeted for these 
+Below are a list of future plans. I have placed these on my Github projects kanban board called "called Alumsdesigns's Portfolio 4 Code Institute"  in a column titled "Future Quater April 2025" epic with task, [view](https://github.com/users/Alumsdesigns/projects/4)
 
 | Feature | Description | Priority |
 |---------|-------------|----------|

@@ -1,4 +1,10 @@
 
+/*jshint esversion: 6 */
+
+/**
+ * Form Validation & UX Enhancements
+ * Quiporder - Equipment Management System
+ */
 document.addEventListener('DOMContentLoaded', function() {
     
     // =========================================================================
