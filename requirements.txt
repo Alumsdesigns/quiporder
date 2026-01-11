@@ -1,7 +1,9 @@
 asgiref==3.10.0
+autopep8==2.3.2
 certifi==2025.11.12
 cffi==2.0.0
 charset-normalizer==3.4.4
+coverage==7.13.1
 crispy-bootstrap5==2025.6
 cryptography==46.0.3
 defusedxml==0.7.1
@@ -9,13 +11,17 @@ dj-database-url==3.0.1
 Django==5.2.8
 django-allauth==0.57.0
 django-crispy-forms==2.5
+flake8==7.3.0
 gunicorn==20.1.0
 idna==3.11
+mccabe==0.7.0
 oauthlib==3.3.1
 pillow==10.4.0
 psycopg==3.2.3
 psycopg-binary==3.2.3
+pycodestyle==2.14.0
 pycparser==2.23
+pyflakes==3.4.0
 PyJWT==2.10.1
 python-decouple==3.8
 python3-openid==3.2.0

@@ -7,6 +7,7 @@
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
+### System Design Diagrams
 2. [Design](#design)
 3. [Features](#features)
 4. [User Stories](#user-stories)
@@ -32,7 +33,7 @@ Therapists can register patients, manage their caseload, and create or update eq
 
 Therapist-facing features use **PatientProfile.status** (ACTIVE / DISCHARGED) to represent the patient’s clinical status, and patient-facing views focus on **EquipmentOrder.status** (PENDING / APPROVED / IN_TRANSIT / DELIVERED / CANCELLED) so patients can clearly see where their equipment is in the logistics journey.
 
-</br>
+---
 
 ### Key Functionality
 
@@ -49,7 +50,7 @@ Therapist-facing features use **PatientProfile.status** (ACTIVE / DISCHARGED) to
 - Therapist dashboards for day-to-day CRUD on equipment orders and caseload, using patients that staff have already set up and assigned.
 - Patient dashboards for secure, read-only tracking of their own orders and statuses.
 
-</br>
+---
 
 ### Project Purpose
 
@@ -60,19 +61,7 @@ Therapist-facing features use **PatientProfile.status** (ACTIVE / DISCHARGED) to
 - Give therapists real-time visibility of their caseload and order status via a dedicated therapist dashboard.
 - Provide patients with a simple, secure view of their own orders only, including the logistics status for each order, without exposing any other patients or internal admin data.
 
-</br>
-
-### Tech Stack
-
-- **Backend:** Python 3.13+, Django 5.2.8
-- **Database:** PostgreSQL 14+
-- **Frontend:** HTML5, CSS3, JavaScript
-- **Authentication:** Django Allauth with OAuth2 and role-based access control
-- **Config & Secrets:** python-decouple + `.env`
-- **Deployment targets:** Render / Heroku
-- **Version control:** Git (conventional commits)
-
-</br>
+---
 
 ### System Design Diagrams
 
@@ -207,6 +196,7 @@ flowchart TD
 
 The flow diagram documents therapist vs patient journeys, including dashboards and CRUD vs read-only behaviour.
 
+---
 
 ### Role-Based Access and Dashboards
 
@@ -251,10 +241,7 @@ This project implements role-based login and separated access as required in LO3
   - Can only **view** their own orders; they cannot create, edit, or delete any equipment or orders.
 
 
-
-### Agile Planning and Iteration
-
-Quiporder is planned and tracked using a GitHub Projects kanban board:
+---
 
 ### User Stories:
 
@@ -352,11 +339,9 @@ One week was spent on project planning, including the first mentor meeting where
 
 <img src="docs/agile_project_management_image/quiporder_github_kanban_board.png" alt="GitHub Projects Kanban board" width="100%">
 
-
-
 </details>
 
-
+---
 ## Features
 
 ### Implemented Features
@@ -672,6 +657,18 @@ The color palette was chosen to convey trust, professionalism, and calm — esse
 
 ## Technologies Used
 
+### Tech Stack
+
+- **Backend:** Python 3.13+, Django 5.2.8
+- **Database:** PostgreSQL 14+
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Authentication:** Django Allauth with OAuth2 and role-based access control
+- **Config & Secrets:** python-decouple + `.env`
+- **Deployment targets:** Render / Heroku
+- **Version control:** Git (conventional commits)
+
+</br>
+
 ### Core Technologies
 
 | Technology | Version | Purpose |
@@ -782,7 +779,7 @@ quiporder/
 └── .env                     
 ```
 
-</br> 
+---
 
 ## Testing
 
@@ -816,7 +813,6 @@ http://127.0.0.1:8000/admin/
 
 Log in using a staff user account details provided by admin.
 
-___
 
 
 ### This checklist ensures all models are testable via Django admin
@@ -835,6 +831,8 @@ ___
 | 10 | Delete CustomUser / Profiles | Remove test users | Tested works as expect | Ensure deletion works |
 
 > All saves, edits, and deletions completed without error, this means CRUD functionality is validated. See screenshots verification below
+
+---
 
 ### Manual testing above Verification in screenshots below
 
@@ -910,6 +908,7 @@ All screenshots confirm that:
 
 This validates **manual CRUD testing via Django Admin** for the current implementation.
 
+---
 
 ### Manual Database Verification - Django Admin -> PostgreSQL
 **Purpose**
@@ -1450,7 +1449,7 @@ patient1 | John  | Doe  | ...   | ... | Patient
 Details and screenshots can be found in TESTING.md
 
 
-## Testing Summary
+### Testing Summary
 
 All code has been validated and follows industry standards. No critical errors found found at present.
 
