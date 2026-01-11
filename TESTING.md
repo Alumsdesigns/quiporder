@@ -4,7 +4,7 @@
 
 - [Python Code Validation](#python-code-validation)
 - [HTML Validation](#html-validation)
-- [Error Handling and testing](#error-handling-and-testing)
+- [HTTP Error Handling and HTTP Error Testing](#http-error-handling-and-http-error-testing)
 - [CSS Validation](#css-validation)
 - [JavaScript Testing](#javascript-testing)
 - [Lighthouse](#lighthouse)
@@ -16,36 +16,39 @@
 
 ---
 
-## HTML (W3C)
+## HTML Validation
 
-All HTML templates validated using W3C Markup Validation Service.
+### Validation Tool
 
-### HTML (W3C) Validation Tool
-- **Service:** W3C Markup Validator
-- **URL:** https://validator.w3.org/
+HTML was validated using the [W3C Markup Validator](https://validator.w3.org/) by copying rendered page source.
+
+### Validation Process
+1. Navigate to page in browser (incognito mode)
+2. Right-click → View Page Source
+3. Copy entire HTML
+4. Paste into W3C Validator (Direct Input)
+5. Review results
 
 ### Pages Validated
 
-| Page | URL | Result |
-|------|-----|--------|
-| Home | `/` | Pass |
-| Login | `/accounts/login/` | Pass |
-| Logout | `/accounts/logout/` | Pass |
+| Page | URL | Result | Screenshot |
+|------|-----|--------|------------|
+| Home | `/` | Pass | ![View](docs/html_validations/q-home-page-html-validation.png) |
+| Login | `/accounts/login/` | Pass | ![View](docs/html_validations/q-login-html-validation.png) |
 **Login as therapist**
-| Therapist Dashboard | `/equipment/dashboard/` | Pass |
+| Therapist Dashboard | `/equipment/dashboard/` | Pass | ![View](docs/html_validations/q-therapist-dashboard-validation.png) |
 **Logout as therapist and login as a Patient**
-| Patient Dashboard | `/equipment/patient/dashboard/` | Pass |
-**Login as therapist**
-| Equipment List | `/equipment/list/` | Pass |
-| Create Order | `/equipment/order/create/` | Pass |
-| Edit Order | `/equipment/order/edit/1/` | Pass |
-| Delete Confirmation | `/equipment/order/delete/1/` | Pass |
-**Login as admin with superuser access**
-| Admin Panel | `/admin/` | Pass |
-**Login as admin with superuser access**
-
+| Patient Dashboard | `/equipment/patient/dashboard/` | Pass | ![View](docs/html_validations/q-patient-dashboard-validation.png) |
+**Login as Therapist**
+| Equipment List | `/equipment/list/` | Pass | ![View](docs/html_validations/q-equipment-list-view-validation.png) |
+| Create Order | `/equipment/order/create/` | Pass | ![View](docs/html_validations/q-create-order-validation.png) |
+| Edit Order | `/equipment/order/edit/<id>/` | Pass | ![View](docs/html_validations/q-edit-order-validation.png) |
+| Delete Confirmation | `/equipment/order/delete/<id>/` | Pass | ![View](docs/html_validations/q-delete-order-validation.png) |
+**Login as Therapist**
+| Admin Panel | `/admin/` | Pass | ![View](docs/html_validations/q-admin-html-validation-pass.png) |
 
 <p>Scroll down in document to  HTTP Error Handling and HTTP Error Testing </p>
+
 -------
 
 ### Validation Process
@@ -56,7 +59,12 @@ All HTML templates validated using W3C Markup Validation Service.
 5. Review results
 
 ### Fixes
-http://127.0.0.1:8000/equipment/list/ The error we're mainly skipping from h1 to h3 (missing h2). Fixed this. And I had the same in /equipment/order/delete/1/`h3 - h2 error in. These now have been fixed.
+http://127.0.0.1:8000/equipment/list/ The error we're mainly skipping from h1 to h3. Fixed this. And I had the same in /equipment/order/delete/1/`h3 - h2 error in. These now have been fixed.
+
+
+### Fixes Applied
+- `equipment_list.html` - Changed `h3` to `h2` (heading hierarchy)
+- `order_confirm_delete.html` - Changed `h3` to `h2` (heading hierarchy)
 
 ### Results
 All pages validated successfully with:
@@ -66,22 +74,7 @@ All pages validated successfully with:
 - Accessible markup
 - All CSS validated successfully using CSS3 standards.
 
-
----
-
-## HTML Validation
-
-HTML was validated using the [W3C Markup Validator](https://validator.w3.org/) by copying page source.
-
-| Page | Result | Screenshot |
-|------|--------|------------|
-| Home | Pass | [View](docs/testing/html-home.png) |
-| Login | Pass | [View](docs/testing/html-login.png) |
-| Therapist Dashboard | Pass | [View](docs/testing/html-dashboard.png) |
-| Patient Dashboard | Pass | [View](docs/testing/html-patient.png) |
-| Order Form | Pass | [View](docs/testing/html-order.png) |
-| Equipment List | Pass | [View](docs/testing/html-equipment.png) |
----
+All pages passed with Document checking completed. No errors or warnings to show as per images above.
 
 ## CSS Validation
 
@@ -89,17 +82,19 @@ CSS was validated using the [W3C CSS Validator (Jigsaw)](https://jigsaw.w3.org/c
 All files have been placed in the validator, one issue fixed with media query replaced high with more.
 All results in table below.
 
-| File | Result | Notes |
-|------|--------|-------|
-| style.css | Pass | No errors |
-| dashboard.css | Pass | No errors |
-| forms.css | Pass | No errors |
-| errors.css | Pass | No errors |
-| home.css | Pass | No errors |
 
 
-![exampe]()
+| File | Result | Notes | Screenshot |
+|------|--------|-------|------------|
+| style.css | Pass | No errors | ![View](docs/css_validations/style_css.png) |
+| dashboard.css | Pass | No errors | ![View](docs/css_validations/dashboard_css.png) |
+| forms.css | Pass | No errors | ![View](docs/css_validations/forms_css.png) |
+| errors.css | Pass | No errors | ![View](docs/css_validations/errors_css.png) |
+| home.css | Pass | No errors | ![View](docs/css_validations/home_css.png) |
+
+
 ---
+
 ### JavaScript Testing
 
 JavaScript was validated using [JSHint](https://jshint.com/).
@@ -133,8 +128,6 @@ JavaScript was validated using [JSHint](https://jshint.com/).
 ---
 
 ### Python Code Validation
-
-<details>
 
 #### Python (PEP8)
 
@@ -308,8 +301,16 @@ users/models.py:73:1: E302 expected 2 blank lines, found 1
 users/models.py:101:1: W391 blank line at end of file
 users/tests.py:1:1: F401 'django.test.TestCase' imported but unused
 ```
-
-reduced errors too
+**Ran command and automated fixes and reduced errors too:**
+```
+# Auto-fix all files
+autopep8 --in-place --aggressive equipment/admin.py
+autopep8 --in-place --aggressive quiporder/settings.py
+autopep8 --in-place --aggressive quiporder/urls.py
+autopep8 --in-place --aggressive quiporder/views.py
+autopep8 --in-place --aggressive users/admin.py
+```
+then when running again reduced what was left manually, example below:
 ```
 flake8 equipment/ users/ quiporder/ --exclude=migrations,__pycache__ --max-line-length=120 --ignore=E501,W503
 equipment/models.py:65:65: W504 line break after binary operator
@@ -323,30 +324,7 @@ I manual fixed errors while iterating examples below:  **0 errors** - All Python
 ![fixed python validations with flake8 and manually](docs/pep8_python_validations/pep8_python_validation_example_1.png)
 
 
-
 ---
-
-## HTML (W3C)
-
-All HTML templates validated using W3C Markup Validation Service.
-
-### Validation Tool
-- **Service:** W3C Markup Validator
-- **URL:** https://validator.w3.org/
-
-### Pages Validated
-
-| Page | URL | Result |
-|------|-----|--------|
-| Home | `/` | Pass |
-| Login | `/accounts/login/` | Pass |
-| Signup Info | `/accounts/signup/` | Pass |
-| Therapist Dashboard | `/equipment/dashboard/` | Pass |
-| Patient Dashboard | `/equipment/patient/dashboard/` | Pass |
-| Equipment List | `/equipment/list/` | Pass |
-| Create Order | `/equipment/order/create/` | Pass |
-| Edit Order | `/equipment/order/edit/<id>/` | Pass |
-| Delete Confirmation | `/equipment/order/delete/<id>/` | Pass |
 
 
 ### HTTP Error Handling and HTTP Error Testing
@@ -446,6 +424,12 @@ Visit (with `DEBUG=False`):
 - `http://127.0.0.1:8000/equipment/test-403/`
 - `http://127.0.0.1:8000/equipment/test-405/`
 - `http://127.0.0.1:8000/equipment/test-500/`
+
+<\br>
+**Example of screens tested**
+![404](docs/http-error-screens/404.png)
+![500](docs/http-error-screens/500.png)
+
 
 **Important:** Remove test views and URLs before production deployment.
 
@@ -644,13 +628,15 @@ User stories were tested during manual testing. Each user story is matched to it
 
 ## Responsive Testing
 
-| Device | Screen Size | Result |
-|--------|-------------|--------|
-| iPhone SE | 375x667 | Pass |
-| iPhone 12 | 390x844 | Pass |
-| iPad | 768x1024 | Pass |
-| Desktop | 1920x1080 | Pass |
-
+| Device | Screen Width | Media Query | Result |
+|--------|-------------|-------------|--------|
+| iPhone SE | 375px | Mobile Portrait (max-width: 479px) | Pass |
+| iPhone 14 | 390px | Mobile Portrait (max-width: 479px) | Pass |
+| iPhone 14 Pro Max | 430px | Mobile Portrait (max-width: 479px) | Pass |
+| Mobile Landscape | 568px | Mobile Landscape (480px - 767px) | Pass |
+| iPad Mini | 768px | Tablet (min-width: 768px) | Pass |
+| iPad Pro 11" | 834px | Tablet (min-width: 768px) | Pass |
+| Desktop | 1920px | Desktop (min-width: 1024px) | Pass |
 ---
 
 ## Bugs

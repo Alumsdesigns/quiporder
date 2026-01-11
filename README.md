@@ -2,7 +2,6 @@
 
 **Live Site:** [View Deployed Site](https://quiporder-app.herokuapp.com/) *(Need to add link when deployed)*
 
-
 ---
 
 ## Table of Contents
@@ -15,10 +14,11 @@
 6. [Testing](#testing)
 7. [Deployment](#deployment)
 8. [Security & Data Protection](#security--data-protection)
-9. [Future Features](#future-improvements)
+9. [Future Features](#future-features)
 10. [Credits & Acknowledgments](#acknowledgement)
 
 ---
+
 ## Project Overview
 
 ### Quiporder
@@ -78,7 +78,7 @@ Therapist-facing features use **PatientProfile.status** (ACTIVE / DISCHARGED) to
 
 
 <details>
-  <summary><strong>Entity Relationship Diagram (ERD)</strong></summary>
+  <summary><strong>View Entity Relationship Diagram (ERD)</strong></summary>
 
   <p>Source file: <code>docs/software_architecture_diagrams/erd.md</code></p>
 
@@ -146,7 +146,7 @@ erDiagram
 The ERD shows CustomUser, PatientProfile, TherapistProfile, Equipment, and EquipmentOrder relationships. 
 
 
-<details> <summary><strong>Application Flow & Role-based Workflows</strong></summary> <p>Source file: <code>docs/software_architecture_diagrams/flow-horizontal-view.md</code></p>
+<details> <summary><strong>View Application Flow & Role-based Workflows</strong></summary> <p>Source file: <code>docs/software_architecture_diagrams/flow-horizontal-view.md</code></p>
 
 ```mermaid
 flowchart TD
@@ -680,6 +680,22 @@ quiporder/
 </br> 
 
 ## Testing
+
+Testing documentation is available in a separate file in the root of the repo called TESTING.md
+
+**[View Full Testing Documentation](https://github.com/Alumsdesigns/quiporder/blob/main/TESTING.md)**
+
+### Summary of whats covered in the TESTING document
+
+- HTML validated (W3C)
+- CSS validated (W3C Jigsaw)
+- JavaScript validated (JSHint)
+- Python PEP8 compliant (flake8)
+- Lighthouse scores 92-100
+- Manual testing completed
+- All user stories tested
+- Responsive design verified
+- Cross-browser tested
 
 ### Manual Testing, Admin CRUD Validation
 
@@ -1326,6 +1342,8 @@ patient1 | John  | Doe  | ...   | ... | Patient
 - **HTML:** all key templates validated via W3C Markup Validation Service.
 - **CSS:** validated using W3C Jigsaw CSS validator.
 
+Details and screenshots can be found in TESTING.md
+
 
 ## Testing Summary
 
@@ -1333,18 +1351,55 @@ All code has been validated and follows industry standards. No critical errors f
 
 </details>
 
-### Future improvements
+## Future Features
 
-- Better Calendar Picker
-- When adding patient or therapist profile in username dropdown have the users full name also in parentheses
-- Forget password functionality
+### Planned for Q2 2025 (April)
 
+**Note** A board is craeted for these 
+
+| Feature | Description | Priority |
+|---------|-------------|----------|
+| Patient Search Functionality | Search/filter patients by name or MRN | Medium |
+| Pagination | Add pagination to order lists and tables | Medium |
+| Maybe Footer Navigation | Add useful links to footer | Low |
+
+### Backlog (Future Consideration)
+
+| Feature | Description | Status |
+|---------|-------------|--------|
+| Create Patient Form | Allow therapists to create patients via UI (not just admin) | Backlog |
+| Forgot Password | Password reset via email | Backlog |
+| Better Calendar Picker | Improved date selection UI | Backlog |
+| GitHub Actions CI Pipeline | Automated testing on push/PR | Backlog |
+| Browser Cache Security | Investigate cache clearing on logout | Spike |
+| Order Action Improvements | Better UX when therapist didn't create order | Spike |
+| Status History Deletion | Investigate if deletion should be prevented | Spike |
+| Signup Page Review | Evaluate signup_closed vs open registration | Spike |
+
+### UX Improvements Identified
+
+| Improvement | Description |
+|-------------|-------------|
+| Username dropdown | Show full name in parentheses when selecting users |
+| Empty state messaging | Better feedback when no orders exist |
+| Mobile table scrolling | Improved horizontal scroll indicators |
+
+### Out of Scope (This Release)
+
+The following features were intentionally excluded from MVP to focus on core functionality:
+
+- Patient creation by therapists (admin-only for security)
+- Email notifications for order status changes
+- PDF export of order history
+- Multi-language support
+- Dark mode theme
+
+---
 
 ## Setup Instructions
 
 Quiporder is a Full-Stack Django application for occupational therapists to manage patient equipment orders. Follow these steps to set up the project locally.
 
----
 
 ### Prerequisites
 
@@ -1353,9 +1408,9 @@ Before you begin, ensure you have the following installed:
 - **Python 3.13+** - [Download Python](https://www.python.org/downloads/)
 - **PostgreSQL 14+** - [Download PostgreSQL](https://www.postgresql.org/download/)
 - **Git** - [Download Git](https://git-scm.com/downloads/)
-- **pip** - Python package installer (included with Python)
+- **pip3** - Python package installer (included with Python)
 
----
+___
 
 ### Installation Steps
 
@@ -1450,6 +1505,8 @@ exit()
 
 Exit the shell type ```exit()``` and enter
 
+---
+
 #### 6. Setup PostgreSQL Database
 
 **Start PostgreSQL:**
@@ -1491,7 +1548,6 @@ CREATE DATABASE quiporder;
 
 # Verify roles: 
 \du
-
 
 # Create user (optional - use your own credentials)
 CREATE USER <enter-a-made-up-username> WITH PASSWORD <'enter-a-password';
