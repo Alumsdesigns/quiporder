@@ -49,13 +49,11 @@ class Equipment(models.Model):
     def __str__(self):
         return f"{self.name} ({self.category}, {self.size})"
 
-    # Property to check if equipment has available stock
     @property
     def is_available(self):
         """Check if equipment has available stock."""
         return self.available_quantity > 0
 
-    # Property to calculate utilization rate
     @property
     def utilization_rate(self):
         """Calculate what percentage of equipment is currently out."""
@@ -64,8 +62,6 @@ class Equipment(models.Model):
         return ((self.total_quantity - self.available_quantity)
                 / self.total_quantity) * 100
 
-    # Validation method to ensure available_quantity doesn't exceed
-    # total_quantity + added None checks and proper error messages
     def clean(self):
         """Validate Equipment fields comprehensively.
 
@@ -74,7 +70,7 @@ class Equipment(models.Model):
         2. Business: total >= allocated orders
         3. Flexible: available can be < (total - allocated) for maintenance
         """
-        # Check if fields have values before comparing prevents TypeError
+
         if self.total_quantity is None:
             raise ValidationError(
                 {"total_quantity": "Total quantity is required."})
@@ -84,7 +80,6 @@ class Equipment(models.Model):
                 {"available_quantity": "Available quantity is required."}
             )
 
-        # Now safe to compare both are not None
         if self.available_quantity > self.total_quantity:
             raise ValidationError(
                 {
@@ -94,7 +89,6 @@ class Equipment(models.Model):
                             self.total_quantity}). " f"Please reduce available quantity to {
                             self.total_quantity} or less.")})
 
-        # Check against active orders only for existing equipment
         if self.pk:
             active_statuses = [
                 "PENDING",
@@ -102,7 +96,6 @@ class Equipment(models.Model):
                 "IN_TRANSIT",
                 "DELIVERED"]
 
-            # Calculate total of all active orders for this equipment
             total_allocated = (
                 EquipmentOrder.objects.filter(
                     equipment=self,
@@ -112,7 +105,6 @@ class Equipment(models.Model):
                 or 0
             )
 
-            # Prevent reducing total_quantity below currently allocated amount
             if self.total_quantity < total_allocated:
                 raise ValidationError(
                     {
@@ -125,8 +117,6 @@ class Equipment(models.Model):
                     }
                 )
 
-            # Available_quantity must be consistent with allocations
-            # Formula: available = total - allocated
             correct_available = self.total_quantity - total_allocated
 
             if self.available_quantity > correct_available:
@@ -141,25 +131,20 @@ class Equipment(models.Model):
                     }
                 )
 
-            # Warn if available_quantity is set lower than mathematically correct
-            # But we store it for potential admin warning
+
             if self.available_quantity < correct_available:
-                # This is ALLOWED, admin might be marking some as unavailable for maintenance
-                # Just log it or add a note field in future
+
                 pass
 
-    # NEW: Auto-adjust available_quantity when total_quantity increases
     def save(self, *args, **kwargs):
         """Override save to auto-adjust available_quantity when total increases."""
-        if self.pk:  # Existing equipment
+        if self.pk:  
             old_equipment = Equipment.objects.get(pk=self.pk)
             old_total = old_equipment.total_quantity
             old_available = old_equipment.available_quantity
 
-            # If total_quantity increased, auto-increase available_quantity
             if self.total_quantity > old_total:
                 difference = self.total_quantity - old_total
-                # Only auto-adjust if available wasn't manually changed
                 if self.available_quantity == old_available:
                     self.available_quantity += difference
 
@@ -214,7 +199,6 @@ class EquipmentOrder(models.Model):
         help_text="Therapist who created this order",
     )
 
-    # Soft delete fields for audit compliance
     deleted_at = models.DateTimeField(
         null=True,
         blank=True,
@@ -246,9 +230,7 @@ class EquipmentOrder(models.Model):
         """Validate order before saving - enforce three rules."""
         super().clean()
 
-        # Comprehensive validation of order quantity
         if self.equipment and self.quantity:
-            # Calculate total of ALL active orders for this equipment
             active_statuses = [
                 "PENDING",
                 "APPROVED",
@@ -266,10 +248,8 @@ class EquipmentOrder(models.Model):
                 or 0
             )
 
-            # Add this order's quantity to the total
             total_with_this_order = total_active_orders + self.quantity
 
-            # Total active orders cannot exceed total_quantity
             if total_with_this_order > self.equipment.total_quantity:
                 currently_allocated = total_active_orders
                 max_can_order = self.equipment.total_quantity - currently_allocated
@@ -286,11 +266,8 @@ class EquipmentOrder(models.Model):
                     }
                 )
 
-            # Check available_quantity both new AND edited orders
-            # Calculate how much is truly available for this order
             current_available = self.equipment.available_quantity
 
-            # If editing existing active order, add back its old quantity
             if self.pk:
                 try:
                     old_order = EquipmentOrder.objects.get(pk=self.pk)
@@ -302,7 +279,6 @@ class EquipmentOrder(models.Model):
                 except EquipmentOrder.DoesNotExist:
                     pass
 
-            # New quantity cannot exceed available + old quantity
             if self.quantity > current_available:
                 raise ValidationError(
                     {
@@ -326,7 +302,6 @@ class EquipmentOrder(models.Model):
     def save(self, *args, **kwargs):
         """Override save to update inventory and create status history."""
 
-        # Extract current_user from kwargs for audit trail
         current_user = kwargs.pop("current_user", None)
 
         is_new = self.pk is None
@@ -338,24 +313,21 @@ class EquipmentOrder(models.Model):
             old_status = old_order.status
             old_quantity = old_order.quantity
 
-            # Active → Cancelled/Returned
             if old_status not in [
                     'CANCELLED',
                     'RETURNED'] and self.status in [
                     'CANCELLED',
                     'RETURNED']:
-                # Order cancelled/returned - restore inventory
+
                 self.equipment.available_quantity += old_quantity
                 self.equipment.save()
 
-            # Cancelled/Returned → Active (REACTIVATION)
             elif old_status in ['CANCELLED', 'RETURNED'] and self.status not in ['CANCELLED', 'RETURNED']:
-                # Order reactivated - reduce inventory
+
                 if self.equipment.available_quantity >= self.quantity:
                     self.equipment.available_quantity -= self.quantity
                     self.equipment.save()
                 else:
-                    # Multi-line error with order ID, equipment, patient
                     raise ValueError(
                         f"Cannot reactivate order #{self.pk}. Insufficient stock.\n"
                         f"Equipment: {self.equipment.name} (ID: {self.equipment.pk})\n"
@@ -366,14 +338,11 @@ class EquipmentOrder(models.Model):
                         f"Action: Increase inventory or reduce order quantity"
                     )
 
-            # DRAFT → Active (ACTIVATION) - MISSING IN DOCUMENT 6
             elif old_status == 'DRAFT' and self.status not in ['DRAFT', 'CANCELLED', 'RETURNED']:
-                # Moving from DRAFT to active status - reduce inventory
                 if self.equipment.available_quantity >= self.quantity:
                     self.equipment.available_quantity -= self.quantity
                     self.equipment.save()
                 else:
-                    # Multi-line error
                     raise ValueError(
                         f"Cannot activate order #{self.pk} from DRAFT. Insufficient stock.\n"
                         f"Equipment: {self.equipment.name} (ID: {self.equipment.pk})\n"
@@ -384,21 +353,16 @@ class EquipmentOrder(models.Model):
                         f"Action: Increase inventory or reduce order quantity"
                     )
 
-            # Active → DRAFT (DEACTIVATION) - MISSING IN DOCUMENT 6
             elif old_status not in ['DRAFT', 'CANCELLED', 'RETURNED'] and self.status == 'DRAFT':
-                # Moving from active to DRAFT - restore inventory
+
                 self.equipment.available_quantity += old_quantity
                 self.equipment.save()
 
-            # Active → Active (QUANTITY CHANGE)
             elif old_status not in ['CANCELLED', 'RETURNED', 'DRAFT'] and self.status not in ['CANCELLED', 'RETURNED', 'DRAFT']:
-                # Order quantity changed while active - adjust inventory
-                # properly
                 quantity_difference = self.quantity - old_quantity
                 if quantity_difference != 0:
                     new_available = self.equipment.available_quantity - quantity_difference
                     if new_available < 0:
-                        # Multi-line error
                         raise ValueError(
                             f"Cannot increase order #{self.pk} quantity. Insufficient stock.\n"
                             f"Equipment: {self.equipment.name} (ID: {self.equipment.pk})\n"
@@ -412,13 +376,11 @@ class EquipmentOrder(models.Model):
                     self.equipment.available_quantity = new_available
                     self.equipment.save()
         else:
-            # NEW ORDER - FIXED FROM DOCUMENT 6
             if self.status not in ['DRAFT', 'CANCELLED', 'RETURNED']:
                 if self.equipment.available_quantity >= self.quantity:
                     self.equipment.available_quantity -= self.quantity
                     self.equipment.save()
                 else:
-                    # ENHANCED ERROR MESSAGE
                     raise ValueError(
                         f"Cannot create order. Insufficient stock.\n"
                         f"Equipment: {self.equipment.name} (ID: {self.equipment.pk})\n"
@@ -428,11 +390,9 @@ class EquipmentOrder(models.Model):
                         f"Shortage: {self.quantity - self.equipment.available_quantity} units\n"
                         f"Action: Reduce quantity or wait for returns"
                     )
-            # If status IS DRAFT/CANCELLED/RETURNED, don't touch inventory
 
         super().save(*args, **kwargs)
 
-        # Create status history entry if status changed
         if is_new or (old_status and old_status != self.status):
             EquipmentOrderStatusHistory.objects.create(
                 order=self,
@@ -441,7 +401,6 @@ class EquipmentOrder(models.Model):
                 changed_by=current_user
             )
 
-    # Soft delete method
     def delete(self, using=None, keep_parents=False, current_user=None):
         """
         Soft delete - mark as deleted instead of removing from database.
@@ -450,15 +409,12 @@ class EquipmentOrder(models.Model):
         self.deleted_at = timezone.now()
         self.deleted_by = current_user
 
-        # Restore inventory if order was active
         if self.status not in ["CANCELLED", "RETURNED", "DRAFT"]:
             self.equipment.available_quantity += self.quantity
             self.equipment.save()
 
-        # Call save() without args to avoid recursion
         super(EquipmentOrder, self).save()
 
-        # Create history entry for deletion
         EquipmentOrderStatusHistory.objects.create(
             order=self,
             old_status=self.status,
@@ -467,7 +423,6 @@ class EquipmentOrder(models.Model):
             notes=f"Order soft-deleted at {self.deleted_at}",
         )
 
-        # Hard delete method for admin only
         def hard_delete(self):
             """Actually delete from database admin use only."""
             super().delete()

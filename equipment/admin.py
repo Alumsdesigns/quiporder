@@ -133,7 +133,6 @@ class EquipmentOrderAdmin(admin.ModelAdmin):
     readonly_fields = ['ordered_at']
     ordering = ['deleted_at', '-ordered_at']
 
-    # Add fieldsets for better form organization
     fieldsets = (
         ('Order Details', {
             'fields': ('patient', 'equipment', 'quantity')

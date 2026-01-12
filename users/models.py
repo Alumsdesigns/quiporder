@@ -1,5 +1,3 @@
-# Create your models here.
-# Database tables (User, Therapist, Patient)
 """
 Models for Quipster app:
 - CustomUser extends AbstractUser with a user_type field (Therapist/Patient)
