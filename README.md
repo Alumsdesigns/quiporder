@@ -6,7 +6,6 @@
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
-### System Design Diagrams
 2. [Design](#design)
 3. [Features](#features)
 4. [User Stories](#user-stories)
