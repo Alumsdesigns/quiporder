@@ -7,7 +7,7 @@
 - [HTTP Error Handling and HTTP Error Testing](#http-error-handling-and-http-error-testing)
 - [CSS Validation](#css-validation)
 - [JavaScript Testing](#javascript-testing)
-- [PageSpeed Insights](#pageSpeed-insights)
+- [PageSpeed Insights](#pagespeed-insights)
 - [Automated Testing](#automated-testing)
 - [Manual Testing](#manual-testing)
 - [User Story Testing](#user-story-testing)
