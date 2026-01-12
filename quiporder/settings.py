@@ -74,6 +74,7 @@ else:
     CSRF_TRUSTED_ORIGINS = [
         'http://127.0.0.1:8000',
         'http://localhost:8000',
+        'https://quiptorder-f48affb2ee2c.herokuapp.com',
     ]
 
     # Heroku app URL
