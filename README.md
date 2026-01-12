@@ -6,15 +6,59 @@
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
-2. [Design](#design)
-3. [Features](#features)
-4. [User Stories](#user-stories)
-5. [Technologies Used](#technologies-used)
-6. [Testing](#testing)
-7. [Deployment](#deployment)
-8. [Security & Data Protection](#security--data-protection)
-9. [Future Features](#future-features)
-10. [Credits & Acknowledgments](#acknowledgement)
+   - [Key Functionality](#key-functionality)
+   - [Project Purpose](#project-purpose)
+   - [System Design Diagrams](#system-design-diagrams)
+   - [Role-Based Access and Dashboards](#role-based-access-and-dashboards)
+   - [User Stories](#user-stories)
+2. [Features](#features)
+   - [Implemented Features](#implemented-features)
+   - [Features Screenshots](#features-screenshots)
+3. [Design](#design)
+   - [Wireframes](#wireframes)
+   - [Mockups](#mockups)
+   - [Color Scheme](#color-scheme)
+   - [Typography](#typography)
+4. [Technologies Used](#technologies-used)
+   - [Tech Stack](#tech-stack)
+   - [Python Packages](#python-packages)
+   - [Development Tools](#development-tools)
+5. [Testing](#testing)
+   - [Summary of Testing](#summary-of-whats-covered-in-the-testing-document)
+   - [Manual Testing, Admin CRUD Validation](#manual-testing-admin-crud-validation)
+   - [Manual Database Verification](#manual-database-verification---django-admin---postgresql)
+   - [Iteration Improvements](#iteration-improvements-from-round-1-observational-user-testing-of-the-admin-panel)
+   - [Overall Testing Summary](#overall-testing-summary)
+6. [Future Features](#future-features)
+   - [Planned for Q2 2025](#planned-for-q2-2025-april)
+   - [Backlog](#backlog-future-consideration)
+   - [UX Improvements Identified](#ux-improvements-identified)
+   - [Out of Scope](#out-of-scope-this-release)
+7. [Setup Instructions](#setup-instructions)
+   - [Prerequisites](#prerequisites)
+   - [Installation Steps](#installation-steps)
+   - [Troubleshooting](#troubleshooting)
+   - [Next Steps](#next-steps)
+8. [Deployment](#deployment)
+   - [Prerequisites for Deployment](#prerequisites-for-deployment)
+   - [Production Deployment Steps](#production-deployment-steps)
+   - [Updating the Deployed Site](#updating-the-deployed-site)
+   - [Troubleshooting Deployment](#troubleshooting-deployment)
+   - [Heroku CLI Commands Reference](#heroku-cli-commands-reference)
+9. [Security & Data Protection](#security--data-protection)
+   - [Overview](#overview)
+   - [Authentication & Authorization](#authentication--authorization)
+   - [Account Registration & Approval](#account-registration--approval)
+   - [Secret Management](#secret-management)
+   - [Django Security Features](#django-security-features)
+   - [Access Control Implementation](#access-control-implementation)
+   - [Data Protection](#data-protection)
+   - [Production Security](#production-security)
+   - [Best Practices Followed](#best-practices-followed)
+   - [Future Security Enhancements](#future-security-enhancements)
+   - [Note for Assessors](#note-for-assessors)
+10. [License](#license)
+11. [Acknowledgement](#acknowledgement)
 
 ---
 
@@ -754,61 +798,42 @@ The color palette was chosen to convey trust, professionalism, and calm — esse
 
 ### Tech Stack
 
-- **Backend:** Python 3.13+, Django 5.2.8
-- **Database:** PostgreSQL 14+
-- **Frontend:** HTML5, CSS3, JavaScript
-- **Authentication:** Django Allauth with OAuth2 and role-based access control
-- **Config & Secrets:** python-decouple + `.env`
-- **Deployment targets:** Render / Heroku
-- **Version control:** Git (conventional commits)
+| Category | Technology |
+|----------|------------|
+| Backend | Python 3.12, Django 5.2.8 |
+| Database | PostgreSQL 14+ |
+| Frontend | HTML5, CSS3, JavaScript ES6 |
+| Authentication | Django Allauth 0.57.0 |
+| Deployment | Heroku |
+| Version Control | Git & GitHub |
 
-</br>
+### Python Packages
 
-### Core Technologies
-
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Python | 3.13 | Backend programming language |
-| Django | 5.2.8 | Web framework (MVT architecture) |
-| PostgreSQL | 14+ | Relational database |
-| HTML5 | - | Page structure and semantics |
-| CSS3 | - | Styling and responsive design |
-| JavaScript | ES6 | Client-side validation and UX |
-
-### Django Packages & Extensions
-
-| Package | Purpose |
-|---------|---------|
-| django-allauth | Authentication, login, OAuth2 support |
-| django-crispy-forms | Form rendering with Bootstrap 5 |
-| crispy-bootstrap5 | Bootstrap 5 template pack for crispy |
-| python-decouple | Environment variable management |
-| dj-database-url | Database URL parsing for Heroku |
-| whitenoise | Static file serving in production |
-| gunicorn | Production WSGI HTTP server |
-| psycopg2-binary | PostgreSQL database adapter |
+| Package | Version | Purpose |
+|---------|---------|---------|
+| Django | 5.2.8 | Web framework |
+| django-allauth | 0.57.0 | Authentication & login |
+| django-crispy-forms | 2.5 | Form rendering |
+| crispy-bootstrap5 | 2025.6 | Bootstrap 5 form styling |
+| psycopg2-binary | 2.9.11 | PostgreSQL adapter |
+| dj-database-url | 3.0.1 | Database URL parsing |
+| gunicorn | 20.1.0 | Production server |
+| whitenoise | 6.6.0 | Static file serving |
+| python-decouple | 3.8 | Environment variables |
+| pillow | 10.4.0 | Image processing |
+| coverage | 7.13.1 | Test coverage |
+| flake8 | 7.3.0 | Python linting |
 
 ### Development Tools
 
 | Tool | Purpose |
 |------|---------|
-| Git | Version control |
-| GitHub | Repository hosting, project management |
-| GitHub Projects | Agile kanban board |
 | VS Code | Code editor |
-| Chrome DevTools | Testing, debugging, responsive design |
-| flake8 | Python PEP8 linting |
+| Chrome DevTools | Testing & debugging |
 | W3C Validator | HTML validation |
 | Jigsaw | CSS validation |
 | JSHint | JavaScript linting |
-
-### Deployment & Hosting
-
-| Service | Purpose |
-|---------|---------|
-| Heroku | Cloud platform deployment |
-| Heroku Postgres | Production database |
-| GitHub | Source code repository |
+| GitHub Projects | Agile project management |
 
 ---
 
