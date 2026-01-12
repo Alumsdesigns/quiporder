@@ -7,12 +7,11 @@
 - [HTTP Error Handling and HTTP Error Testing](#http-error-handling-and-http-error-testing)
 - [CSS Validation](#css-validation)
 - [JavaScript Testing](#javascript-testing)
-- [Lighthouse](#lighthouse)
+- [PageSpeed Insights](#PageSpeed-Insights)
 - [Automated Testing](#automated-testing)
 - [Manual Testing](#manual-testing)
 - [User Story Testing](#user-story-testing)
 - [Browser Compatibility](#browser-compatibility)
-- [Python Testing](#python-testing)
 - [Bugs](#bugs)
 
 ---
@@ -474,16 +473,22 @@ All pages validated successfully with:
 
 ---
 
-## Lighthouse
+## PageSpeed Insights
 
-Lighthouse testing was performed in Chrome DevTools (Incognito mode).
+[PageSpeed Insights](https://pagespeed.web.dev/) testing was performed using Google PageSpeed Insights and Chrome DevTools (Incognito mode).
 
 | Page | Performance | Accessibility | Best Practices | SEO |
 |------|-------------|---------------|----------------|-----|
-| Home | 95 | 100 | 100 | 100 |
-| Login | 98 | 100 | 100 | 100 |
-| Dashboard | 92 | 98 | 100 | 100 |
-| Order Form | 94 | 100 | 100 | 100 |
+| Equipment List | 95 | 100 | 100 | 100 |
+| Therapist Dashboard | 92 | 98 | 100 | 100 |
+
+---
+
+### Evidence
+
+- ![Equipment List PageSpeed Report](docs/pagespeed-insights/pagespeed-insights-equipment-list.png)
+- ![Therapist Dashboard PageSpeed Report](docs/pagespeed-insights/pagespeed-insights-therapist-dashboard.png)
+
 
 ---
 

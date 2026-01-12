@@ -913,7 +913,7 @@ Testing documentation is available in a separate file in the root of the repo ca
 - CSS validated (W3C Jigsaw)
 - JavaScript validated (JSHint)
 - Python PEP8 compliant (flake8)
-- Lighthouse scores 92-100
+- PageSpeed Insights score 92-100
 - Manual testing completed
 - All user stories tested
 - Responsive design verified
