@@ -1,3 +1,4 @@
+
 """
 Django settings for quiporder project.
 
@@ -15,30 +16,15 @@ from decouple import config
 import os
 import dj_database_url
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# ----------------------------------------------------------------------
+# ---------------------------------------------------------------------
 # SECURITY SETTINGS
 # ----------------------------------------------------------------------
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-temporary-key')
-
-# SECURITY !! don't run with debug turned on in production! DEBUG = True
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
     default='localhost,127.0.0.1').split(',')
-# Test 500 + 405 run below
-# DEBUG = False  # Hard-coded False (ignores .env file) for 500 + 405
-# ALLOWED_HOSTS = [ '*']  # 'localhost', '127.0.0.1', Allow all hosts for
-# 500 http://127.0.0.1:8000/equipment/test-500/
-
-# ['quiporder.herokuapp.com'] add in prod for allowed hosts
-
-# For Heroku production, set via environment variables:
-# DEBUG=False
-# ALLOWED_HOSTS=your-app-name.herokuapp.com
-
 # ----------------------------------------------------------------------
 # CSRF & SESSION SETTINGS
 # ----------------------------------------------------------------------
@@ -48,36 +34,31 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-# CSRF & Security Settings
 if DEBUG:
-    # LOCAL DEVELOPMENT
-    CSRF_COOKIE_SECURE = False  # True in production only
+    # Local development
+    CSRF_COOKIE_SECURE = False 
     SESSION_COOKIE_SECURE = False
-    SECURE_SSL_REDIRECT = False  # No HTTPS locally
-    CSRF_COOKIE_HTTPONLY = False  # ← Already set
-    CSRF_USE_SESSIONS = False     # ← ADD THIS
+    SECURE_SSL_REDIRECT = False 
+    CSRF_COOKIE_HTTPONLY = False 
+    CSRF_USE_SESSIONS = False
     CSRF_TRUSTED_ORIGINS = [
         'http://127.0.0.1:8000',
         'http://localhost:8000',
     ]
 else:
-    # PRODUCTION (Heroku)
-    CSRF_COOKIE_SECURE = True  # in production only keep False for local testing # False
-    SESSION_COOKIE_SECURE = True  # Keep False for local testing then True - False
-    SECURE_SSL_REDIRECT = True  # DISABLE for local testing with DEBUG=False True - False
-    # SECURE_HSTS_SECONDS = 3600  # Comment out for local
-    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Comment out for local
-    # SECURE_HSTS_PRELOAD = True
+    # Production Heroku
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 3600 
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-    # CSRF trusted origins - include local for testing
     CSRF_TRUSTED_ORIGINS = [
         'http://127.0.0.1:8000',
         'http://localhost:8000',
         'https://quiptorder-f48affb2ee2c.herokuapp.com',
     ]
-
-    # Heroku app URL
     heroku_app_name = config('HEROKU_APP_NAME', default='')
     if heroku_app_name:
         CSRF_TRUSTED_ORIGINS = [f'https://{heroku_app_name}.herokuapp.com']
@@ -124,29 +105,15 @@ MIDDLEWARE = [
 # ----------------------------------------------------------------------
 AUTH_USER_MODEL = 'users.CustomUser'
 SITE_ID = 1
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
-
-# This tells django-allauth to use OUR custom adapter instead of default
-# The adapter handles:
-# 1. Blocking public signup (admin-only registration)
-# 2. Role-based login redirects (therapist → dashboard, patient → patient
-# dashboard)
 ACCOUNT_ADAPTER = 'users.adapters.NoSignupAccountAdapter'
-# Django-allauth settings
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-
-ACCOUNT_EMAIL_REQUIRED = True  # Changed from False
-
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Changed from 'username'
-# Username requirements
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_USERNAME_REQUIRED = True
-
-# Authentication redirects  after successful login. These are FALLBACK
-# values - the custom adapter overrides them
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
@@ -158,7 +125,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -167,7 +133,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # ----------------------------------------------------------------------
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -182,7 +147,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 # ----------------------------------------------------------------------
 # WSGI
@@ -212,7 +176,6 @@ else:
         }
     }
 
-
 # ----------------------------------------------------------------------
 # PASSWORD VALIDATION
 # ----------------------------------------------------------------------
@@ -230,7 +193,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 # ----------------------------------------------------------------------
 # INTERNATIONALIZATION
 # ----------------------------------------------------------------------
@@ -239,8 +201,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
 # ----------------------------------------------------------------------
 # EMAIL (dev only)
 # ----------------------------------------------------------------------

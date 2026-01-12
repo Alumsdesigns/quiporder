@@ -1,6 +1,6 @@
 # Quiporder - Occupational Therapy Management System
 
-**Live Site:** [View Deployed Site](https://quiporder-app.herokuapp.com/) *(Need to add link when deployed)*
+**Live Site:** [View Deployed Site](https://quiptorder-f48affb2ee2c.herokuapp.com) *(Need to add link when deployed)*
 
 ---
 
@@ -1819,7 +1819,7 @@ Once the server is running:
 
 Quiporder is deployed on Heroku, a cloud platform that supports PostgreSQL databases and Python applications.
 
-**Live Site:** [View Deployed Site](#) *(Add your Heroku URL)*
+**Live Site:** [View Deployed Site](https://quiptorder-f48affb2ee2c.herokuapp.com/)
 
 
 ### Prerequisites for Deployment
