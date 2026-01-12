@@ -572,79 +572,79 @@ Low-fidelity wireframes were created to plan the layout and user flow before dev
 <details>
 <summary>Therapist Dashboard Wireframe</summary>
 
-![Therapist Dashboard Wireframe](docs/wireframe/therapist-dashboard-wirefram.png)
+![Therapist Dashboard Wireframe](docs/wireframes/therapist-dashboard-wirefram.png)
 </details>
 
 <details>
 <summary>Patient Dashboard Wireframe</summary>
 
-![Patient Dashboard Wireframe](docs/wireframe/patient-dashboard-wireframe.png)
+![Patient Dashboard Wireframe](docs/wireframes/patient-dashboard-wireframe.png)
 </details>
 
 <details>
 <summary>Therapist Logged In Wireframe</summary>
 
-![Therapist Logged In Wireframe](docs/wireframe/therapist-loged-in-wireframe.png)
+![Therapist Logged In Wireframe](docs/wireframes/therapist-loged-in-wireframe.png)
 </details>
 
 <details>
 <summary>Patient Logged In Wireframe</summary>
 
-![Patient Logged In Wireframe](docs/wireframe/patient-loged-in-wireframe.png)
+![Patient Logged In Wireframe](docs/wireframes/patient-loged-in-wireframe.png)
 </details>
 
 <details>
 <summary>Therapist Logout Wireframe</summary>
 
-![Therapist Logout Wireframe](docs/wireframe/therapist-logout-wireframe.png)
+![Therapist Logout Wireframe](docs/wireframes/therapist-logout-wireframe.png)
 </details>
 
 <details>
 <summary>Patient Logout Wireframe</summary>
 
-![Patient Logout Wireframe](docs/wireframe/patient-logout-wireframe.png)
+![Patient Logout Wireframe](docs/wireframes/patient-logout-wireframe.png)
 </details>
 
 <details>
 <summary>Equipment Inventory Wireframe</summary>
 
-![Equipment Inventory Wireframe](docs/wireframe/equipment-inventory-wireframe.png)
+![Equipment Inventory Wireframe](docs/wireframes/equipment-inventory-wireframe.png)
 </details>
 
 <details>
 <summary>Create Equipment Order Wireframe</summary>
 
-![Create Equipment Wireframe](docs/wireframe/create-equipment-wireframe.png)
+![Create Equipment Wireframe](docs/wireframes/create-equipment-wireframe.png)
 </details>
 
 <details>
 <summary>Edit Equipment Order Wireframe</summary>
 
-![Edit Equipment Wireframe](docs/wireframe/edit-equipment-wireframe.png)
+![Edit Equipment Wireframe](docs/wireframes/edit-equipment-wireframe.png)
 </details>
 
 <details>
 <summary>Delete Equipment Order Wireframe</summary>
 
-![Delete Equipment Wireframe](docs/wireframe/delete-equipment-wireframe.png)
+![Delete Equipment Wireframe](docs/wireframes/delete-equipment-wireframe.png)
 </details>
 
 <details>
 <summary>403 Error Page Wireframe</summary>
 
-![403 Error Wireframe](docs/wireframe/error-403-wireframe.png)
+![403 Error Wireframe](docs/wireframes/error-403-wireframe.png)
 </details>
 
 <details>
 <summary>404 Error Page Wireframe</summary>
 
-![404 Error Wireframe](docs/wireframe/error-404-wireframe.png)
+![404 Error Wireframe](docs/wireframes/error-404-wireframe.png)
 </details>
 
 <details>
 <summary>500 Error Page Wireframe</summary>
 
-![500 Error Wireframe](docs/wireframe/error-500-wireframe.png)
+![500 Error Wireframe](docs/wireframes/error-500-wireframe.png)
 </details>
 
 ---
