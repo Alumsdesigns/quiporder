@@ -17,8 +17,6 @@ idna==3.11
 mccabe==0.7.0
 oauthlib==3.3.1
 pillow==10.4.0
-psycopg==3.2.3
-psycopg-binary==3.2.3
 psycopg2-binary==2.9.11
 pycodestyle==2.14.0
 pycparser==2.23
