@@ -850,10 +850,10 @@ quiporder/
 │   ├── __init__.py         
 |   ├── admin.py
 |   |── apps.py
-│   ├── models.py            
-│   ├── tests.py             
+│   ├── models.py                        
 │   ├── urls.py            
-│   └── views.py            
+│   └── views.py   
+│   └── tests 
 │
 └── quiporder/            
 │   ├──  __pycache__/       
@@ -889,7 +889,7 @@ quiporder/
 |  ├── admin.py             
 |  ├── apps.py              
 |  ├── models.py            
-|  ├── tests.py             
+|  ├── tests            
 |  └── views.py             
 │
 ├── .gitignore               
