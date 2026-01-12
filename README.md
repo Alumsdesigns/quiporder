@@ -1,7 +1,6 @@
 # Quiporder - Occupational Therapy Management System
 
-**Live Site:** [View Deployed Site](https://quiptorder-f48affb2ee2c.herokuapp.com) *(Need to add link when deployed)*
-
+**Live Site:** [View Deployed Site](https://quiptorder-f48affb2ee2c.herokuapp.com) 
 ---
 
 ## Table of Contents
