@@ -5,9 +5,7 @@ Models for equipment app.
 - EquipmentOrder tracks assignment of equipment to patients
 - Equipment, EquipmentCategory, EquipmentOrder tables
 """
-
 from django.db import models
-
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
@@ -70,7 +68,6 @@ class Equipment(models.Model):
         2. Business: total >= allocated orders
         3. Flexible: available can be < (total - allocated) for maintenance
         """
-
         if self.total_quantity is None:
             raise ValidationError(
                 {"total_quantity": "Total quantity is required."})
@@ -131,14 +128,12 @@ class Equipment(models.Model):
                     }
                 )
 
-
             if self.available_quantity < correct_available:
-
                 pass
 
     def save(self, *args, **kwargs):
         """Override save to auto-adjust available_quantity when total increases."""
-        if self.pk:  
+        if self.pk:
             old_equipment = Equipment.objects.get(pk=self.pk)
             old_total = old_equipment.total_quantity
             old_available = old_equipment.available_quantity

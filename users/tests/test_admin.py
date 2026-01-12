@@ -1,7 +1,6 @@
 """Tests for user admin."""
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
-from users.models import TherapistProfile, PatientProfile
 
 User = get_user_model()
 

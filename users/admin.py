@@ -272,7 +272,7 @@ class TherapistProfileAdmin(admin.ModelAdmin):
             )
             return
 
-            super().save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(PatientProfile)

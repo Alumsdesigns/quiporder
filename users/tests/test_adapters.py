@@ -1,5 +1,5 @@
 """Tests for user adapters."""
-from django.test import TestCase, Client, RequestFactory
+from django.test import TestCase, RequestFactory
 from django.contrib.auth import get_user_model
 from users.adapters import NoSignupAccountAdapter
 
