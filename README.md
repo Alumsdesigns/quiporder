@@ -416,132 +416,106 @@ One week was spent on project planning, including the first mentor meeting where
 
 ### Features Screenshots
 
-<details>
-<summary>Home Page</summary>
-
-![Home Page](docs/screenshots/home-page.png)
-</details>
+#### User Interface Screenshots
 
 <details>
 <summary>Login Page</summary>
 
-![Login Page](docs/screenshots/login-page.png)
+![Login Page](docs/features/ui-login-page.png)
 </details>
 
 <details>
-<summary>Therapist Dashboard</summary>
+<summary>Logout Page</summary>
 
-![Therapist Dashboard](docs/screenshots/therapist-dashboard.png)
+![Logout Page](docs/features/ui-logout.png)
+</details>
+
+<details>
+<summary>Logout Successful</summary>
+
+![Logout Successful](docs/features/ui-logout-succesful.png)
 </details>
 
 <details>
 <summary>Patient Dashboard</summary>
 
-![Patient Dashboard](docs/screenshots/patient-dashboard.png)
+![Patient Dashboard](docs/features/ui-patient-dashboard.png)
 </details>
 
 <details>
 <summary>Create Order Form</summary>
 
-![Create Order](docs/screenshots/create-order.png)
+![Create Order Form](docs/features/ui-create-order-form.png)
 </details>
 
 <details>
-<summary>Edit Order Form</summary>
+<summary>Edit Equipment Order</summary>
 
-![Edit Order](docs/screenshots/edit-order.png)
+![Edit Equipment Order](docs/features/ui-edit-eqipment-order.png)
 </details>
 
 <details>
-<summary>Delete Confirmation</summary>
+<summary>Recent Orders Updated</summary>
 
-![Delete Order](docs/screenshots/delete-order.png)
+![Recent Orders Updated](docs/features/ui-recent-orders-updated.png)
 </details>
 
 <details>
-<summary>Equipment List</summary>
+<summary>Quantity Validation Feedback</summary>
 
-![Equipment List](docs/screenshots/equipment-list.png)
+![Quantity Feedback](docs/features/ui-quantity-feedback-number-ordered-not-avail.png)
+</details>
+
+---
+
+#### Admin Panel Screenshots
+
+<details>
+<summary>Admin - Equipment List</summary>
+
+![Admin Equipment List](docs/features/admin-equipments.png)
 </details>
 
 <details>
-<summary> Admin Panel</summary>
+<summary>Admin - Therapist Profile</summary>
 
-![Admin Panel](docs/screenshots/admin-panel.png)
+![Admin Therapist Profile](docs/features/admin-therapist-profile.png)
 </details>
 
 <details>
-<summary>Success Message</summary>
+<summary>Admin - User Therapist Created</summary>
 
-![Success Message](docs/screenshots/success-message.png)
+![Admin User Therapist Created](docs/features/admin-user-therapist-created.png)
 </details>
 
 <details>
-<summary> Error Message</summary>
+<summary>Admin - Superuser Updated</summary>
 
-![Error Message](docs/screenshots/error-message.png)
+![Admin Superuser Updated](docs/features/admin-superuser-updated.png)
 </details>
 
 <details>
-<summary> 403 Forbidden Page</summary>
+<summary>Admin - Status History (Audit Trail)</summary>
 
-![403 Error](docs/screenshots/403-error.png)
+![Admin Status History](docs/features/admin-status-history.png)
 </details>
 
 <details>
-<summary> 404 Not Found Page</summary>
+<summary>Admin - Therapist Profile Updated via Edit</summary>
 
-![404 Error](docs/screenshots/404-error.png)
+![Admin Therapist Profile Edit](docs/features/ui-from-admin-therapist_profile_updated_edit.png)
 </details>
+
+---
+
+#### Security & RBAC Screenshots
 
 <details>
-<summary> Mobile Responsive View</summary>
+<summary>RBAC - Patient Cannot Be Staff Restriction</summary>
 
-![Mobile View](docs/screenshots/mobile-view.png)
+![RBAC Patient Restriction](docs/features/admin-rbac-restriction-feedback-patient-cant-be-staff.png)
 </details>
 
-
-<details>
-<summary>Home Page</summary>
-
-![Home Page](docs/screenshots/home-page.png)
-</details>
-
-<details>
-<summary>Login Page</summary>
-
-![Login Page](docs/screenshots/login-page.png)
-</details>
-
-<details>
-<summary>Therapist Dashboard</summary>
-
-![Therapist Dashboard](docs/screenshots/therapist-dashboard.png)
-</details>
-
-<details>
-<summary>Patient Dashboard</summary>
-
-![Patient Dashboard](docs/screenshots/patient-dashboard.png)
-</details>
-
-<details>
-<summary>Create Order Form</summary>
-
-![Create Order](docs/screenshots/create-order.png)
-</details>
-
-<details>
-<summary>Equipment List</summary>
-
-![Equipment List](docs/screenshots/equipment-list.png)
-</details>
-
-<details>
-<summary>Admin Panel</summary>
-
-![Admin Panel](docs/screenshots/admin-panel.png)
-</details>
 
 ---
 
@@ -551,46 +525,169 @@ One week was spent on project planning, including the first mentor meeting where
 
 Low-fidelity wireframes were created to plan the layout and user flow before development.
 
-| Page | URL | Result |
-|------|-----|--------|
-| Home | `/` | Pass |
-| Login | `/accounts/login/` | Pass |
-| Logout | `/accounts/logout/` | Pass |
-| Signup Info | `/accounts/signup/` | Pass |
-| Therapist Dashboard | `/equipment/dashboard/` | Pass |
-| Patient Dashboard | `/equipment/patient/dashboard/` | Pass |
-| Equipment List | `/equipment/list/` | Pass |
-| Create Order | `/equipment/order/create/` | Pass |
-| Edit Order | `/equipment/order/edit/1/` | Pass |
-| Delete Confirmation | `/equipment/order/delete/1/` | Pass |
-| Admin Panel | `/admin/` | Pass |
-| 403 Error | Trigger by accessing restricted page | Pass |
-| 404 Error | `/this-page-does-not-exist/` | Pass |
-| 500 Error | Server error (test with DEBUG=False) | Pass |
-
 <details>
-<summary>Login Page</summary>
+<summary>Therapist Dashboard Wireframe</summary>
 
-![Login Wireframe](docs/wireframes/login-wireframe.png)
+![Therapist Dashboard Wireframe](docs/wireframe/therapist-dashboard-wirefram.png)
 </details>
 
 <details>
-<summary>Therapist Dashboard</summary>
+<summary>Patient Dashboard Wireframe</summary>
 
-![Dashboard Wireframe](docs/wireframes/therapist-dashboard-wireframe.png)
+![Patient Dashboard Wireframe](docs/wireframe/patient-dashboard-wireframe.png)
 </details>
 
 <details>
-<summary>Patient Dashboard</summary>
+<summary>Therapist Logged In Wireframe</summary>
 
-![Patient Dashboard Wireframe](docs/wireframes/patient-dashboard-wireframe.png)
+![Therapist Logged In Wireframe](docs/wireframe/therapist-loged-in-wireframe.png)
 </details>
 
 <details>
-<summary>Order Form</summary>
+<summary>Patient Logged In Wireframe</summary>
 
-![Order Form Wireframe](docs/wireframes/order-form-wireframe.png)
+![Patient Logged In Wireframe](docs/wireframe/patient-loged-in-wireframe.png)
 </details>
+
+<details>
+<summary>Therapist Logout Wireframe</summary>
+
+![Therapist Logout Wireframe](docs/wireframe/therapist-logout-wireframe.png)
+</details>
+
+<details>
+<summary>Patient Logout Wireframe</summary>
+
+![Patient Logout Wireframe](docs/wireframe/patient-logout-wireframe.png)
+</details>
+
+<details>
+<summary>Equipment Inventory Wireframe</summary>
+
+![Equipment Inventory Wireframe](docs/wireframe/equipment-inventory-wireframe.png)
+</details>
+
+<details>
+<summary>Create Equipment Order Wireframe</summary>
+
+![Create Equipment Wireframe](docs/wireframe/create-equipment-wireframe.png)
+</details>
+
+<details>
+<summary>Edit Equipment Order Wireframe</summary>
+
+![Edit Equipment Wireframe](docs/wireframe/edit-equipment-wireframe.png)
+</details>
+
+<details>
+<summary>Delete Equipment Order Wireframe</summary>
+
+![Delete Equipment Wireframe](docs/wireframe/delete-equipment-wireframe.png)
+</details>
+
+<details>
+<summary>403 Error Page Wireframe</summary>
+
+![403 Error Wireframe](docs/wireframe/error-403-wireframe.png)
+</details>
+
+<details>
+<summary>404 Error Page Wireframe</summary>
+
+![404 Error Wireframe](docs/wireframe/error-404-wireframe.png)
+</details>
+
+<details>
+<summary>500 Error Page Wireframe</summary>
+
+![500 Error Wireframe](docs/wireframe/error-500-wireframe.png)
+</details>
+
+---
+
+### Mockups
+
+High-fidelity mockups were created to visualise the final design before implementation.
+
+<details>
+<summary>Therapist Dashboard Mockup</summary>
+
+![Therapist Dashboard Mockup](docs/mockups/therapist-dashboard-mockup.png)
+</details>
+
+<details>
+<summary>Patient Dashboard Mockup</summary>
+
+![Patient Dashboard Mockup](docs/mockups/patient-dashboard-mokup.png)
+</details>
+
+<details>
+<summary>Therapist Logged In Mockup</summary>
+
+![Therapist Logged In Mockup](docs/mockups/therapist-loged-in-mokup.png)
+</details>
+
+<details>
+<summary>Patient Logged In Mockup</summary>
+
+![Patient Logged In Mockup](docs/mockups/patien-loged-in-mokeup.png)
+</details>
+
+<details>
+<summary>Therapist Logout Mockup</summary>
+
+![Therapist Logout Mockup](docs/mockups/therapist-logout-mokup.png)
+</details>
+
+<details>
+<summary>Patient Logout Mockup</summary>
+
+![Patient Logout Mockup](docs/mockups/patient-logout-mockup.png)
+</details>
+
+<details>
+<summary>Equipment Inventory Mockup</summary>
+
+![Equipment Inventory Mockup](docs/mockups/equipment-inventory-mokup.png)
+</details>
+
+<details>
+<summary>Create Equipment Order Mockup</summary>
+
+![Create Equipment Mockup](docs/mockups/create-equipment-mokup.png)
+</details>
+
+<details>
+<summary>Edit Equipment Order Mockup</summary>
+
+![Edit Equipment Mockup](docs/mockups/edit-equipment-mokup.png)
+</details>
+
+<details>
+<summary>Delete Equipment Order Mockup</summary>
+
+![Delete Equipment Mockup](docs/mockups/delete-equipment-mokup.png)
+</details>
+
+<details>
+<summary>403 Error Page Mockup</summary>
+
+![403 Error Mockup](docs/mockups/error-403-mokeup.png)
+</details>
+
+<details>
+<summary>404 Error Page Mockup</summary>
+
+![404 Error Mockup](docs/mockups/error-404-mokeup.png)
+</details>
+
+<details>
+<summary>500 Error Page Mockup</summary>
+
+![500 Error Mockup](docs/mockups/error-500-mokeup.png)
+</details>
+
+*Note: Final implementation evolved from wireframes and mockups based on user testing feedback and accessibility requirements.*
 
 *Note: Final implementation evolved from wireframes based on user testing feedback and accessibility requirements.*
 
